@@ -7,7 +7,7 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
     This allows us to load the corresponding defaults from scenarios.json.
     """
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument("--scenario", type=str, default="base_scenario",
+    parser.add_argument("--scenario", type=str, default="base",
                         help="Scenario name to use (as defined in scenarios.json)")
     # We only care about the scenario argument here.
     args, _ = parser.parse_known_args()
