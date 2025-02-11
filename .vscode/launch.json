@@ -1,0 +1,49 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: RL training",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "C:\\Users\\harry\\Coding\\LanderLearner\\main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--mode",
+                "train",
+                "--timesteps",
+                "1000000",
+                "--num_envs",
+                "8"
+            ]
+        },
+        {
+            "name": "Python Debugger: RL inference",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "C:\\Users\\harry\\Coding\\LanderLearner\\main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--gui",
+                "--mode",
+                "inference",
+                "--episodes",
+                "3"
+            ]
+        },
+        {
+            "name": "Python Debugger: Human Operator",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "C:\\Users\\harry\\Coding\\LanderLearner\\main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--gui",
+                "--mode",
+                "human",
+                "--episodes",
+                "3"
+            ],
+            "justMyCode": false
+        }
+    ]
+}

@@ -1,0 +1,12 @@
+{
+    "base_scenario": {
+      "rl_agent_type": "PPO",
+      "reward_function": "rightward",
+      "learning_frames": 10000
+    },
+    "landing_scenario": {
+      "rl_agent_type": "PPO",
+      "reward_function": "soft_landing",
+      "learning_frames": 50000
+    }
+  }
