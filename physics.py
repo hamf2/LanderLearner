@@ -18,9 +18,9 @@ class PhysicsEngine:
 
         # Add collision handler callback
         collision_handler = self.space.add_default_collision_handler()
-        collision_handler.begin = self._collision_callback
-        collision_handler.separate = self._collision_callback
-        collision_handler.post_solve = self._collision_solve_callback
+        collision_handler.begin = self._collision_begin_callback
+        collision_handler.separate = self._collision_separate_callback
+        collision_handler.post_solve = self._collision_post_solve_callback
         self.collision_state = False
         self.collision_impulse = 0.0
 
@@ -77,6 +77,7 @@ class PhysicsEngine:
         env.lander_angle = np.array(self.lander_body.angle, dtype=np.float32)
         env.lander_angular_velocity = np.array(self.lander_body.angular_velocity, dtype=np.float32)
         env.collision_state = self.collision_state
+        env.collision_impulse = self.collision_impulse
         
     def _create_ground(self):
         """
@@ -111,20 +112,23 @@ class PhysicsEngine:
         self.lander_shape.elasticity = 0.5
         self.space.add(self.lander_body, self.lander_shape)
 
-    def _collision_callback(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
+    def _collision_begin_callback(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
         """
-        Called when collisions occur. We can use this to set collision flags
-        in the environment.
+        Called when collisions begin. Sets the collision state.
         """
-        if arbiter.is_first_contact:
-            self.collision_state = True
-        elif arbiter.is_removal:
-            self.collision_state = False
-            self.collision_impulse = 0.0
-            
+        self.collision_state = True
         return True
     
-    def _collision_solve_callback(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
+    def _collision_separate_callback(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
+        """
+        Called when collisions end. Resets the collision state.
+        """
+        self.collision_state = False
+        return True
+    
+    def _collision_post_solve_callback(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
+        """
+        Called after collision resolution. Records the impulse.
+        """
         self.collision_impulse = max(self.collision_impulse, arbiter.total_impulse.length)
-
         return True

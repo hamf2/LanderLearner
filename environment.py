@@ -50,6 +50,8 @@ class LunarLanderEnv(gym.Env):
         self.target_zone = np.array([30.0, 0.0], dtype=np.float32)
 
         self.collision_state = False
+        self.collision_impulse = 0.0
+        self.crash_state = False
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
@@ -140,20 +142,26 @@ class LunarLanderEnv(gym.Env):
         """
         # If time limit exceeded
         if self.elapsed_time >= Config.MAX_EPISODE_DURATION:
-            print("Time limit reached.")
+            print(f"Time limit reached.  Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f}"
+                  f"Angle = {self.lander_angle:.2f}")
             return True
 
-        # Collision detected
-        if self.collision_state:
-            print("Collision detected.")
+        # Crash detected if collision impulse exceeds threshold or lander is upside down
+        if self.collision_state and (
+            self.collision_impulse > Config.IMPULSE_THRESHOLD or 
+            (np.pi/2 <= self.lander_angle % (2*np.pi) <= 3*np.pi/2)):
+
+            print(f"Crash detected.      Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f}, "
+                  f"Angle = {self.lander_angle:.2f}. Impulse: {self.collision_impulse:.2f}")
             return True
 
         # If y-position is below ground baseline
         if self.lander_position[1] <= 0.0:
             self.collision_state = True
             print(f"Lander below ground. Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f}, "
-                  f"Angle = {self.lander_angle:.2f}, Velocity: vx = {self.lander_velocity[0]:.2f}, vy = {self.lander_velocity[1]:.2f}, "
+                  f"Angle = {self.lander_angle:.2f}. Velocity: vx = {self.lander_velocity[0]:.2f}, vy = {self.lander_velocity[1]:.2f}, "
                   f"vAng = {self.lander_angular_velocity:.2f}")
+            self.crash_state = True
             return True
 
         # If fuel is depleted: let it coast without fuel until it hits the ground.

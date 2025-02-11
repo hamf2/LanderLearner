@@ -12,8 +12,10 @@ def default_reward(env, done):
     angle_penalty = abs((env.lander_angle - np.pi/2) % np.pi)
     reward = (x_velocity * 10 - angle_penalty * 1.0) * Config.RENDER_TIME_STEP
 
-    if env.collision_state:
+    if env.crash_state:
         reward -= 100.0
+    elif env.collision_state:
+        reward -= 5.0
 
     return reward
 
