@@ -20,8 +20,9 @@ class PhysicsEngine:
         collision_handler = self.space.add_default_collision_handler()
         collision_handler.begin = self._collision_callback
         collision_handler.separate = self._collision_callback
-        collision_handler.post_solve = self._collision_callback
+        collision_handler.post_solve = self._collision_solve_callback
         self.collision_state = False
+        self.collision_impulse = 0.0
 
     def reset(self):
         """
@@ -30,8 +31,11 @@ class PhysicsEngine:
         Variables are reset as needed.
         """
         self.space.remove(self.lander_body, self.lander_shape)
-
         self._create_lander()
+        self._move_ground()
+
+        self.collision_state = False
+        self.collision_impulse = 0.0
 
     def update(self, left_thruster, right_thruster, env):
         """
@@ -56,7 +60,11 @@ class PhysicsEngine:
         fuel_used = (thruster_force_left + thruster_force_right) * Config.FUEL_COST
         env.fuel_remaining = max(0.0, env.fuel_remaining - fuel_used)
 
-        if self.lander_body.position.x - self.ground_shape.a.x < Config.LANDER_WIDTH or self.lander_body.position.x - self.ground_shape.b.x > - Config.LANDER_WIDTH:
+        if (
+            self.lander_body.position.x - (self.ground_body.position.x + self.ground_shape.a.x) < Config.LANDER_WIDTH 
+            or self.lander_body.position.x - (self.ground_body.position.x + self.ground_shape.b.x) > - Config.LANDER_WIDTH
+            ):
+
             self._move_ground()
 
         # Step the physics simulation
@@ -112,4 +120,11 @@ class PhysicsEngine:
             self.collision_state = True
         elif arbiter.is_removal:
             self.collision_state = False
-        return True  # Return True to process collision as usual.
+            self.collision_impulse = 0.0
+            
+        return True
+    
+    def _collision_solve_callback(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
+        self.collision_impulse = max(self.collision_impulse, arbiter.total_impulse.length)
+
+        return True

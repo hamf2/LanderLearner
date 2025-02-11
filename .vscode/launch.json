@@ -27,7 +27,7 @@
                 "--mode",
                 "inference",
                 "--episodes",
-                "3"
+                "1"
             ]
         },
         {
