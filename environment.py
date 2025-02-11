@@ -4,13 +4,14 @@ from gymnasium import spaces
 from physics import PhysicsEngine
 from utils.config import Config
 from utils.rewards import get_reward_function
+from utils.observations import get_observation_function
 
 class LunarLanderEnv(gym.Env):
     """
     A 2D Lunar Lander Environment conforming to Gymnasium's interface.
     """
 
-    def __init__(self, gui_enabled=False, reward_function="default"):
+    def __init__(self, gui_enabled=False, reward_function="default", observation_mode="default"):
         super().__init__()
 
         self.gui_enabled = gui_enabled
@@ -18,18 +19,20 @@ class LunarLanderEnv(gym.Env):
         # Create a physics engine instance
         self.physics_engine = PhysicsEngine()
 
-        # Define the observation and action space sizes.
-        #   Observation: 12 variables
+        # Select the reward function based on the provided name.
+        self.reward_fn = get_reward_function(reward_function)
+        # Select the observation function based on the provided mode.
+        self.observation_fn, observation_size = get_observation_function(observation_mode)
+
+        # Define the observation and action space sizes
+        #   Observation: as defined by the observation function
         #   Action: 2 thruster power values (each in range [-1, 1])
         self.observation_space = spaces.Box(
-            low=-np.inf, high=np.inf, shape=(12,), dtype=np.float32
+            low=-np.inf, high=np.inf, shape=(observation_size,), dtype=np.float32
         )
         self.action_space = spaces.Box(
             low=-1.0, high=1.0, shape=(2,), dtype=np.float32
         )
-
-        # Select the reward function based on the provided name.
-        self.reward_fn = get_reward_function(reward_function)
 
         # State placeholders (initially zero):
         self.reset_state_variables()
@@ -45,9 +48,11 @@ class LunarLanderEnv(gym.Env):
         self.fuel_remaining = np.array(Config.INITIAL_FUEL, dtype=np.float32)
         self.elapsed_time = np.array(0.0, dtype=np.float32)
 
-        self.surface_heights = np.zeros((50,), dtype=np.float32)  # Example terrain
-        self.Dx = np.array(1.0, dtype=np.float32)  # distance between terrain segments
-        self.target_zone = np.array([30.0, 0.0], dtype=np.float32)
+        # self.surface_heights = np.zeros((50,), dtype=np.float32)  # Example terrain
+        # self.Dx = np.array(1.0, dtype=np.float32)  # distance between terrain segments
+        self.target_position = np.array([30.0, 0.0], dtype=np.float32)
+        self.target_zone_width = np.array(10.0, dtype=np.float32)
+        self.target_zone_height = np.array(5.0, dtype=np.float32)
 
         self.collision_state = False
         self.collision_impulse = 0.0
@@ -82,7 +87,7 @@ class LunarLanderEnv(gym.Env):
         # Calculate reward using the selected reward function.
         reward = self._calculate_reward(done)
 
-        # Get observation for the RL agent
+        # Get observation for the RL agent.
         obs = self._get_observation()
 
         # Gymnasium step returns: obs, reward, done, truncated, info.
@@ -94,40 +99,10 @@ class LunarLanderEnv(gym.Env):
 
     def _get_observation(self):
         """
-        Construct and return a flattened observation vector from the current state.
-        This combines:
-          - lander position (2)
-          - lander velocity (2)
-          - angle + angular velocity (2)
-          - fuel remaining (1)
-          - distance to target (2)
-          - altitude or other sensor readings...
-        Here, we keep it simple with placeholders.
+        Construct and return an observation vector from the current state
+        using the selected observation function.
         """
-        distance_to_target = self.target_zone - self.lander_position
-        altitude = self.lander_position[1]
-        angle = self.lander_angle % (2*np.pi)  # Keep angle in [0, 2pi)
-        left_laser_distance = Config.LASER_RANGE if angle >= np.pi or angle == 0 else np.clip(altitude / np.sin(self.lander_angle), 0, Config.LASER_RANGE)
-        right_laser_distance = Config.LASER_RANGE if angle <= np.pi or angle == 0 else np.clip(altitude / np.sin(-self.lander_angle), 0, Config.LASER_RANGE)
-
-        # Flatten into a single array
-        observation = np.array([
-            self.lander_position[0],
-            self.lander_position[1],
-            self.lander_velocity[0],
-            self.lander_velocity[1],
-            self.lander_angle,
-            self.lander_angular_velocity,
-            self.fuel_remaining,
-            distance_to_target[0],
-            distance_to_target[1],
-            left_laser_distance,
-            right_laser_distance,
-            float(self.collision_state),
-            # Additional sensors or derived measures...
-        ], dtype=np.float32)
-
-        return observation
+        return self.observation_fn(self)
 
     def _calculate_reward(self, done):
         """
@@ -142,15 +117,15 @@ class LunarLanderEnv(gym.Env):
         """
         # If time limit exceeded
         if self.elapsed_time >= Config.MAX_EPISODE_DURATION:
-            print(f"Time limit reached.  Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f}"
+            print(f"Time limit reached.  Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f} "
                   f"Angle = {self.lander_angle:.2f}")
             return True
 
         # Crash detected if collision impulse exceeds threshold or lander is upside down
         if self.collision_state and (
             self.collision_impulse > Config.IMPULSE_THRESHOLD or 
-            (np.pi/2 <= self.lander_angle % (2*np.pi) <= 3*np.pi/2)):
-
+            (np.pi/2 <= self.lander_angle % (2*np.pi) <= 3*np.pi/2)
+        ):
             print(f"Crash detected.      Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f}, "
                   f"Angle = {self.lander_angle:.2f}. Impulse: {self.collision_impulse:.2f}")
             return True

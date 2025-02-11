@@ -26,12 +26,20 @@ def soft_landing_reward(env, done):
       - Returns a positive reward only if the lander touches the ground softly (no collision).
       - Otherwise, no reward.
     """
-    if env.collision_state:
-        return -100.0
-    elif env.lander_position[1] <= 0.0 and not env.collision_state:
-        return 100.0
-    else:
-        return 0.0
+    # Reward travel toward target position
+    vector_to_target = env.target_position - env.lander_position
+    reward = np.dot(env.lander_velocity, vector_to_target) * Config.RENDER_TIME_STEP
+
+    distance_to_target = np.linalg.norm(vector_to_target)
+    if env.crash_state:
+        reward -= 100.0
+    elif env.collision_state:
+        if distance_to_target < env.target_zone_width:
+            reward += 10.0
+        else:
+            reward -= 5.0
+    
+    return reward
 
 def get_reward_function(name: str):
     """
