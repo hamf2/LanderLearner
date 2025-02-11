@@ -2,6 +2,8 @@ import pathlib
 
 class Config:
     SCENARIO_FILE = pathlib.Path(__file__).parent.parent / "scenarios" / "scenarios.json"
+    DEFAULT_CHECKPOINT_DIR = pathlib.Path(__file__).parent.parent / "agents" / "checkpoints"
+    DEFAULT_LOGGING_DIR = pathlib.Path(__file__).parent.parent / "agents" / "logs"
     
     # Physics / Environment
     GRAVITY = 1.0

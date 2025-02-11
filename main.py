@@ -54,7 +54,7 @@ def main():
         ])
         agent = agent_class(env)
         agent.train(args.timesteps)
-        agent.save_model("models/lander_model.zip")
+        agent.save_model(args.model_path)
         env.close()
         sys.exit(0)
     else:
@@ -64,7 +64,7 @@ def main():
             agent = HumanAgent(env)
         else:  # inference mode
             agent = RL_AGENT_MAP.get(args.rl_agent, RL_AGENT_MAP["PPO"])(env)
-            agent.load_model("models/lander_model.zip")
+            agent.load_model(args.model_path)
 
         if args.gui:
             gui = LunarLanderGUI(env)

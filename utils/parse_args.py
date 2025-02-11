@@ -44,5 +44,7 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
                         help="RL agent type to use (overrides scenario default)")
     parser.add_argument("--reward_function", type=str, default=default_reward_function,
                         help="Reward function to use (overrides scenario default)")
+    parser.add_argument("--model_path", type=str, default=Config.DEFAULT_CHECKPOINT_DIR,
+                        help="Path to save/load the model (for train and inference mode)")
     return parser.parse_args()
     

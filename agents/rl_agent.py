@@ -2,6 +2,7 @@ import numpy as np
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 from utils.helpers import adjust_save_path, adjust_load_path
+from utils.config import Config
 
 class RLAgent:
     """
@@ -19,7 +20,7 @@ class RLAgent:
             "MlpPolicy", 
             env, 
             verbose=1,
-            tensorboard_log="./agents/logs/ppo_lunar_lander_tensorboard/"
+            tensorboard_log=str(Config.DEFAULT_LOGGING_DIR / "ppo_lander_tensorboard")
             )
 
     def train(self, timesteps=10000):
