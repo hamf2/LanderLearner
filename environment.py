@@ -57,6 +57,8 @@ class LunarLanderEnv(gym.Env):
         self.collision_state = False
         self.collision_impulse = 0.0
         self.crash_state = False
+        self.landing_state = False
+        self.idle_timer = 0.0
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
@@ -142,6 +144,20 @@ class LunarLanderEnv(gym.Env):
         # If fuel is depleted: let it coast without fuel until it hits the ground.
         if self.fuel_remaining <= 0.0:
             return False
+        
+        # If lander is idle for too long, terminate episode
+        if self.collision_state and np.linalg.norm(self.lander_velocity) < 0.1:
+            self.idle_timer += Config.TIME_STEP
+            if self.idle_timer > Config.IDLE_TIMEOUT:
+                print(f"Idle timeout. Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f}, "
+                      f"Angle = {self.lander_angle:.2f}. Velocity: vx = {self.lander_velocity[0]:.2f}, vy = {self.lander_velocity[1]:.2f}, "
+                      f"vAng = {self.lander_angular_velocity:.2f}")
+                if (self.target_position[0] - self.target_zone_width / 2 <= self.lander_position[0] <= self.target_position[0] + self.target_zone_width / 2 and
+                    self.target_position[1] - self.target_zone_height / 2 <= self.lander_position[1] <= self.target_position[1] + self.target_zone_height / 2):
+                    self.landing_state = True
+                return True
+        else:
+            self.idle_timer = 0.0
 
         return False
 

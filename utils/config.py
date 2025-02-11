@@ -11,7 +11,8 @@ class Config:
     THRUST_POWER = 40.0         # Max force from each thruster
     FUEL_COST = 0.01            # Fuel cost per Newton of thrust
     INITIAL_FUEL = 100.0        # Starting fuel
-    IMPULSE_THRESHOLD = 30.0     # Max impulse before crash
+    IMPULSE_THRESHOLD = 30.0    # Max impulse before crash
+    IDLE_TIMEOUT = 3.0          # Max time lander can be idle before episode termination
 
     # Lander dimensions
     LANDER_WIDTH = 3.0

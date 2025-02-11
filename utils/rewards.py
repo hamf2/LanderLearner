@@ -13,7 +13,7 @@ def default_reward(env, done):
     reward = (x_velocity * 10 - angle_penalty * 1.0) * Config.RENDER_TIME_STEP
 
     if env.crash_state:
-        reward -= 100.0
+        reward -= env.collision_impulse
     elif env.collision_state:
         reward -= 5.0 * Config.RENDER_TIME_STEP
 
@@ -38,12 +38,15 @@ def soft_landing_reward(env, done):
 
     # Penalize collision and reward soft landing in target zone
     if env.crash_state:
-        reward -= 100.0
+        reward -= env.collision_impulse * 2.0
     elif env.collision_state:
         if distance_to_target < env.target_zone_width:
             reward += 10.0 * Config.RENDER_TIME_STEP
         else:
             reward -= 5.0 * Config.RENDER_TIME_STEP
+
+    if env.landing_state:
+        reward += 100
     
     return reward
 
