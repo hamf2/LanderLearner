@@ -51,13 +51,17 @@ def target_landing_observation(env):
     on target position for RL agents.
     """
     base_obs = default_observation(env)
-    additional = np.array([
-        env.target_position[0] - env.lander_position[0],
-        env.target_position[1] - env.lander_position[1],
-        np.arctan2(env.target_position[1] - env.lander_position[1], env.target_position[0] - env.lander_position[0]),
-        env.target_zone_width,
-        env.target_zone_height
-    ], dtype=np.float32)
+    try:
+        additional = np.array([
+            env.target_position[0] - env.lander_position[0],
+            env.target_position[1] - env.lander_position[1],
+            np.arctan2(env.target_position[1] - env.lander_position[1], env.target_position[0] - env.lander_position[0]),
+            env.target_zone_width,
+            env.target_zone_height
+        ], dtype=np.float32)
+    except NameError as e:
+        raise ValueError("Target position must be defined in environment to use target landing observation. "
+                         "Set target_zone_mode to True when creating environment. ", e)
     return np.concatenate([base_obs, additional])
 
 def get_observation_function(name: str):

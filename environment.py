@@ -11,7 +11,7 @@ class LunarLanderEnv(gym.Env):
     A 2D Lunar Lander Environment conforming to Gymnasium's interface.
     """
 
-    def __init__(self, gui_enabled=False, reward_function="default", observation_mode="default"):
+    def __init__(self, gui_enabled=False, reward_function="default", observation_function="default", target_zone=False):
         super().__init__()
 
         self.gui_enabled = gui_enabled
@@ -22,7 +22,7 @@ class LunarLanderEnv(gym.Env):
         # Select the reward function based on the provided name.
         self.reward_fn = get_reward_function(reward_function)
         # Select the observation function based on the provided mode.
-        self.observation_fn, observation_size = get_observation_function(observation_mode)
+        self.observation_fn, observation_size = get_observation_function(observation_function)
 
         # Define the observation and action space sizes
         #   Observation: as defined by the observation function
@@ -33,6 +33,9 @@ class LunarLanderEnv(gym.Env):
         self.action_space = spaces.Box(
             low=-1.0, high=1.0, shape=(2,), dtype=np.float32
         )
+
+        # Set a flag for the target zone mode
+        self.target_zone_mode = target_zone
 
         # State placeholders (initially zero):
         self.reset_state_variables()
@@ -50,10 +53,14 @@ class LunarLanderEnv(gym.Env):
 
         # self.surface_heights = np.zeros((50,), dtype=np.float32)  # Example terrain
         # self.Dx = np.array(1.0, dtype=np.float32)  # distance between terrain segments
-        self.target_position = np.array([30.0, 0.0], dtype=np.float32)
-        self.target_zone_width = np.array(10.0, dtype=np.float32)
-        self.target_zone_height = np.array(5.0, dtype=np.float32)
 
+        # Target zone parameters
+        if self.target_zone_mode:
+            self.target_position = np.array([Config.TARGET_ZONE_X, Config.TARGET_ZONE_Y], dtype=np.float32)
+            self.target_zone_width = np.array(Config.TARGET_ZONE_WIDTH, dtype=np.float32)
+            self.target_zone_height = np.array(Config.TARGET_ZONE_HEIGHT, dtype=np.float32)
+
+        # Collision and state flags
         self.collision_state = False
         self.collision_impulse = 0.0
         self.crash_state = False
@@ -140,10 +147,6 @@ class LunarLanderEnv(gym.Env):
                   f"vAng = {self.lander_angular_velocity:.2f}")
             self.crash_state = True
             return True
-
-        # If fuel is depleted: let it coast without fuel until it hits the ground.
-        if self.fuel_remaining <= 0.0:
-            return False
         
         # If lander is idle for too long, terminate episode
         if self.collision_state and np.linalg.norm(self.lander_velocity) < 0.1:
@@ -158,6 +161,10 @@ class LunarLanderEnv(gym.Env):
                 return True
         else:
             self.idle_timer = 0.0
+
+        # If fuel is depleted: let it coast without fuel until it hits the ground.
+        if self.fuel_remaining <= 0.0:
+            return False
 
         return False
 

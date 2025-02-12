@@ -4,6 +4,7 @@ from utils.config import Config
 
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 DARK_GREY = (50, 50, 50)
 BLACK = (0, 0, 0)
 
@@ -67,9 +68,36 @@ class LunarLanderGUI:
         angle = self.env.lander_angle
         fuel = self.env.fuel_remaining
 
+        if self.env.target_zone_mode:
+            targ_x, targ_y = self.env.target_position
+            targ_w, targ_h = self.env.target_zone_width, self.env.target_zone_height
+
+            # Draw the target zone
+            target_x_px = int(Config.SCREEN_WIDTH // 2 + (targ_x-x) * Config.RENDER_SCALE - targ_w * Config.RENDER_SCALE // 2)
+            target_y_px = int(Config.SCREEN_HEIGHT - ((targ_y) * Config.RENDER_SCALE + 50) - targ_h * Config.RENDER_SCALE // 2)
+            # pygame.draw.rect(
+            #     self.screen,
+            #     BLUE,
+            #     (target_x_px, target_y_px, targ_w * Config.RENDER_SCALE, targ_h * Config.RENDER_SCALE)
+            # )
+            target_rect = pygame.Rect(
+                target_x_px,
+                target_y_px,
+                targ_w * Config.RENDER_SCALE,
+                targ_h * Config.RENDER_SCALE
+            )
+            outline_surface = pygame.Surface((target_rect.width, target_rect.height), pygame.SRCALPHA)
+            pygame.draw.rect(
+                outline_surface,
+                (BLUE[0],BLUE[1],BLUE[2],128),  # blue with 50% transparency
+                outline_surface.get_rect(),
+                2  # outline thickness
+            )
+            self.screen.blit(outline_surface, target_rect.topleft)
+
         # Add moving crosshatch
         hatch_size = 50
-        offset = -((x * Config.RENDER_SCALE) % hatch_size)
+        offset = hatch_size-((x * Config.RENDER_SCALE) % hatch_size)
         for i in range(0, Config.SCREEN_WIDTH, hatch_size):
             dx = i + offset
             pygame.draw.line(self.screen, DARK_GREY, (dx, 0), (dx, Config.SCREEN_HEIGHT))

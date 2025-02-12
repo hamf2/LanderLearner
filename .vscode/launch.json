@@ -44,6 +44,8 @@
                 "--gui",
                 "--mode",
                 "human",
+                "--scenario",
+                "landing",
                 "--episodes",
                 "3"
             ],

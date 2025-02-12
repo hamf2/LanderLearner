@@ -36,7 +36,7 @@ def main():
         agent_class = RL_AGENT_MAP.get(args.rl_agent, RL_AGENT_MAP["PPO"])
     # For training mode, import the vectorized environment.
     if args.mode == "train":
-        from stable_baselines3.common.vec_env import DummyVecEnv
+        from stable_baselines3.common.vec_env import DummyVecEnv # Alternative: SubprocVecEnv - DummyVecEnv is faster in this case.
     # For human mode, import the human agent.
     if args.mode == "human":
         HumanAgent = importlib.import_module("agents.human_agent").HumanAgent
@@ -49,7 +49,7 @@ def main():
     if args.mode == "train":
         # Training mode: use a vectorized environment.
         env = DummyVecEnv([
-            lambda: LunarLanderEnv(gui_enabled=False, reward_function=args.reward_function)
+            lambda: LunarLanderEnv(gui_enabled=False, reward_function=args.reward_function, observation_function=args.observation_function, target_zone=args.target_zone)
             for _ in range(args.num_envs)
         ])
         agent = agent_class(env)
@@ -59,7 +59,7 @@ def main():
         sys.exit(0)
     else:
         # For human or inference mode, use a single environment instance.
-        env = LunarLanderEnv(gui_enabled=args.gui, reward_function=args.reward_function)
+        env = LunarLanderEnv(gui_enabled=args.gui, reward_function=args.reward_function, observation_function=args.observation_function, target_zone=args.target_zone)
         if args.mode == "human":
             agent = HumanAgent(env)
         else:  # inference mode

@@ -9,16 +9,23 @@ class Config:
     GRAVITY = 1.0
     TIME_STEP = 1.0 / 60.0
     THRUST_POWER = 40.0         # Max force from each thruster
-    FUEL_COST = 0.01            # Fuel cost per Newton of thrust
+    FUEL_COST = 0.005           # Fuel cost per Newton of thrust
     INITIAL_FUEL = 100.0        # Starting fuel
-    IMPULSE_THRESHOLD = 30.0    # Max impulse before crash
-    IDLE_TIMEOUT = 3.0          # Max time lander can be idle before episode termination
+    IMPULSE_THRESHOLD = 30.0    # Max impulse before crash (Newton-seconds)
+    IDLE_TIMEOUT = 3.0          # Max time lander can be idle before episode termination (seconds)
+    MAX_EPISODE_DURATION = 20.0 # Max duration of an episode (seconds)
 
     # Lander dimensions
     LANDER_WIDTH = 3.0
     LANDER_HEIGHT = 1.0
     LANDER_MASS = 10.0
-    LANDER_COF = 1.5
+    LANDER_COF = 1.0
+
+    # Target zone (if target_zone_mode is True in environment)
+    TARGET_ZONE_X = 30.0
+    TARGET_ZONE_Y = 0.0
+    TARGET_ZONE_WIDTH = 10.0
+    TARGET_ZONE_HEIGHT = 5.0
 
     # Sensor specifications
     LASER_RANGE = 100.0
@@ -31,7 +38,6 @@ class Config:
     RENDER_SCALE = 10.0
 
     # RL
-    MAX_EPISODE_DURATION = 20.0
 
     # Calculated
     PHYSICS_STEPS_PER_FRAME = int(1.0 / TIME_STEP / FPS)

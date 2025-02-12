@@ -23,6 +23,7 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
     default_rl_agent = scenario_defaults.get("rl_agent_type", "PPO")
     default_reward_function = scenario_defaults.get("reward_function", "default")
     default_observation_function = scenario_defaults.get("observation_function", "default")
+    default_target_zone = scenario_defaults.get("target_zone", None)
     default_learning_frames = scenario_defaults.get("learning_frames", 10000)
 
     parser = argparse.ArgumentParser(
@@ -47,6 +48,8 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
                         help="Reward function to use (overrides scenario default)")
     parser.add_argument("--observation_function", type=str, default=default_observation_function,
                         help="Observation function to use (overrides scenario default)")
+    parser.add_argument("--target_zone", action="store_false" if default_target_zone else "store_true",
+                        help="Enable target zone mode (overrides scenario default)")
     parser.add_argument("--model_path", type=str, default=Config.DEFAULT_CHECKPOINT_DIR,
                         help="Path to save/load the model (for train and inference mode)")
     return parser.parse_args()

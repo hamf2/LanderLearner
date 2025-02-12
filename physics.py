@@ -43,22 +43,23 @@ class PhysicsEngine:
         applying thruster forces to the lander.
         """
 
-        # Convert thruster power to force
-        thruster_force_left = (left_thruster + 1.0)/2.0 * Config.THRUST_POWER
-        thruster_force_right = (right_thruster + 1.0)/2.0 * Config.THRUST_POWER
+        if env.fuel_remaining > 0.0:
+            # Convert thruster power to force
+            thruster_force_left = (left_thruster + 1.0)/2.0 * Config.THRUST_POWER
+            thruster_force_right = (right_thruster + 1.0)/2.0 * Config.THRUST_POWER
 
-        # Apply upward forces on opposite corners of the lander
-        # Here force applied in body coordinates.
-        self.lander_body.apply_force_at_local_point(
-            (0, thruster_force_left), (-Config.LANDER_WIDTH/2, 0)
-        )
-        self.lander_body.apply_force_at_local_point(
-            (0, thruster_force_right), (Config.LANDER_WIDTH/2, 0)
-        )
+            # Apply upward forces on opposite corners of the lander
+            # Here force applied in body coordinates.
+            self.lander_body.apply_force_at_local_point(
+                (0, thruster_force_left), (-Config.LANDER_WIDTH/2, 0)
+            )
+            self.lander_body.apply_force_at_local_point(
+                (0, thruster_force_right), (Config.LANDER_WIDTH/2, 0)
+            )
 
-        # Decrease fuel in env according to consumption rate
-        fuel_used = (thruster_force_left + thruster_force_right) * Config.FUEL_COST
-        env.fuel_remaining = max(0.0, env.fuel_remaining - fuel_used)
+            # Decrease fuel in env according to consumption rate
+            fuel_used = (thruster_force_left + thruster_force_right) * Config.FUEL_COST
+            env.fuel_remaining = max(0.0, env.fuel_remaining - fuel_used)
 
         if (
             self.lander_body.position.x - (self.ground_body.position.x + self.ground_shape.a.x) < Config.LANDER_WIDTH 

@@ -3,12 +3,14 @@
         "rl_agent_type": "PPO",
         "reward_function": "rightward",
         "observation_function": "default",
+        "target_zone": false,
         "learning_frames": 10000
     },
     "landing": {
         "rl_agent_type": "PPO",
         "reward_function": "soft_landing",
         "observation_function": "landing_zone",
+        "target_zone": true,
         "learning_frames": 50000
     }
   }

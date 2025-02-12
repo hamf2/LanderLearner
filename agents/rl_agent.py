@@ -3,6 +3,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 from utils.helpers import adjust_save_path, adjust_load_path
 from utils.config import Config
+from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
 
 class RLAgent:
     """
@@ -13,8 +14,9 @@ class RLAgent:
         """
         env: A Gymnasium environment.
         """
-        if not hasattr(env, "envs"):
-            check_env(env, warn=True)  # Checks if the env follows Gym API
+        # Only run check_env for non-vectorized environments.
+        if not (isinstance(env, SubprocVecEnv) or isinstance(env, DummyVecEnv)):
+            check_env(env, warn=True)
         self.env = env
         self.model = PPO(
             "MlpPolicy", 
