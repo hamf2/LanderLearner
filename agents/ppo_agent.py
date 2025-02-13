@@ -10,7 +10,7 @@ class PPOAgent(BaseAgent):
     """
     An RL agent that uses Proximal Policy Optimization (PPO).
     """
-    def __init__(self, env, deterministic=True):
+    def __init__(self, env, deterministic=True, **kwargs):
         # Only run check_env for non-vectorized environments.
         if not (isinstance(env, SubprocVecEnv) or isinstance(env, DummyVecEnv)):
             check_env(env, warn=True)
@@ -19,7 +19,8 @@ class PPOAgent(BaseAgent):
             "MlpPolicy",
             env,
             verbose=1,
-            tensorboard_log=str(Config.DEFAULT_LOGGING_DIR / "ppo_lander_tensorboard")
+            tensorboard_log=str(Config.DEFAULT_LOGGING_DIR / "ppo_lander_tensorboard"),
+            **kwargs  # Extra arguments passed to PPO, if any
         )
 
     def train(self, timesteps=10000):

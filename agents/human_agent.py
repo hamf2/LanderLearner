@@ -37,7 +37,7 @@ class HumanAgent(BaseAgent):
                 self.state_flags["right_thruster"] = False
 
     def train(self, timesteps):
-        # Human agent does not learn.
+        # Human agent learns independently.
         pass
 
     def save_model(self, path):
