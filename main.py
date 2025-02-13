@@ -28,11 +28,13 @@ def main():
     # Import RL agent modules only if needed.
     if args.mode in ["train", "inference"]:
         RL_AGENT_MAP = {
-            "PPO": importlib.import_module("agents.rl_agent").RLAgent,
+            "PPO": importlib.import_module("agents.ppo_agent").PPOAgent,
+            "SAC": importlib.import_module("agents.sac_agent").SACAgent,
             # Additional agents here.
         }
         if args.rl_agent not in RL_AGENT_MAP:
             print(f"Warning: RL agent '{args.rl_agent}' not found. Defaulting to PPO.", file=sys.stderr)
+            args.rl_agent = "PPO"
         agent_class = RL_AGENT_MAP.get(args.rl_agent, RL_AGENT_MAP["PPO"])
     # For training mode, import the vectorized environment.
     if args.mode == "train":
@@ -53,6 +55,8 @@ def main():
             for _ in range(args.num_envs)
         ])
         agent = agent_class(env)
+        if args.load_checkpoint:
+            agent.load_model(args.load_checkpoint)
         agent.train(args.timesteps)
         agent.save_model(args.model_path)
         env.close()
@@ -63,7 +67,7 @@ def main():
         if args.mode == "human":
             agent = HumanAgent(env)
         else:  # inference mode
-            agent = RL_AGENT_MAP.get(args.rl_agent, RL_AGENT_MAP["PPO"])(env)
+            agent = agent_class(env)
             agent.load_model(args.model_path)
 
         if args.gui:
@@ -86,6 +90,7 @@ def main():
                 gui.render()
 
         print(f"Episode {episode + 1} finished with total reward: {total_reward}")
+        agent.deterministic = False  # Ensure agent is stochastic after first episode.
 
     env.close()
 

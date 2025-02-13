@@ -126,8 +126,9 @@ class LunarLanderEnv(gym.Env):
         """
         # If time limit exceeded
         if self.elapsed_time >= Config.MAX_EPISODE_DURATION:
+            angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
             print(f"Time limit reached.  Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f} "
-                  f"Angle = {self.lander_angle:.2f}")
+                  f"Angle = {angle_display:.2f} ({self.lander_angle:.2f})")
             return True
 
         # Crash detected if collision impulse exceeds threshold or lander is upside down
@@ -135,15 +136,18 @@ class LunarLanderEnv(gym.Env):
             self.collision_impulse > Config.IMPULSE_THRESHOLD or 
             (np.pi/2 <= self.lander_angle % (2*np.pi) <= 3*np.pi/2)
         ):
+            angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
             print(f"Crash detected.      Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f}, "
-                  f"Angle = {self.lander_angle:.2f}. Impulse: {self.collision_impulse:.2f}")
+                  f"Angle = {angle_display:.2f} ({self.lander_angle:.2f}). Impulse: {self.collision_impulse:.2f}")
+            self.crash_state = True
             return True
 
         # If y-position is below ground baseline
         if self.lander_position[1] <= 0.0:
             self.collision_state = True
+            angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
             print(f"Lander below ground. Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f}, "
-                  f"Angle = {self.lander_angle:.2f}. Velocity: vx = {self.lander_velocity[0]:.2f}, vy = {self.lander_velocity[1]:.2f}, "
+                  f"Angle = {angle_display:.2f} ({self.lander_angle:.2f}). Velocity: vx = {self.lander_velocity[0]:.2f}, vy = {self.lander_velocity[1]:.2f}, "
                   f"vAng = {self.lander_angular_velocity:.2f}")
             self.crash_state = True
             return True
@@ -152,8 +156,9 @@ class LunarLanderEnv(gym.Env):
         if self.collision_state and np.linalg.norm(self.lander_velocity) < 0.1:
             self.idle_timer += Config.TIME_STEP
             if self.idle_timer > Config.IDLE_TIMEOUT:
+                angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
                 print(f"Idle timeout. Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f}, "
-                      f"Angle = {self.lander_angle:.2f}. Velocity: vx = {self.lander_velocity[0]:.2f}, vy = {self.lander_velocity[1]:.2f}, "
+                      f"Angle = {angle_display:.2f} ({self.lander_angle:.2f}). Velocity: vx = {self.lander_velocity[0]:.2f}, vy = {self.lander_velocity[1]:.2f}, "
                       f"vAng = {self.lander_angular_velocity:.2f}")
                 if (self.target_position[0] - self.target_zone_width / 2 <= self.lander_position[0] <= self.target_position[0] + self.target_zone_width / 2 and
                     self.target_position[1] - self.target_zone_height / 2 <= self.lander_position[1] <= self.target_position[1] + self.target_zone_height / 2):

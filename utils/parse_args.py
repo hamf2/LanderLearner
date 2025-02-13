@@ -52,5 +52,7 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
                         help="Enable target zone mode (overrides scenario default)")
     parser.add_argument("--model_path", type=str, default=Config.DEFAULT_CHECKPOINT_DIR,
                         help="Path to save/load the model (for train and inference mode)")
+    parser.add_argument("--load_checkpoint", type=str, default=None,
+                        help="Path to load a model checkpoint from (for continued training)")
     return parser.parse_args()
     
