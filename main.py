@@ -3,6 +3,7 @@ import sys
 import importlib
 from environment import LunarLanderEnv
 from utils.config import Config
+from utils.rl_config import RL_Config
 from utils.helpers import load_scenarios
 from utils.parse_args import parse_args
 # RL agent and GUI modules are imported conditionally based on the mode.
@@ -28,14 +29,14 @@ def main():
     # Import RL agent modules only if needed.
     if args.mode in ["train", "inference"]:
         RL_AGENT_MAP = {
-            "PPO": importlib.import_module("agents.ppo_agent").PPOAgent,
-            "SAC": importlib.import_module("agents.sac_agent").SACAgent,
+            "PPO": [importlib.import_module("agents.ppo_agent").PPOAgent, {"device": RL_Config.PPO_DEVICE}],
+            "SAC": [importlib.import_module("agents.sac_agent").SACAgent, {"device": RL_Config.SAC_DEVICE}],
             # Additional agents here.
         }
         if args.rl_agent not in RL_AGENT_MAP:
             print(f"Warning: RL agent '{args.rl_agent}' not found. Defaulting to PPO.", file=sys.stderr)
             args.rl_agent = "PPO"
-        agent_class = RL_AGENT_MAP.get(args.rl_agent, RL_AGENT_MAP["PPO"])
+        agent_class, agent_options = RL_AGENT_MAP.get(args.rl_agent, RL_AGENT_MAP["PPO"])
     # For training mode, import the vectorized environment.
     if args.mode == "train":
         from stable_baselines3.common.vec_env import DummyVecEnv # Alternative: SubprocVecEnv - DummyVecEnv is faster in this case.
@@ -54,10 +55,13 @@ def main():
             lambda: LunarLanderEnv(gui_enabled=False, reward_function=args.reward_function, observation_function=args.observation_function, target_zone=args.target_zone)
             for _ in range(args.num_envs)
         ])
-        agent = agent_class(env)
+        agent = agent_class(env, **agent_options)
         if args.load_checkpoint:
             agent.load_model(args.load_checkpoint)
-        agent.train(args.timesteps)
+        try:
+            agent.train(args.timesteps)
+        except KeyboardInterrupt:
+            print("Training interrupted.")
         agent.save_model(args.model_path)
         env.close()
         sys.exit(0)
@@ -67,7 +71,7 @@ def main():
         if args.mode == "human":
             agent = HumanAgent(env)
         else:  # inference mode
-            agent = agent_class(env)
+            agent = agent_class(env, **agent_options)
             agent.load_model(args.model_path)
 
         if args.gui:

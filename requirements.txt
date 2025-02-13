@@ -1,5 +1,5 @@
 gymnasium
-stable-baselines3
+stable-baselines3[extra]
 pymunk
 pygame
 numpy

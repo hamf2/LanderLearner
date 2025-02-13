@@ -37,8 +37,6 @@ class Config:
     REPLAY_SPEED = 1.0
     RENDER_SCALE = 10.0
 
-    # RL
-
     # Calculated
     PHYSICS_STEPS_PER_FRAME = int(1.0 / TIME_STEP / FPS)
     RENDER_TIME_STEP = 1 / FPS
