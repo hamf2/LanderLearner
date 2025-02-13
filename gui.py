@@ -83,8 +83,8 @@ class LunarLanderGUI:
             target_rect = pygame.Rect(
                 target_x_px,
                 target_y_px,
-                targ_w * Config.RENDER_SCALE,
-                targ_h * Config.RENDER_SCALE
+                int(targ_w * Config.RENDER_SCALE),
+                int(targ_h * Config.RENDER_SCALE)
             )
             outline_surface = pygame.Surface((target_rect.width, target_rect.height), pygame.SRCALPHA)
             pygame.draw.rect(
@@ -99,7 +99,7 @@ class LunarLanderGUI:
         hatch_size = 50
         offset = hatch_size-((x * Config.RENDER_SCALE) % hatch_size)
         for i in range(0, Config.SCREEN_WIDTH, hatch_size):
-            dx = i + offset
+            dx = int(i + offset)
             pygame.draw.line(self.screen, DARK_GREY, (dx, 0), (dx, Config.SCREEN_HEIGHT))
         for j in range(0, Config.SCREEN_HEIGHT, hatch_size):
             dy = j

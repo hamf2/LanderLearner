@@ -53,7 +53,7 @@ def soft_landing_reward(env, done):
         if env.landing_state:
             reward += 20.0 * (Config.MAX_EPISODE_DURATION - env.elapsed_time)
     
-    return reward
+    return float(reward)
 
 def get_reward_function(name: str):
     """
