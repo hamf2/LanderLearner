@@ -28,8 +28,8 @@ def adjust_save_path(path: str, model_type: str = "") -> str:
     if os.path.isdir(path):
         filename = f"{model_type if model_type else "model"}_{datetime.now().strftime('%y%m%d_%H%M%S')}.zip"
         path = os.path.join(path, filename)
-    if not path.lower().endswith(".zip"):
-        path += ".zip"
+    if not str(path).lower().endswith(".zip"):
+        path = str(path) + ".zip"
     os.makedirs(os.path.dirname(path), exist_ok=True)
     return path
 

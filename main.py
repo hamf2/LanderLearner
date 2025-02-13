@@ -33,6 +33,7 @@ def main():
             "SAC": [importlib.import_module("agents.sac_agent").SACAgent, {"device": RL_Config.SAC_DEVICE}],
             # Additional agents here.
         }
+        args.rl_agent = args.rl_agent.upper()
         if args.rl_agent not in RL_AGENT_MAP:
             print(f"Warning: RL agent '{args.rl_agent}' not found. Defaulting to PPO.", file=sys.stderr)
             args.rl_agent = "PPO"

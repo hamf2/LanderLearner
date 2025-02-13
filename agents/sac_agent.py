@@ -1,4 +1,5 @@
 import numpy as np
+from datetime import datetime
 from stable_baselines3 import SAC
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
@@ -20,13 +21,16 @@ class SACAgent(BaseAgent):
             "MlpPolicy",
             env,
             verbose=1,
-            tensorboard_log=str(Config.DEFAULT_LOGGING_DIR / "sac_lander_tensorboard"),
+            tensorboard_log=str(Config.DEFAULT_LOGGING_DIR / "lander_tensorboard"),
             device=self.device,  # Uses GPU if available: "cuda" or "auto"
             **kwargs  # Extra arguments passed to SAC, if any
         )
 
     def train(self, timesteps=10000):
-        self.model.learn(total_timesteps=timesteps)
+        self.model.learn(
+            total_timesteps=timesteps,
+            tb_log_name="SAC_" + datetime.now().strftime("%Y%m%d-%H%M%S")
+        )
 
     def get_action(self, observation):
         action, _states = self.model.predict(observation, deterministic=self.deterministic)

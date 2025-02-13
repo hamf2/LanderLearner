@@ -5,7 +5,7 @@
             "name": "Python Debugger: RL training",
             "type": "debugpy",
             "request": "launch",
-            "program": "C:\\Users\\harry\\Coding\\LanderLearner\\main.py",
+            "program": "${workspaceRoot}\\main.py",
             "console": "integratedTerminal",
             "args": [
                 "--mode",
@@ -22,7 +22,7 @@
             "name": "Python Debugger: RL inference",
             "type": "debugpy",
             "request": "launch",
-            "program": "C:\\Users\\harry\\Coding\\LanderLearner\\main.py",
+            "program": "${workspaceRoot}\\main.py",
             "console": "integratedTerminal",
             "args": [
                 "--gui",
@@ -31,14 +31,14 @@
                 "--scenario",
                 "landing",
                 "--episodes",
-                "1"
+                "4"
             ]
         },
         {
             "name": "Python Debugger: Human Operator",
             "type": "debugpy",
             "request": "launch",
-            "program": "C:\\Users\\harry\\Coding\\LanderLearner\\main.py",
+            "program": "${workspaceRoot}\\main.py",
             "console": "integratedTerminal",
             "args": [
                 "--gui",

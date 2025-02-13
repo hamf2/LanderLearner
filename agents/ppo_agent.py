@@ -1,4 +1,5 @@
 import numpy as np
+from datetime import datetime
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
@@ -19,12 +20,15 @@ class PPOAgent(BaseAgent):
             "MlpPolicy",
             env,
             verbose=1,
-            tensorboard_log=str(Config.DEFAULT_LOGGING_DIR / "ppo_lander_tensorboard"),
+            tensorboard_log=str(Config.DEFAULT_LOGGING_DIR / "lander_tensorboard"),
             **kwargs  # Extra arguments passed to PPO, if any
         )
 
     def train(self, timesteps=10000):
-        self.model.learn(total_timesteps=timesteps)
+        self.model.learn(
+            total_timesteps=timesteps,
+            tb_log_name="PPO_" + datetime.now().strftime("%Y%m%d-%H%M%S")
+        )
 
     def get_action(self, observation):
         action, _states = self.model.predict(observation, deterministic=self.deterministic)
