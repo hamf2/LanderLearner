@@ -8,6 +8,8 @@ def default_reward(env, done):
       - Penalizes deviation from π/2 orientation (lander up towards right).
       - Penalizes collisions.
     """
+    reward = 0.0
+    
     # Penalize crash
     if done:
         if env.crash_state:
@@ -18,7 +20,7 @@ def default_reward(env, done):
     # Reward rightward travel and heading angle towards right
     x_velocity = env.lander_velocity[0]
     angle_penalty = abs((env.lander_angle - np.pi/2) % np.pi)
-    reward = (x_velocity * 10 - angle_penalty * 1.0) * Config.RENDER_TIME_STEP
+    reward += (x_velocity * 10 - angle_penalty * 1.0) * Config.RENDER_TIME_STEP
 
     # Penalize collision
     if env.collision_state:
@@ -33,6 +35,8 @@ def soft_landing_reward(env, done):
       - Returns a positive reward only if the lander touches the ground softly (no collision).
       - Otherwise, no reward.
     """
+    reward = 0.0
+    
     # Penalize crash and reward soft landing in target zone
     if done:
         if env.crash_state:
@@ -49,7 +53,7 @@ def soft_landing_reward(env, done):
         raise ValueError("Target position must be defined in environment to use soft landing reward. "
                          "Set target_zone_mode to True when creating environment. ", e)
     distance_to_target = np.linalg.norm(vector_to_target)
-    reward = np.dot(env.lander_velocity, vector_to_target) / distance_to_target * Config.RENDER_TIME_STEP
+    reward += np.dot(env.lander_velocity, vector_to_target) / distance_to_target * Config.RENDER_TIME_STEP
 
     # Encourage being upright and moving slowly near the target
     angle_penalty = abs(((env.lander_angle + np.pi) % (2 * np.pi)) - np.pi) - np.pi/2
