@@ -26,7 +26,7 @@ class Config:
     # Target zone is defined by its center position, width, and height
     # Spawn mode options are "deterministic", "on_ground", "above_ground"
     TARGET_ZONE_SPAWN_MODE = "on_ground" 
-    TARGET_ZONE_SPAWN_RANGE_X = 100.0
+    TARGET_ZONE_SPAWN_RANGE_X = 60.0
     TARGET_ZONE_SPAWN_RANGE_Y = 50.0
     TARGET_ZONE_X = 30.0
     TARGET_ZONE_Y = 0.0

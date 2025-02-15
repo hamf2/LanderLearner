@@ -45,6 +45,9 @@ lunar_lander/
    For RL inference (after a model is saved):
    `python main.py --gui --mode inference`
 
+   For TensorBoard log viewing:
+   `tensorboard --logdir=agents/logs/lander_tensorboard`
+
 
 # Expanding This Project (possible directions)
 
@@ -63,10 +66,10 @@ Multiple Agents: Investigate multi-agent RL or competing landers.
    - `gui.py` is **decoupled** from the environment, only reading its state.  
    - `physics.py` handles **all** physics updates with pymunk.  
    - `agents/` can be expanded with different agents (human, RL, scripted).  
-   - `utils/` keeps config constants and helper functions.  
+   - `utils/` keeps config constants and helper functions. 
+   - `utils/rewards.py` enables interchangable reward functions.
+   - `utils/observations.py` enables interchangable observation modes.
+   - `utils/target.py` implements multiple options for target spawning and motion. 
 
 2. **Optional Headless Mode**  
    - Passing `--gui` toggles the UI. Without it, training can proceed faster.  
-
-3. **Customization**  
-   - All classes here can be freely extended to handle advanced terrain, better collision detection, improved control schemes, or more sophisticated RL algorithms.
