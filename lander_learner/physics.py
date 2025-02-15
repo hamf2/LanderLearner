@@ -1,6 +1,6 @@
 import pymunk
 import numpy as np
-from utils.config import Config
+from lander_learner.utils.config import Config
 
 
 class PhysicsEngine:

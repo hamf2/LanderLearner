@@ -1,5 +1,5 @@
 import argparse
-from utils.config import Config
+from lander_learner.utils.config import Config
 
 def parse_args(scenarios: dict) -> argparse.Namespace:
     """

@@ -1,6 +1,7 @@
-import sys
 import numpy as np
-from utils.config import Config
+from lander_learner.utils.config import Config
+import logging
+logger = logging.getLogger(__name__)
 
 class TargetZone:
     """
@@ -59,7 +60,7 @@ class TargetZone:
             return np.array([x, y], dtype=np.float32)
         else:
             # Fallback: use deterministic spawn.
-            print("Warning: Unknown spawn mode. Falling back to deterministic spawn.", self.spawn_mode, file=sys.stderr)
+            logger.warning(f"Unknown spawn mode: {self.spawn_mode}. Falling back to deterministic spawn.")
             return np.array([self.deterministic_x, self.deterministic_y], dtype=np.float32)
 
     def _sample_random_velocity(self):

@@ -1,5 +1,5 @@
 import numpy as np
-from utils.config import Config
+from lander_learner.utils.config import Config
 
 def default_observation(env):
     """
@@ -15,26 +15,21 @@ def default_observation(env):
     This provides a basic set of information about the lander state for RL agents
     but no additional information on goals or targets.
     """
-    distance_to_target = env.target_position - env.lander_position
-    altitude = env.lander_position[1]
-    angle = env.lander_angle % (2 * np.pi)
-    left_laser_distance = Config.LASER_RANGE if angle >= np.pi or angle == 0 else np.clip(
-        altitude / np.sin(env.lander_angle), 0, Config.LASER_RANGE)
-    right_laser_distance = Config.LASER_RANGE if angle <= np.pi or angle == 0 else np.clip(
-        altitude / np.sin(-env.lander_angle), 0, Config.LASER_RANGE)
+    angle = (env.lander_angle + np.pi) % (2 * np.pi) - np.pi
+    # altitude = env.lander_position[1]
+    # left_laser_distance = Config.LASER_RANGE if angle >= 0 or angle == -np.pi else np.clip(
+    #     altitude / np.sin(angle), 0, Config.LASER_RANGE)
+    # right_laser_distance = Config.LASER_RANGE if angle <= 0 else np.clip(
+    #     altitude / np.sin(-angle), 0, Config.LASER_RANGE)
 
     observation = np.array([
         env.lander_position[0],
         env.lander_position[1],
         env.lander_velocity[0],
         env.lander_velocity[1],
-        env.lander_angle,
+        angle,
         env.lander_angular_velocity,
         env.fuel_remaining,
-        distance_to_target[0],
-        distance_to_target[1],
-        left_laser_distance,
-        right_laser_distance,
         float(env.collision_state)
     ], dtype=np.float32)
     return observation
@@ -71,7 +66,7 @@ def get_observation_function(name: str):
     Defaults to `default_observation` if the name is not recognized.
     """
     mapping = {
-        "default": (default_observation, 12),
-        "landing_zone": (target_landing_observation, 17)
+        "default": (default_observation, 8),
+        "landing_zone": (target_landing_observation, 13)
     }
     return mapping.get(name, default_observation)

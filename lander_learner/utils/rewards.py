@@ -1,5 +1,7 @@
 import numpy as np
-from utils.config import Config
+from lander_learner.utils.config import Config
+import logging
+logger = logging.getLogger(__name__)
 
 def default_reward(env, done):
     """
@@ -14,7 +16,7 @@ def default_reward(env, done):
     if done:
         if env.crash_state:
             reward -= env.collision_impulse * 1.0
-        print(f"Final reward: {reward:.2f}")
+        logger.debug(f"Final reward: {reward:.2f}")
         return float(reward)
     
     # Reward rightward travel and heading angle towards right
@@ -45,7 +47,7 @@ def soft_landing_reward(env, done):
             reward += 20.0 * (Config.MAX_EPISODE_DURATION - env.elapsed_time)
         else:
             reward -= 2.0 * (Config.MAX_EPISODE_DURATION - env.elapsed_time)
-        print(f"Final reward: {reward:.2f}")
+        logger.debug(f"Final reward: {reward:.2f}")
         return float(reward)
     
     # Reward travel toward target position

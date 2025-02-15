@@ -1,6 +1,6 @@
 import numpy as np
 import pygame
-from agents.base_agent import BaseAgent
+from lander_learner.agents.base_agent import BaseAgent
 
 class HumanAgent(BaseAgent):
     """

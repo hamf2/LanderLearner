@@ -1,3 +1,5 @@
 *__pycache__*
-agents/logs/*
-agents/checkpoints/*
+data/logs/*
+data/checkpoints/*
+
+lander_learner.egg-info

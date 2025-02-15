@@ -3,9 +3,9 @@ from datetime import datetime
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
-from utils.helpers import adjust_save_path, adjust_load_path
-from utils.config import Config
-from agents.base_agent import BaseAgent
+from lander_learner.utils.helpers import adjust_save_path, adjust_load_path
+from lander_learner.utils.config import Config
+from lander_learner.agents.base_agent import BaseAgent
 
 class PPOAgent(BaseAgent):
     """

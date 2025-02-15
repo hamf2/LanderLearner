@@ -1,6 +1,8 @@
 import pygame
 import sys
-from utils.config import Config
+from lander_learner.utils.config import Config
+import importlib.resources as pkg_resources
+from lander_learner import assets
 
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
@@ -31,7 +33,8 @@ class LunarLanderGUI:
         self.lander_surface = pygame.Surface((lander_width_px, lander_height_px))
         self.lander_surface.set_colorkey(WHITE)
         self.lander_surface.fill(GREEN)
-        image = pygame.image.load("assets/lander.png").convert_alpha()
+        with pkg_resources.open_binary(assets, "lander.png") as img_file:
+            image = pygame.image.load(img_file).convert_alpha()
         image = pygame.transform.smoothscale(image, (int(lander_width_px), int(lander_height_px)))
         self.lander_surface.blit(image, (0, 0))
 
