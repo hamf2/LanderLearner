@@ -5,6 +5,7 @@ from physics import PhysicsEngine
 from utils.config import Config
 from utils.rewards import get_reward_function
 from utils.observations import get_observation_function
+from utils.target import TargetZone
 
 class LunarLanderEnv(gym.Env):
     """
@@ -21,7 +22,7 @@ class LunarLanderEnv(gym.Env):
 
         # Select the reward function based on the provided name.
         self.reward_fn = get_reward_function(reward_function)
-        # Select the observation function based on the provided mode.
+        # Select the observation function and determine observation size.
         self.observation_fn, observation_size = get_observation_function(observation_function)
 
         # Define the observation and action space sizes
@@ -34,8 +35,13 @@ class LunarLanderEnv(gym.Env):
             low=-1.0, high=1.0, shape=(2,), dtype=np.float32
         )
 
-        # Set a flag for the target zone mode
+        # Set target zone mode and instantiate target zone management if enabled.
         self.target_zone_mode = target_zone
+        self.target_moves = target_zone and Config.TARGET_ZONE_MOTION
+        if self.target_zone_mode:
+            self.target_zone_obj = TargetZone()
+        else:
+            self.target_zone_obj = None
 
         # State placeholders (initially zero):
         self.reset_state_variables()
@@ -51,12 +57,10 @@ class LunarLanderEnv(gym.Env):
         self.fuel_remaining = np.array(Config.INITIAL_FUEL, dtype=np.float32)
         self.elapsed_time = np.array(0.0, dtype=np.float32)
 
-        # self.surface_heights = np.zeros((50,), dtype=np.float32)  # Example terrain
-        # self.Dx = np.array(1.0, dtype=np.float32)  # distance between terrain segments
-
         # Target zone parameters
         if self.target_zone_mode:
-            self.target_position = np.array([Config.TARGET_ZONE_X, Config.TARGET_ZONE_Y], dtype=np.float32)
+            self.target_zone_obj.reset()
+            self.target_position = self.target_zone_obj.initial_position
             self.target_zone_width = np.array(Config.TARGET_ZONE_WIDTH, dtype=np.float32)
             self.target_zone_height = np.array(Config.TARGET_ZONE_HEIGHT, dtype=np.float32)
 
@@ -79,7 +83,7 @@ class LunarLanderEnv(gym.Env):
         # Ensure action is within valid bounds
         action = np.clip(action, -1.0, 1.0)
 
-        # Convert action -> thruster forces
+        # Convert action to thruster forces
         left_thruster, right_thruster = action
 
         # Update physics based on thruster forces
@@ -89,6 +93,10 @@ class LunarLanderEnv(gym.Env):
             env=self
         )
         self.elapsed_time += Config.TIME_STEP * Config.PHYSICS_STEPS_PER_FRAME
+        
+        # Update target zone position if enabled
+        if self.target_moves:
+            self.target_position = self.target_zone_obj.get_target_position(self.elapsed_time)
 
         # Check termination conditions (collision, out of bounds, no fuel, etc.)
         done = self._check_done()
