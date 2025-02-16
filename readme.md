@@ -9,21 +9,37 @@ A modular Python project using:
 
 ## Directory Structure
 lunar_lander/ 
+
 ├── main.py 
+
 ├── environment.py 
+
 ├── gui.py 
+
 ├── physics.py 
+
 ├── agents/ 
+
 │ ├── human_agent.py 
+
 │ ├── rl_agent.py 
+
 ├── utils/ 
+
 │ ├── config.py 
+
 │ ├── helpers.py 
+
 │ ├── parse_args.py
+
 │ ├── rewards.py
+
 ├── models/ 
+
 ├── scenarios/
+
 │ ├── scenarios.json
+
 └── README.md
 
 ## Installation
