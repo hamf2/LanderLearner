@@ -1,5 +1,5 @@
 import argparse
-from lander_learner.utils.config import Config
+from lander_learner.utils.rl_config import RL_Config
 
 
 def parse_args(scenarios: dict) -> argparse.Namespace:
@@ -89,7 +89,7 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
     parser.add_argument(
         "--model_path",
         type=str,
-        default=Config.DEFAULT_CHECKPOINT_DIR,
+        default=RL_Config.DEFAULT_CHECKPOINT_DIR,
         help="Path to save/load the model (for train and inference mode)",
     )
     parser.add_argument(

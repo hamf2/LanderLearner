@@ -1,10 +1,6 @@
-import pathlib
 
 
 class Config:
-    DEFAULT_CHECKPOINT_DIR = pathlib.Path(__file__).parent.parent.parent / "data" / "checkpoints"
-    DEFAULT_LOGGING_DIR = pathlib.Path(__file__).parent.parent.parent / "data" / "logs"
-
     # Physics / Environment
     GRAVITY = 1.0
     TIME_STEP = 1.0 / 60.0

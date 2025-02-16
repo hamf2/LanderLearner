@@ -3,8 +3,9 @@ from stable_baselines3 import SAC
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
 from lander_learner.utils.helpers import adjust_save_path, adjust_load_path
-from lander_learner.utils.config import Config
+from lander_learner.utils.rl_config import RL_Config
 from lander_learner.agents.base_agent import BaseAgent
+from lander_learner.agents import default_callback
 
 
 class SACAgent(BaseAgent):
@@ -22,13 +23,19 @@ class SACAgent(BaseAgent):
             "MlpPolicy",
             env,
             verbose=1,
-            tensorboard_log=str(Config.DEFAULT_LOGGING_DIR / "lander_tensorboard"),
+            tensorboard_log=str(RL_Config.DEFAULT_LOGGING_DIR / "lander_tensorboard"),
             device=self.device,  # Uses GPU if available: "cuda" or "auto"
             **kwargs  # Extra arguments passed to SAC, if any
         )
 
-    def train(self, timesteps=10000):
-        self.model.learn(total_timesteps=timesteps, tb_log_name="SAC_" + datetime.now().strftime("%Y%m%d-%H%M%S"))
+    def train(self, timesteps=RL_Config.CHECKPOINT_FREQ, callback=None):
+        if callback is None:
+            callback = default_callback(timesteps=timesteps, model_type="sac")
+        self.model.learn(
+            total_timesteps=timesteps,
+            tb_log_name="SAC_" + datetime.now().strftime("%Y%m%d-%H%M%S"),
+            callback=callback
+        )
 
     def get_action(self, observation):
         action, _states = self.model.predict(observation, deterministic=self.deterministic)

@@ -1,4 +1,11 @@
+import pathlib
+
+
 class RL_Config:
+    DEFAULT_CHECKPOINT_DIR = pathlib.Path(__file__).parent.parent.parent / "data" / "checkpoints"
+    DEFAULT_LOGGING_DIR = pathlib.Path(__file__).parent.parent.parent / "data" / "logs"
+    CHECKPOINT_FREQ = 500000
+
     # PPO Configuration
     PPO_DEVICE = "cpu"
 

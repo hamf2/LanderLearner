@@ -20,7 +20,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "lander_learner=lunar_lander.main:main",
+            "lander_learner=lander_learner.main:main",
         ],
     },
 )
