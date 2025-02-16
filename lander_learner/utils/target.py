@@ -18,29 +18,29 @@ class TargetZone:
     sampled (within provided bounds) and used to move the target.
     """
 
-    def __init__(self):
-        # Read basic spawn parameters from config
-        self.spawn_mode = Config.TARGET_ZONE_SPAWN_MODE  # "deterministic", "on_ground", "above_ground"
-        self.deterministic_x = Config.TARGET_ZONE_X
-        self.deterministic_y = Config.TARGET_ZONE_Y
-        self.zone_width = Config.TARGET_ZONE_WIDTH
-        self.zone_height = Config.TARGET_ZONE_HEIGHT
+    def __init__(self, **kwargs):
+        # Read basic spawn parameters from config or kwargs
+        self.spawn_mode = kwargs.get('spawn_mode', Config.TARGET_ZONE_SPAWN_MODE)  # "deterministic", "on_ground", "above_ground"
+        self.deterministic_x = kwargs.get('deterministic_x', Config.TARGET_ZONE_X)
+        self.deterministic_y = kwargs.get('deterministic_y', Config.TARGET_ZONE_Y)
+        self.zone_width = kwargs.get('zone_width', Config.TARGET_ZONE_WIDTH)
+        self.zone_height = kwargs.get('zone_height', Config.TARGET_ZONE_HEIGHT)
         
         # Spawn ranges for random placement
-        self.spawn_range_x = Config.TARGET_ZONE_SPAWN_RANGE_X
-        self.spawn_range_y = Config.TARGET_ZONE_SPAWN_RANGE_Y
+        self.spawn_range_x = kwargs.get('spawn_range_x', Config.TARGET_ZONE_SPAWN_RANGE_X)
+        self.spawn_range_y = kwargs.get('spawn_range_y', Config.TARGET_ZONE_SPAWN_RANGE_Y)
 
         # Motion configuration
-        self.motion_enabled = Config.TARGET_ZONE_MOTION
+        self.motion_enabled = kwargs.get('motion_enabled', Config.TARGET_ZONE_MOTION)
         if self.motion_enabled:
             # Use additional config parameters if available; otherwise, use defaults.
-            self.motion_interval = Config.TARGET_ZONE_MOTION_INTERVAL
-            self.vel_range_x = Config.TARGET_ZONE_VELOCITY_RANGE_X
-            self.vel_range_y = Config.TARGET_ZONE_VELOCITY_RANGE_Y
+            self.motion_interval = kwargs.get('motion_interval', Config.TARGET_ZONE_MOTION_INTERVAL)
+            self.vel_range_x = kwargs.get('vel_range_x', Config.TARGET_ZONE_VELOCITY_RANGE_X)
+            self.vel_range_y = kwargs.get('vel_range_y', Config.TARGET_ZONE_VELOCITY_RANGE_Y)
             # Set up for piecewise linear motion.
             self.current_velocity = np.array([0.0, 0.0], dtype=np.float32)
-            self.last_segment_time = 0.0  # Time at which the current motion segment began.
-        # In all cases, sample the initial target position. Run reset() to initialize random values.
+            self.last_segment_time = np.array(0.0, dtype=np.float32)  # Time at which the current motion segment began.
+        # In all cases, declare the initial target position. Run reset() to initialize random values.
         self.initial_position = np.array([0.0, 0.0], dtype=np.float32)
 
     def _sample_spawn_position(self):
@@ -72,7 +72,7 @@ class TargetZone:
         vy = np.random.uniform(0, self.vel_range_y)
         return np.array([vx, vy], dtype=np.float32)
 
-    def get_target_position(self, elapsed_time):
+    def get_target_position(self, elapsed_time: np.ndarray) -> np.ndarray:
         """
         Given the elapsed time (in seconds), return the current target zone position.
         

@@ -38,9 +38,9 @@ class LunarLanderEnv(gym.Env):
         )
 
         # Set target zone mode and instantiate target zone management if enabled.
-        self.target_zone_mode = target_zone
+        self.target_zone = target_zone
         self.target_moves = target_zone and Config.TARGET_ZONE_MOTION
-        if self.target_zone_mode:
+        if self.target_zone:
             self.target_zone_obj = TargetZone()
         else:
             self.target_zone_obj = None
@@ -60,7 +60,7 @@ class LunarLanderEnv(gym.Env):
         self.elapsed_time = np.array(0.0, dtype=np.float32)
 
         # Target zone parameters
-        if self.target_zone_mode:
+        if self.target_zone:
             self.target_zone_obj.reset()
             self.target_position = self.target_zone_obj.initial_position
             self.target_zone_width = np.array(Config.TARGET_ZONE_WIDTH, dtype=np.float32)
@@ -70,8 +70,9 @@ class LunarLanderEnv(gym.Env):
         self.collision_state = False
         self.collision_impulse = 0.0
         self.crash_state = False
-        self.landing_state = False
+        self.idle_state = False
         self.idle_timer = 0.0
+        self.time_limit_reached = False
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
@@ -139,6 +140,7 @@ class LunarLanderEnv(gym.Env):
             angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
             logger.info(f"Time limit reached.  Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f} "
                   f"Angle = {angle_display:.2f} ({self.lander_angle:.2f}). ")
+            self.time_limit_reached = True
             return True
 
         # Crash detected if collision impulse exceeds threshold or lander is upside down
@@ -170,9 +172,7 @@ class LunarLanderEnv(gym.Env):
                 logger.info(f"Idle timeout. Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f}, "
                       f"Angle = {angle_display:.2f} ({self.lander_angle:.2f}). Velocity: vx = {self.lander_velocity[0]:.2f}, vy = {self.lander_velocity[1]:.2f}, "
                       f"vAng = {self.lander_angular_velocity:.2f}. ")
-                if (self.target_position[0] - self.target_zone_width / 2 <= self.lander_position[0] <= self.target_position[0] + self.target_zone_width / 2 and
-                    self.target_position[1] - self.target_zone_height / 2 <= self.lander_position[1] <= self.target_position[1] + self.target_zone_height / 2):
-                    self.landing_state = True
+                self.idle_state = True
                 return True
         else:
             self.idle_timer = 0.0

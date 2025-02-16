@@ -43,10 +43,16 @@ def soft_landing_reward(env, done):
     if done:
         if env.crash_state:
             reward -= env.collision_impulse * 1.0
-        elif env.landing_state:
-            reward += 20.0 * (Config.MAX_EPISODE_DURATION - env.elapsed_time)
+        elif env.idle_state:
+            if (env.target_position[0] - env.target_zone_width / 2 <= env.lander_position[0] <= env.target_position[0] + env.target_zone_width / 2 and
+                env.target_position[1] - env.target_zone_height / 2 <= env.lander_position[1] <= env.target_position[1] + env.target_zone_height / 2):
+                reward += 20.0 * (Config.MAX_EPISODE_DURATION - env.elapsed_time)
+            else:
+                reward -= 2.0 * (Config.MAX_EPISODE_DURATION - env.elapsed_time)
+        elif env.time_limit_reached:
+            pass
         else:
-            reward -= 2.0 * (Config.MAX_EPISODE_DURATION - env.elapsed_time)
+            logger.warning("Unrecognised termination condition. No reward assigned.")
         logger.debug(f"Final reward: {reward:.2f}")
         return float(reward)
     
