@@ -1,9 +1,9 @@
-
 class BaseAgent:
     """
     Base class for RL agents.
     Subclasses should override the train, get_action, save_model, and load_model methods.
     """
+
     def __init__(self, env, deterministic=True):
         """
         env: The Gym environment.

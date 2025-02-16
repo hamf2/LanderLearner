@@ -1,4 +1,3 @@
-import numpy as np
 from datetime import datetime
 from stable_baselines3 import SAC
 from stable_baselines3.common.env_checker import check_env
@@ -7,10 +6,12 @@ from lander_learner.utils.helpers import adjust_save_path, adjust_load_path
 from lander_learner.utils.config import Config
 from lander_learner.agents.base_agent import BaseAgent
 
+
 class SACAgent(BaseAgent):
     """
     An RL agent that uses Soft Actor-Critic (SAC) with GPU acceleration where available.
     """
+
     def __init__(self, env, deterministic=True, device="auto", **kwargs):
         # Only run check_env for non-vectorized environments.
         if not (isinstance(env, SubprocVecEnv) or isinstance(env, DummyVecEnv)):
@@ -27,10 +28,7 @@ class SACAgent(BaseAgent):
         )
 
     def train(self, timesteps=10000):
-        self.model.learn(
-            total_timesteps=timesteps,
-            tb_log_name="SAC_" + datetime.now().strftime("%Y%m%d-%H%M%S")
-        )
+        self.model.learn(total_timesteps=timesteps, tb_log_name="SAC_" + datetime.now().strftime("%Y%m%d-%H%M%S"))
 
     def get_action(self, observation):
         action, _states = self.model.predict(observation, deterministic=self.deterministic)

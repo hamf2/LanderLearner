@@ -4,11 +4,13 @@ from pathlib import Path
 import os
 from datetime import datetime
 
+
 def flatten_state(*arrays):
     """
     Flatten multiple arrays into one.
     """
     return np.concatenate([arr.flatten() for arr in arrays if arr is not None])
+
 
 def load_scenarios(json_path: Path) -> dict:
     """
@@ -19,7 +21,8 @@ def load_scenarios(json_path: Path) -> dict:
             return json.load(f)
     except Exception as e:
         raise RuntimeError(f"Error loading {json_path}: {e}")
-    
+
+
 def adjust_save_path(path: str, model_type: str = "") -> str:
     """
     Ensure the save path exists, and add default file name if directory is provided.
@@ -32,6 +35,7 @@ def adjust_save_path(path: str, model_type: str = "") -> str:
         path = str(path) + ".zip"
     os.makedirs(os.path.dirname(path), exist_ok=True)
     return path
+
 
 def adjust_load_path(path: str, model_type: str = "") -> str:
     """

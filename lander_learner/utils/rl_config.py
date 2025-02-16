@@ -1,5 +1,3 @@
-
-
 class RL_Config:
     # PPO Configuration
     PPO_DEVICE = "cpu"
