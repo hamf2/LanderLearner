@@ -9,7 +9,7 @@
     "landing": {
         "rl_agent_type": "PPO",
         "reward_function": "soft_landing",
-        "observation_function": "landing_zone",
+        "observation_function": "target",
         "target_zone": true,
         "learning_frames": 50000
     }

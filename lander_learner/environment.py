@@ -4,8 +4,8 @@ import logging
 
 from lander_learner.physics import PhysicsEngine
 from lander_learner.utils.config import Config
-from lander_learner.utils.rewards import get_reward_function
-from lander_learner.utils.observations import get_observation_function
+from lander_learner.rewards import get_reward_class
+from lander_learner.observations import get_observation_class
 from lander_learner.utils.target import TargetZone
 
 logger = logging.getLogger(__name__)
@@ -25,14 +25,19 @@ class LunarLanderEnv(gym.Env):
         self.physics_engine = PhysicsEngine()
 
         # Select the reward function based on the provided name.
-        self.reward_fn = get_reward_function(reward_function)
+        self.reward = get_reward_class(reward_function)
         # Select the observation function and determine observation size.
-        self.observation_fn, observation_size = get_observation_function(observation_function)
+        self.observation = get_observation_class(observation_function)
 
         # Define the observation and action space sizes
         #   Observation: as defined by the observation function
         #   Action: 2 thruster power values (each in range [-1, 1])
-        self.observation_space = gym.spaces.Box(low=-np.inf, high=np.inf, shape=(observation_size,), dtype=np.float32)
+        self.observation_space = gym.spaces.Box(
+            low=-np.inf,
+            high=np.inf,
+            shape=(self.observation.observation_size,),
+            dtype=np.float32
+        )
         self.action_space = gym.spaces.Box(low=-1.0, high=1.0, shape=(2,), dtype=np.float32)
 
         # Set target zone mode and instantiate target zone management if enabled.
@@ -116,13 +121,13 @@ class LunarLanderEnv(gym.Env):
         Construct and return an observation vector from the current state
         using the selected observation function.
         """
-        return self.observation_fn(self)
+        return self.observation.get_observation(self)
 
     def _calculate_reward(self, done):
         """
         Compute and return the reward by calling the selected reward function.
         """
-        return self.reward_fn(self, done)
+        return self.reward.get_reward(self, done)
 
     def _check_done(self):
         """

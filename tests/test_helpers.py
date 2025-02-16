@@ -1,9 +1,8 @@
 import os
-import tempfile
-from pathlib import Path
 import numpy as np
-import pytest
+import pytest  # noqa: F401
 from lander_learner.utils.helpers import flatten_state, adjust_save_path, adjust_load_path
+
 
 def test_flatten_state():
     a = np.array([1, 2])
@@ -11,6 +10,7 @@ def test_flatten_state():
     flattened = flatten_state(a, b)
     # Expected flatten: [1, 2, 3, 4, 5, 6]
     np.testing.assert_array_equal(flattened, np.array([1, 2, 3, 4, 5, 6]))
+
 
 def test_adjust_save_path_directory(tmp_path):
     # Create a temporary directory to simulate providing a directory path.
@@ -22,6 +22,7 @@ def test_adjust_save_path_directory(tmp_path):
     assert save_path.startswith(str(directory))
     assert save_path.endswith(".zip")
 
+
 def test_adjust_load_path_file(tmp_path):
     # Create a dummy zip file in a temporary directory.
     directory = tmp_path / "models"
@@ -31,6 +32,7 @@ def test_adjust_load_path_file(tmp_path):
     # adjust_load_path should return the same file if given the file path.
     load_path = adjust_load_path(str(file_path), model_type="test")
     assert load_path == str(file_path)
+
 
 def test_adjust_load_path_directory(tmp_path):
     # Create multiple dummy zip files and check that the latest is selected.

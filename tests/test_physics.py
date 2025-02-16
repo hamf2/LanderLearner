@@ -1,7 +1,8 @@
 import numpy as np
-import pytest
+import pytest  # noqa: F401
 from lander_learner.physics import PhysicsEngine
 from lander_learner.utils.config import Config
+
 
 # Create a dummy environment class for testing the physics engine.
 class DummyEnv:
@@ -14,6 +15,7 @@ class DummyEnv:
         self.collision_state = False
         self.collision_impulse = 0.0
         self.elapsed_time = 0.0
+
 
 def test_physics_update():
     env = DummyEnv()
@@ -32,8 +34,8 @@ def test_physics_update():
     # Fuel should have decreased.
     assert env.fuel_remaining < Config.INITIAL_FUEL
 
+
 def test_physics_reset():
-    env = DummyEnv()
     physics_engine = PhysicsEngine()
     # Simulate a collision impulse
     physics_engine.collision_impulse = 50.0

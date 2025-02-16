@@ -30,7 +30,9 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
 
     parser = argparse.ArgumentParser(description="2D Lunar Lander with Scenario Selection and Conditional Imports")
     parser.add_argument(
-        "--gui", action="store_true", help="Enable GUI Rendering (only available in single environment mode)"
+        "--gui",
+        action="store_true",
+        help="Enable GUI Rendering (only available in single environment mode)"
     )
     parser.add_argument(
         "--mode",
@@ -38,7 +40,11 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
         default="human",
         help="Mode to run the environment in (human|train|inference)",
     )
-    parser.add_argument("--episodes", type=int, default=1, help="Number of episodes to run (for human/inference modes)")
+    parser.add_argument(
+        "--episodes",
+        type=int,
+        default=1,
+        help="Number of episodes to run (for human/inference modes)")
     parser.add_argument(
         "--timesteps",
         type=int,
@@ -46,13 +52,22 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
         help="Number of training timesteps (only for train mode)",
     )
     parser.add_argument(
-        "--num_envs", type=int, default=4, help="Number of environments to run in parallel during training"
+        "--num_envs",
+        type=int,
+        default=4,
+        help="Number of environments to run in parallel during training"
     )
     parser.add_argument(
-        "--scenario", type=str, default="base_scenario", help="Scenario name to use (as defined in scenarios.json)"
+        "--scenario",
+        type=str,
+        default="base_scenario",
+        help="Scenario name to use (as defined in scenarios.json)"
     )
     parser.add_argument(
-        "--rl_agent", type=str, default=default_rl_agent, help="RL agent type to use (overrides scenario default)"
+        "--rl_agent",
+        type=str,
+        default=default_rl_agent,
+        help="RL agent type to use (overrides scenario default)"
     )
     parser.add_argument(
         "--reward_function",

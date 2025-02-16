@@ -1,6 +1,6 @@
-import sys
-import pytest
+import pytest  # noqa: F401
 from lander_learner.utils.parse_args import parse_args
+
 
 def test_parse_args_defaults(monkeypatch):
     # Provide a dummy scenarios dictionary.
@@ -10,7 +10,7 @@ def test_parse_args_defaults(monkeypatch):
             "reward_function": "rightward",
             "observation_function": "default",
             "target_zone": False,
-            "learning_frames": 10000
+            "learning_frames": 10000,
         }
     }
     test_args = ["program", "--scenario", "base"]
