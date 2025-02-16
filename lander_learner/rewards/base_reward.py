@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 import operator
-from .composite_reward import CompositeReward
 
 
 class BaseReward(ABC):
@@ -25,25 +24,33 @@ class BaseReward(ABC):
 
     # Operator overloads:
     def __add__(self, other):
+        from .composite_reward import CompositeReward
         return CompositeReward(self, operator.add, other)
 
     def __radd__(self, other):
+        from .composite_reward import CompositeReward
         return CompositeReward(other, operator.add, self)
 
     def __sub__(self, other):
+        from .composite_reward import CompositeReward
         return CompositeReward(self, operator.sub, other)
 
     def __rsub__(self, other):
+        from .composite_reward import CompositeReward
         return CompositeReward(other, operator.sub, self)
 
     def __mul__(self, other):
+        from .composite_reward import CompositeReward
         return CompositeReward(self, operator.mul, other)
 
     def __rmul__(self, other):
+        from .composite_reward import CompositeReward
         return CompositeReward(other, operator.mul, self)
 
     def __truediv__(self, other):
+        from .composite_reward import CompositeReward
         return CompositeReward(self, operator.truediv, other)
 
     def __rtruediv__(self, other):
+        from .composite_reward import CompositeReward
         return CompositeReward(other, operator.truediv, self)

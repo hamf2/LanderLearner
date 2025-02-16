@@ -1,6 +1,7 @@
 import numpy as np
 import pytest  # noqa: F401
 from lander_learner.rewards import get_reward_class
+from lander_learner.rewards.constant_reward import ConstantReward
 from lander_learner.utils.config import Config
 
 
@@ -69,3 +70,51 @@ def test_soft_landing_reward_done_no_landing():
     reward = soft_landing_reward.get_reward(env, done=True)
     # Reaching time limit, landing did not occur, so reward should be zero or negative.
     assert reward <= 0
+
+
+def test_reward_addition():
+    # Create two constant rewards with known values.
+    reward1 = ConstantReward(5.0)
+    reward2 = ConstantReward(3.0)
+    # Using overloaded addition.
+    composite = reward1 + reward2
+    env = DummyEnv()
+    # The composite reward should yield the sum of the two constant rewards.
+    value = composite.get_reward(env, done=False)
+    assert value == 8.0
+
+
+def test_reward_multiplication_by_scalar():
+    # Create a constant reward.
+    reward = ConstantReward(4.0)
+    scalar = 3.0
+    # Multiply reward by a scalar using both left and right operations.
+    product1 = reward * scalar
+    product2 = scalar * reward
+    env = DummyEnv()
+    value1 = product1.get_reward(env, done=False)
+    value2 = product2.get_reward(env, done=False)
+    assert value1 == 12.0
+    assert value2 == 12.0
+
+
+def test_combined_rightward_and_soft_landing_scalars():
+    # Test the addition of scalar multiples of a rightward reward and a soft_landing reward.
+    # Scalars to use.
+    a = 2.0
+    b = 3.0
+    # Create reward instances.
+    rightward_reward = get_reward_class("rightward")
+    soft_landing_reward = get_reward_class("soft_landing")
+    # Compute scalar multiples and their sum.
+    combined_reward = a * rightward_reward + b * soft_landing_reward
+
+    env = DummyEnv()
+    # Use a non-terminal scenario (done=False) for consistent reward computations.
+    # Get individual rewards.
+    reward_right = rightward_reward.get_reward(env, done=False)
+    reward_soft = soft_landing_reward.get_reward(env, done=False)
+    expected_value = a * reward_right + b * reward_soft
+    composite_value = combined_reward.get_reward(env, done=False)
+    # Allow a small numerical tolerance.
+    assert abs(composite_value - expected_value) < 1e-6
