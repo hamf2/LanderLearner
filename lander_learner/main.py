@@ -6,7 +6,7 @@ import logging
 
 from lander_learner import scenarios
 from lander_learner.environment import LunarLanderEnv
-from lander_learner.utils.rl_config import RL_Config
+from lander_learner.utils.config import RL_Config
 from lander_learner.utils.helpers import load_scenarios
 from lander_learner.utils.parse_args import parse_args
 

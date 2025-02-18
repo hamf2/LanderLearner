@@ -1,7 +1,6 @@
 import numpy as np
 from lander_learner.rewards.base_reward import BaseReward
-from lander_learner.utils.config import Config
-from lander_learner.utils.rl_config import RL_Config
+from lander_learner.utils.config import Config, RL_Config
 import logging
 
 logger = logging.getLogger(__name__)

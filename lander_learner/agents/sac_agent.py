@@ -3,7 +3,7 @@ from stable_baselines3 import SAC
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
 from lander_learner.utils.helpers import adjust_save_path, adjust_load_path
-from lander_learner.utils.rl_config import RL_Config
+from lander_learner.utils.config import RL_Config
 from lander_learner.agents.base_agent import BaseAgent
 from lander_learner.agents import default_callback
 

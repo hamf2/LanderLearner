@@ -1,6 +1,6 @@
 from stable_baselines3.common.callbacks import CheckpointCallback
 from datetime import datetime
-from lander_learner.utils.rl_config import RL_Config
+from lander_learner.utils.config import RL_Config
 
 
 def default_callback(checkpoint_freq=100000, checkpoint_dir=None, model_type="model"):

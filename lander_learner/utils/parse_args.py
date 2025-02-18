@@ -1,5 +1,5 @@
 import argparse
-from lander_learner.utils.rl_config import RL_Config
+from lander_learner.utils.config import RL_Config
 
 
 def parse_args(scenarios: dict) -> argparse.Namespace:

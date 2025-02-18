@@ -1,5 +1,8 @@
 import numpy as np
+import logging
 from lander_learner.observations.base_observation import BaseObservation
+
+logger = logging.getLogger(__name__)
 
 
 class ObservationWrapper(BaseObservation):
@@ -58,6 +61,7 @@ class NoiseObservationWrapper(ObservationWrapper):
         elif self.noise_covariance is None and self.noise_variance is None:
             # If no noise parameters are provided, do not add noise.
             self.noise_covariance = None
+            logger.warning("Noise parameters not provided. No noise will be added to observations.")
 
     def get_observation(self, env):
         obs = self.observation.get_observation(env)
