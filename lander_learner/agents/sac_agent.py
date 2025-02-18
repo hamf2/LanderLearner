@@ -28,9 +28,9 @@ class SACAgent(BaseAgent):
             **kwargs  # Extra arguments passed to SAC, if any
         )
 
-    def train(self, timesteps=RL_Config.CHECKPOINT_FREQ, callback=None):
+    def train(self, timesteps=100000, callback=None, checkpoint_freq=RL_Config.CHECKPOINT_FREQ):
         if callback is None:
-            callback = default_callback(timesteps=timesteps, model_type="sac")
+            callback = default_callback(checkpoint_freq=checkpoint_freq, model_type="sac")
         self.model.learn(
             total_timesteps=timesteps,
             tb_log_name="SAC_" + datetime.now().strftime("%Y%m%d-%H%M%S"),

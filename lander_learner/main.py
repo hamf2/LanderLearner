@@ -11,7 +11,7 @@ from lander_learner.utils.helpers import load_scenarios
 from lander_learner.utils.parse_args import parse_args
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format="%(created)f: %(message)s", stream=sys.stdout)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(message)s", stream=sys.stdout)
 
 
 # RL agent and GUI modules are imported conditionally based on the mode.
@@ -86,7 +86,7 @@ def main():
         if args.load_checkpoint:
             agent.load_model(args.load_checkpoint)
         try:
-            agent.train(args.timesteps)
+            agent.train(args.timesteps, checkpoint_freq=RL_Config.CHECKPOINT_FREQ // args.num_envs)
         except KeyboardInterrupt:
             logger.warning("Training interrupted.")
         agent.save_model(args.model_path)

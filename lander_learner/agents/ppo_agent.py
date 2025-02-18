@@ -28,7 +28,7 @@ class PPOAgent(BaseAgent):
 
     def train(self, timesteps=RL_Config.CHECKPOINT_FREQ, callback=None):
         if callback is None:
-            callback = default_callback(timesteps=timesteps, model_type="ppo")
+            callback = default_callback(checkpoint_freq=timesteps, model_type="ppo")
         self.model.learn(
             total_timesteps=timesteps,
             tb_log_name="PPO_" + datetime.now().strftime("%Y%m%d-%H%M%S"),

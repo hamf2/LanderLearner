@@ -3,7 +3,7 @@ from datetime import datetime
 from lander_learner.utils.rl_config import RL_Config
 
 
-def default_callback(timesteps=100000, checkpoint_dir=None, model_type="model"):
+def default_callback(checkpoint_freq=100000, checkpoint_dir=None, model_type="model"):
     """
     Create a default CheckpointCallback for training an RL agent.
 
@@ -16,4 +16,4 @@ def default_callback(timesteps=100000, checkpoint_dir=None, model_type="model"):
     """
     if checkpoint_dir is None:
         checkpoint_dir = RL_Config.DEFAULT_CHECKPOINT_DIR / f"{model_type}_{datetime.now().strftime('%Y%m%d-%H%M%S')}"
-    return CheckpointCallback(save_freq=100000, save_path=checkpoint_dir, name_prefix=model_type)
+    return CheckpointCallback(save_freq=checkpoint_freq, save_path=checkpoint_dir, name_prefix=model_type)
