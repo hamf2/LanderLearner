@@ -25,6 +25,11 @@ class LunarLanderEnv(gym.Env):
         target_zone (bool): Flag to enable or disable target zone.
         target_moves (bool): Flag to enable or disable target zone motion.
         target_zone_obj (TargetZone or None): Instance of target zone management if enabled.
+        time_step (float): Time step for each frame.
+        max_episode_duration (float): Maximum duration of an episode.
+        impulse_threshold (float): Threshold for collision impulse to be considered a crash.
+        max_idle_time (float): Maximum idle time before termination.
+        initial_fuel (float): Initial fuel amount.
         lander_position (np.ndarray): Position of the lander.
         lander_velocity (np.ndarray): Velocity of the lander.
         lander_angle (np.ndarray): Angle of the lander.
@@ -45,14 +50,16 @@ class LunarLanderEnv(gym.Env):
         __init__(self, gui_enabled=False, reward_function="default",
         observation_function="default", target_zone=False, **kwargs):
             Initialize the Lunar Lander environment.
-        reset_state_variables(self, reset_config: bool = False, target_seed: int = None):
-        reset(self, seed=None, options=None):
+        reset_state_variables(self, reset_config=False):
+            Reset (or initialize) key state variables for a new episode.
+        reset(self, seed=None, reset_config=False):
             Reset the environment to an initial state and return the initial observation.
         step(self, action):
             Execute one time step within the environment given an action.
         _get_observation(self):
             Construct and return an observation vector from the current state using the selected observation function.
         _calculate_reward(self, done):
+            Compute and return the reward by calling the selected reward function.
         _check_done(self):
             Check if the episode should terminate
             (e.g., collision, lander below ground, or other termination conditions).
@@ -111,6 +118,13 @@ class LunarLanderEnv(gym.Env):
         else:
             self.target_zone_obj = None
 
+        # Load parameters from config
+        self.time_step = Config.FRAME_TIME_STEP
+        self.max_episode_duration = Config.MAX_EPISODE_DURATION
+        self.impulse_threshold = Config.IMPULSE_THRESHOLD
+        self.max_idle_time = Config.IDLE_TIMEOUT
+        self.initial_fuel = Config.INITIAL_FUEL
+
         # State placeholders (initially zero):
         self.reset(seed=seed)
 
@@ -120,11 +134,16 @@ class LunarLanderEnv(gym.Env):
         """
         if reset_config:
             self.target_moves = self.target_zone and Config.TARGET_ZONE_MOTION
+            self.time_step = Config.FRAME_TIME_STEP
+            self.max_episode_duration = Config.MAX_EPISODE_DURATION
+            self.impulse_threshold = Config.IMPULSE_THRESHOLD
+            self.max_idle_time = Config.IDLE_TIMEOUT
+            self.initial_fuel = Config.INITIAL_FUEL
         self.lander_position = np.array([0.0, 10.0], dtype=np.float32)
         self.lander_velocity = np.array([0.0, 0.0], dtype=np.float32)
         self.lander_angle = np.array(0.0, dtype=np.float32)
         self.lander_angular_velocity = np.array(0.0, dtype=np.float32)
-        self.fuel_remaining = np.array(Config.INITIAL_FUEL, dtype=np.float32)
+        self.fuel_remaining = np.array(self.initial_fuel, dtype=np.float32)
         self.elapsed_time = np.array(0.0, dtype=np.float32)
 
         # Target zone parameters
@@ -159,7 +178,7 @@ class LunarLanderEnv(gym.Env):
 
         # Update physics based on thruster forces
         self.physics_engine.update(left_thruster=left_thruster, right_thruster=right_thruster, env=self)
-        self.elapsed_time += Config.TIME_STEP * Config.PHYSICS_STEPS_PER_FRAME
+        self.elapsed_time += self.time_step
 
         # Update target zone position if enabled
         if self.target_moves:
@@ -200,7 +219,7 @@ class LunarLanderEnv(gym.Env):
         lander below ground, or other termination conditions).
         """
         # If time limit exceeded
-        if self.elapsed_time >= Config.MAX_EPISODE_DURATION:
+        if self.elapsed_time >= self.max_episode_duration:
             angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
             logger.info(
                 f"Time limit reached.  Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f} "
@@ -211,7 +230,7 @@ class LunarLanderEnv(gym.Env):
 
         # Crash detected if collision impulse exceeds threshold or lander is upside down
         if self.collision_state and (
-            self.collision_impulse > Config.IMPULSE_THRESHOLD
+            self.collision_impulse > self.impulse_threshold
             or (np.pi / 2 <= self.lander_angle % (2 * np.pi) <= 3 * np.pi / 2)
         ):
             angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
@@ -236,8 +255,8 @@ class LunarLanderEnv(gym.Env):
 
         # If lander is idle for too long, terminate episode
         if self.collision_state and np.linalg.norm(self.lander_velocity) < 0.1:
-            self.idle_timer += Config.TIME_STEP
-            if self.idle_timer > Config.IDLE_TIMEOUT:
+            self.idle_timer += self.time_step
+            if self.idle_timer > self.max_idle_time:
                 angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
                 logger.info(
                     f"Idle timeout. Position: x = {self.lander_position[0]:.2f}, y = {self.lander_position[1]:.2f}, "

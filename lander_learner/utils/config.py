@@ -45,4 +45,4 @@ class Config:
 
     # Calculated
     PHYSICS_STEPS_PER_FRAME = int(1.0 / TIME_STEP / FPS)
-    RENDER_TIME_STEP = 1 / FPS
+    FRAME_TIME_STEP = 1 / FPS

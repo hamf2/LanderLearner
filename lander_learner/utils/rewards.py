@@ -24,11 +24,11 @@ def default_reward(env, done):
     # Reward rightward travel and heading angle towards right
     x_velocity = env.lander_velocity[0]
     angle_penalty = abs((env.lander_angle - np.pi / 2) % np.pi)
-    reward += (x_velocity * 10 - angle_penalty * 1.0) * Config.RENDER_TIME_STEP
+    reward += (x_velocity * 10 - angle_penalty * 1.0) * Config.FRAME_TIME_STEP
 
     # Penalize collision
     if env.collision_state:
-        reward -= 5.0 * Config.RENDER_TIME_STEP
+        reward -= 5.0 * Config.FRAME_TIME_STEP
 
     return float(reward)
 
@@ -75,7 +75,7 @@ def soft_landing_reward(env, done):
             e,
         )
     distance_to_target = np.linalg.norm(vector_to_target)
-    reward += 2.0 * np.dot(env.lander_velocity, vector_to_target) / distance_to_target * Config.RENDER_TIME_STEP
+    reward += 2.0 * np.dot(env.lander_velocity, vector_to_target) / distance_to_target * Config.FRAME_TIME_STEP
 
     # Encourage being upright and moving slowly near the target
     angle_penalty = abs(((env.lander_angle + np.pi) % (2 * np.pi)) - np.pi) - np.pi / 4
@@ -84,15 +84,15 @@ def soft_landing_reward(env, done):
     reward -= (
         (angle_penalty * 1.0 + velocity_penalty * 2.0 + time_penalty * 1.0)
         * (5 / np.clip(distance_to_target, 2, np.inf))
-        * Config.RENDER_TIME_STEP
+        * Config.FRAME_TIME_STEP
     )
 
     # Penalize collision
     if env.collision_state:
         if distance_to_target < env.target_zone_width / 2:
-            reward += 10.0 * Config.RENDER_TIME_STEP
+            reward += 10.0 * Config.FRAME_TIME_STEP
         else:
-            reward -= 5.0 * Config.RENDER_TIME_STEP
+            reward -= 5.0 * Config.FRAME_TIME_STEP
 
     return float(reward)
 

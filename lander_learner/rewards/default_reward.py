@@ -38,9 +38,9 @@ class DefaultReward(BaseReward):
         angle_error = abs((env.lander_angle - np.pi / 2) % np.pi)
         reward += (
             x_velocity * self.x_velocity_factor - angle_error * self.angle_penalty_factor
-        ) * Config.RENDER_TIME_STEP
+        ) * Config.FRAME_TIME_STEP
 
         if env.collision_state:
-            reward -= self.collision_penalty * Config.RENDER_TIME_STEP
+            reward -= self.collision_penalty * Config.FRAME_TIME_STEP
 
         return float(reward)

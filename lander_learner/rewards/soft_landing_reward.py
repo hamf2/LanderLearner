@@ -103,7 +103,7 @@ class SoftLandingReward(BaseReward):
             * np.dot(env.lander_velocity, vector_to_target)
             / distance_to_target
             - self.time_penalty_factor
-            ) * Config.RENDER_TIME_STEP
+            ) * Config.FRAME_TIME_STEP
 
         # Encourage being upright and moving slowly near the target
         angle_penalty = abs(((env.lander_angle + np.pi) % (2 * np.pi)) - np.pi) / np.pi
@@ -114,7 +114,7 @@ class SoftLandingReward(BaseReward):
              + self.near_target_passive_bonus)
             * (self.near_target_unit_dist
                / np.clip(distance_to_target, self.near_target_unit_dist / self.near_target_max_multiplier, np.inf))
-            * Config.RENDER_TIME_STEP
+            * Config.FRAME_TIME_STEP
         )
 
         # Penalize collision
@@ -123,6 +123,6 @@ class SoftLandingReward(BaseReward):
                 self.on_target_touch_down_bonus
                 - (self.on_target_touch_down_bonus + self.off_target_touch_down_penalty)
                 * np.clip(distance_to_target / env.target_zone_width, 0.0, 1.0)
-                ) * Config.RENDER_TIME_STEP
+                ) * Config.FRAME_TIME_STEP
 
         return float(reward)
