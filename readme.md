@@ -49,20 +49,24 @@ lunar_lander/
    source venv/bin/activate   # On Linux/macOS
    # or:
    venv\Scripts\activate      # On Windows
-2. Install dependencies:
+2. Install package:
    pip install -r requirements.txt
+   pip install -e .
 3. Run the main script:
    For a human-controlled GUI:
-   `python main.py --gui --mode human`
+   `lander_learner --gui --mode human`
    
    For RL training:
-   `python main.py --mode train`
+   `lander_learner --mode train`
    
    For RL inference (after a model is saved):
-   `python main.py --gui --mode inference`
+   `lander_learner --gui --mode inference`
 
    For TensorBoard log viewing:
-   `tensorboard --logdir=agents/logs/lander_tensorboard`
+   `tensorboard --logdir=data/logs/lander_tensorboard`
+
+   For multiple agent visualisation (renders multiple stachastic instances simultaneously):
+   `python lander_learner/utils/multiple_render.py --checkpoint [path] --agent_type [agent_type]`
 
 
 # Expanding This Project (possible directions)

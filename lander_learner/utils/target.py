@@ -22,6 +22,8 @@ class TargetZone:
 
     def __init__(self, **kwargs):
         # Read basic spawn parameters from config or kwargs
+        self.np_random = np.random.default_rng()
+
         self.spawn_mode = kwargs.get(
             "spawn_mode", Config.TARGET_ZONE_SPAWN_MODE
         )  # "deterministic", "on_ground", "above_ground"
@@ -55,12 +57,12 @@ class TargetZone:
             return np.array([self.deterministic_x, self.deterministic_y], dtype=np.float32)
         elif self.spawn_mode == "on_ground":
             # Place target randomly along the ground (y = 0) within the x-range.
-            x = np.random.uniform(-self.spawn_range_x / 2, self.spawn_range_x / 2)
+            x = self.np_random.uniform(-self.spawn_range_x / 2, self.spawn_range_x / 2)
             return np.array([x, 0.0], dtype=np.float32)
         elif self.spawn_mode == "above_ground":
             # Place target randomly with y in [0, spawn_range_y] and x in the specified range.
-            x = np.random.uniform(-self.spawn_range_x / 2, self.spawn_range_x / 2)
-            y = np.random.uniform(0, self.spawn_range_y)
+            x = self.np_random.uniform(-self.spawn_range_x / 2, self.spawn_range_x / 2)
+            y = self.np_random.uniform(0, self.spawn_range_y)
             return np.array([x, y], dtype=np.float32)
         else:
             # Fallback: use deterministic spawn.
@@ -72,8 +74,8 @@ class TargetZone:
         Sample a random velocity vector for target motion.
         Ensure that the y-velocity is non-negative so that the target remains above ground.
         """
-        vx = np.random.uniform(-self.vel_range_x, self.vel_range_x)
-        vy = np.random.uniform(0, self.vel_range_y)
+        vx = self.np_random.uniform(-self.vel_range_x, self.vel_range_x)
+        vy = self.np_random.uniform(0, self.vel_range_y)
         return np.array([vx, vy], dtype=np.float32)
 
     def get_target_position(self, elapsed_time: np.ndarray) -> np.ndarray:
@@ -110,10 +112,15 @@ class TargetZone:
         current_position[1] = max(current_position[1], 0.0)
         return current_position
 
-    def reset(self):
+    def reset(self, reset_config: bool = False, random_generator: np.random.Generator = None):
         """
         Reset the target zone to its initial state.
         """
+        if reset_config:
+            # Reload the config values.
+            self.__init__()
+        if random_generator is not None:
+            self.np_random = random_generator
         self.initial_position = self._sample_spawn_position()
         if self.motion_enabled:
             self.current_velocity = self._sample_random_velocity()

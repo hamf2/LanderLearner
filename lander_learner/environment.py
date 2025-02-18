@@ -14,9 +14,72 @@ logger = logging.getLogger(__name__)
 class LunarLanderEnv(gym.Env):
     """
     A 2D Lunar Lander Environment conforming to Gymnasium's interface.
+
+    Attributes:
+        gui_enabled (bool): Flag to enable or disable GUI.
+        physics_engine (PhysicsEngine): Instance of the physics engine.
+        reward (Reward): Selected reward function.
+        observation (Observation): Selected observation function.
+        observation_space (gym.spaces.Box): Observation space definition.
+        action_space (gym.spaces.Box): Action space definition.
+        target_zone (bool): Flag to enable or disable target zone.
+        target_moves (bool): Flag to enable or disable target zone motion.
+        target_zone_obj (TargetZone or None): Instance of target zone management if enabled.
+        lander_position (np.ndarray): Position of the lander.
+        lander_velocity (np.ndarray): Velocity of the lander.
+        lander_angle (np.ndarray): Angle of the lander.
+        lander_angular_velocity (np.ndarray): Angular velocity of the lander.
+        fuel_remaining (np.ndarray): Remaining fuel.
+        elapsed_time (np.ndarray): Elapsed time in the episode.
+        target_position (np.ndarray): Position of the target zone.
+        target_zone_width (np.ndarray): Width of the target zone.
+        target_zone_height (np.ndarray): Height of the target zone.
+        collision_state (bool): Flag indicating if a collision occurred.
+        collision_impulse (float): Impulse of the collision.
+        crash_state (bool): Flag indicating if a crash occurred.
+        idle_state (bool): Flag indicating if the lander is idle.
+        idle_timer (float): Timer for idle state.
+        time_limit_reached (bool): Flag indicating if the time limit was reached.
+
+    Methods:
+        __init__(self, gui_enabled=False, reward_function="default",
+        observation_function="default", target_zone=False, **kwargs):
+            Initialize the Lunar Lander environment.
+        reset_state_variables(self, reset_config: bool = False, target_seed: int = None):
+        reset(self, seed=None, options=None):
+            Reset the environment to an initial state and return the initial observation.
+        step(self, action):
+            Execute one time step within the environment given an action.
+        _get_observation(self):
+            Construct and return an observation vector from the current state using the selected observation function.
+        _calculate_reward(self, done):
+        _check_done(self):
+            Check if the episode should terminate
+            (e.g., collision, lander below ground, or other termination conditions).
+        close(self):
+            Cleanup if needed. Called when the environment is done.
     """
 
-    def __init__(self, gui_enabled=False, reward_function="default", observation_function="default", target_zone=False):
+    def __init__(
+        self,
+        gui_enabled=False,
+        reward_function="default",
+        observation_function="default",
+        target_zone=False,
+        seed=None,
+        **kwargs
+    ):
+        """
+        Initialize the Lunar Lander environment.
+
+        Parameters:
+        gui_enabled (bool): Flag to enable or disable the graphical user interface.
+        reward_function (str): Name of the reward function to use.
+        observation_function (str): Name of the observation function to use.
+        target_zone (bool): Flag to enable or disable the target zone feature.
+        seed (int): Seed for the random number generator.
+        **kwargs: Additional keyword arguments for target zone configuration.
+        """
         super().__init__()
 
         self.gui_enabled = gui_enabled
@@ -44,17 +107,19 @@ class LunarLanderEnv(gym.Env):
         self.target_zone = target_zone
         self.target_moves = target_zone and Config.TARGET_ZONE_MOTION
         if self.target_zone:
-            self.target_zone_obj = TargetZone()
+            self.target_zone_obj = TargetZone(**kwargs)
         else:
             self.target_zone_obj = None
 
         # State placeholders (initially zero):
-        self.reset_state_variables()
+        self.reset(seed=seed)
 
-    def reset_state_variables(self):
+    def reset_state_variables(self, reset_config=False):
         """
         Reset (or initialize) key state variables for a new episode.
         """
+        if reset_config:
+            self.target_moves = self.target_zone and Config.TARGET_ZONE_MOTION
         self.lander_position = np.array([0.0, 10.0], dtype=np.float32)
         self.lander_velocity = np.array([0.0, 0.0], dtype=np.float32)
         self.lander_angle = np.array(0.0, dtype=np.float32)
@@ -64,10 +129,10 @@ class LunarLanderEnv(gym.Env):
 
         # Target zone parameters
         if self.target_zone:
-            self.target_zone_obj.reset()
+            self.target_zone_obj.reset(reset_config=reset_config, random_generator=self.np_random)
             self.target_position = self.target_zone_obj.initial_position
-            self.target_zone_width = np.array(Config.TARGET_ZONE_WIDTH, dtype=np.float32)
-            self.target_zone_height = np.array(Config.TARGET_ZONE_HEIGHT, dtype=np.float32)
+            self.target_zone_width = np.array(self.target_zone_obj.zone_width, dtype=np.float32)
+            self.target_zone_height = np.array(self.target_zone_obj.zone_height, dtype=np.float32)
 
         # Collision and state flags
         self.collision_state = False
@@ -77,9 +142,9 @@ class LunarLanderEnv(gym.Env):
         self.idle_timer = 0.0
         self.time_limit_reached = False
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, reset_config=False):
         super().reset(seed=seed)
-        self.reset_state_variables()
+        self.reset_state_variables(reset_config=reset_config)
         self.physics_engine.reset()
 
         # Return initial observation
