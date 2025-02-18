@@ -30,8 +30,17 @@ class RL_Config:
 
     # Default parameters for the SoftLandingReward
     DEFAULT_SOFT_LANDING_REWARD_PARAMS = {
-        "soft_landing_bonus": 20.0,
+        "on_target_touch_down_bonus": 10.0,
+        "off_target_touch_down_penalty": 5.0,
+        "on_target_idle_bonus": 20.0,
+        "off_target_idle_penalty": 2.0,
         "crash_penalty_multiplier": 1.0,
         "time_penalty_factor": 1.0,
-        "travel_reward_factor": 2.0,
+        "travel_reward_factor": 3.0,
+        "near_target_off_angle_penalty": 3.0,
+        "near_target_high_velocity_penalty": 3.0,
+        "near_target_high_velocity_cut_off": 1.0,
+        "near_target_unit_dist": 5.0,
+        "near_target_max_multiplier": 2.5,
+        "near_target_passive_bonus": 1.0
     }

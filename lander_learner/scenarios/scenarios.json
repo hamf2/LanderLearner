@@ -7,7 +7,7 @@
         "learning_frames": 10000
     },
     "landing": {
-        "rl_agent_type": "PPO",
+        "rl_agent_type": "SAC",
         "reward_function": "soft_landing",
         "observation_function": "target",
         "target_zone": true,
