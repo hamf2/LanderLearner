@@ -1,3 +1,12 @@
+"""
+LunarLanderGUI Module
+
+This module provides the LunarLanderGUI class, which manages a pygame window to visualize the
+lander and environment. It supports rendering a single environment or multiple environments in
+parallel. When in multi-mode, it accepts a list of environments and a corresponding list of style
+dictionaries (for tinting, transparency, etc.).
+"""
+
 import pygame
 import sys
 import importlib.resources as pkg_resources
@@ -13,22 +22,40 @@ BLACK = (0, 0, 0)
 
 
 class LunarLanderGUI:
-    """
-    Manages a pygame window to visualize the lander and environment.
-    Capable of rendering a single environment or multiple environments in parallel.
+    """Manages a pygame window to visualize the lander and environment.
 
-    If multi_mode is False (default), env is a single environment.
-    If multi_mode is True, env should be a list of environment objects, and
-    styles should be a list of dictionaries (one per environment) specifying
-    drawing options (e.g. tint colour and alpha).
+    This class is capable of rendering either a single environment or multiple environments in parallel.
+
+    In single-mode, `env` is expected to be a single environment instance and a single style is applied.
+    In multi-mode, `env` should be a list of environment objects and `styles` should be a list of
+    dictionaries (one per environment) specifying drawing options such as tint colour and alpha.
+
+    Attributes:
+        view_ref_x (float): The reference x-coordinate for converting world coordinates to screen coordinates.
+        screen (pygame.Surface): The main display surface.
+        clock (pygame.time.Clock): Clock used for regulating frame rate.
+        font (pygame.font.Font): Font used for rendering debug text.
+        lander_surface (pygame.Surface): Surface containing the lander image.
+        _key_callback (callable): Optional callback for key events.
     """
 
     def __init__(self, env, multi_mode=False, styles=None):
+        """Initializes the LunarLanderGUI.
+
+        Args:
+            env: A single environment instance (if multi_mode is False) or a list of environment instances.
+            multi_mode (bool, optional): Flag indicating whether to render multiple environments.
+                Defaults to False.
+            styles (dict or list of dict, optional): For single-mode a dictionary specifying the style.
+                For multi-mode, a list of dictionaries (one per environment) specifying the style.
+                Each style dict may contain keys "color" (an RGB tuple) and "alpha" (an integer 0-255).
+                Defaults to None, in which case a default style is applied (GREEN, opaque).
+        """
         self.multi_mode = multi_mode
         if self.multi_mode:
             # Expect a list of environments.
             self.envs = env
-            # If no styles provided, default to white (opaque) for all.
+            # If no styles provided, default to green (opaque) for all.
             if styles is None:
                 self.styles = [{"color": GREEN, "alpha": 255} for _ in self.envs]
             else:
@@ -38,6 +65,8 @@ class LunarLanderGUI:
             self.env = env
             if styles is None:
                 self.styles = {"color": GREEN, "alpha": 255}
+            else:
+                self.styles = styles
 
         self._key_callback = None
         pygame.init()
@@ -46,14 +75,18 @@ class LunarLanderGUI:
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont(None, 24)
 
-        self.view_ref_x = 0
+        self.view_ref_x = 0.0
+        self.view_ref_y = 25.0
         self._load_lander_image()
 
     def render(self):
+        """Draws the lander(s), terrain, and debug information to the screen.
+
+        Handles pygame events, clears the screen, draws the ground, background grid,
+        target zone (if enabled), lander(s), and debug text. Finally, it updates the display
+        and regulates the frame rate.
         """
-        Draw the lander(s), the terrain, and any relevant info to the screen.
-        """
-        # Handle Pygame events (like closing window, key-press, etc.)
+        # Handle Pygame events (e.g., closing window, key events).
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -65,6 +98,7 @@ class LunarLanderGUI:
 
         self._draw_ground()
 
+        # Use the last environment in the list (or the single env) as reference for view.
         view_ref_env = self.envs[-1] if self.multi_mode else self.env
         self.view_ref_x = view_ref_env.lander_position[0]
 
@@ -72,7 +106,6 @@ class LunarLanderGUI:
             self._draw_target_zone(view_ref_env)
         self._draw_background()
         if self.multi_mode:
-            pass
             for env, style in zip(self.envs, self.styles):
                 self._draw_lander(env, style)
         else:
@@ -82,8 +115,10 @@ class LunarLanderGUI:
         self.clock.tick(Config.FPS * Config.REPLAY_SPEED)
 
     def _load_lander_image(self):
-        """
-        Load the lander image.
+        """Loads and scales the lander image from the assets.
+
+        The image is loaded from the assets package and scaled based on the configuration
+        settings for lander width, height, and render scale.
         """
         lander_width_px = int(Config.LANDER_WIDTH * Config.RENDER_SCALE)
         lander_height_px = int(Config.LANDER_HEIGHT * Config.RENDER_SCALE)
@@ -93,9 +128,15 @@ class LunarLanderGUI:
         self.lander_surface = pygame.transform.smoothscale(image, (lander_width_px, lander_height_px))
 
     def _draw_lander(self, env, style: dict = {}):
-        """
-        Draw the lander for a given environment.
-        If a style dict is provided, apply a tint and transparency.
+        """Draws the lander for a given environment.
+
+        If a style dictionary is provided with "color" and "alpha", a tinted copy of the
+        lander image is created.
+
+        Args:
+            env: The environment instance whose lander state is to be drawn.
+            style (dict, optional): Dictionary with style parameters ("color" and "alpha").
+                Defaults to an empty dict.
         """
         # Determine the lander surface.
         if style is not None and "color" in style and "alpha" in style:
@@ -111,24 +152,30 @@ class LunarLanderGUI:
         lander_x, lander_y = env.lander_position
         lander_angle = env.lander_angle
 
-        # Rotate the image (note the minus sign to match expected orientation).
+        # Rotate the image (note the multiplication factor converts radians to degrees).
         rotated_surface = pygame.transform.rotate(lander_surf, lander_angle * 180 / 3.14159)
         lander_rect = rotated_surface.get_rect(center=(
             self.world_to_screen_x(lander_x),
-            self.world_to_screen_y(lander_y))
-        )
+            self.world_to_screen_y(lander_y)
+        ))
         self.screen.blit(rotated_surface, lander_rect)
 
     def _draw_target_zone(self, env, style: dict = {}):
-        """
-        Draw the target zone on the screen as a semi-transparent rectanglular outline.
+        """Draws the target zone as a semi-transparent rectangular outline.
+
+        The target zone is drawn using the specified style (default is blue with 50% transparency).
+
+        Args:
+            env: The environment instance containing the target zone parameters.
+            style (dict, optional): Dictionary with style parameters ("color" and "alpha").
+                Defaults to an empty dict.
         """
         targ_x, targ_y = env.target_position
         targ_w, targ_h = env.target_zone_width, env.target_zone_height
         color = style.get("color", BLUE)
         alpha = style.get("alpha", 128)
 
-        # Draw the target zone
+        # Calculate the screen coordinates for the target zone.
         target_x_px = self.world_to_screen_x(targ_x - targ_w / 2)
         target_y_px = self.world_to_screen_y(targ_y + targ_h / 2)
         target_rect = pygame.Rect(
@@ -137,16 +184,16 @@ class LunarLanderGUI:
         outline_surface = pygame.Surface((target_rect.width, target_rect.height), pygame.SRCALPHA)
         pygame.draw.rect(
             outline_surface,
-            (color[0], color[1], color[2], alpha),  # blue with 50% transparency
+            (color[0], color[1], color[2], alpha),
             outline_surface.get_rect(),
-            2,  # outline thickness
+            2  # Outline thickness.
         )
         self.screen.blit(outline_surface, target_rect.topleft)
 
     def _draw_background(self):
-        """
-        Draw a crosshatch pattern as a background grid.
-        Uses the last environment's position as a reference.
+        """Draws a crosshatch pattern as a background grid.
+
+        The grid uses the view reference x-coordinate (from the last environment) to determine the offset.
         """
         hatch_size = 50
         offset = hatch_size - ((self.view_ref_x * Config.RENDER_SCALE) % hatch_size)
@@ -157,17 +204,20 @@ class LunarLanderGUI:
             pygame.draw.line(self.screen, DARK_GREY, (0, dy), (Config.SCREEN_WIDTH, dy))
 
     def _draw_ground(self):
-        """
-        Draw a simple ground line (y = 0 in world coordinates).
-        # TODO: Replace with automatic rendering for ease with more complex terrain
+        """Draws a simple ground line corresponding to y = 0 in world coordinates.
+
+        Note:
+            This is a basic rendering of the ground. It may be replaced in the future with
+            automatic terrain rendering for more complex scenarios.
         """
         ground_y = self.world_to_screen_y(0)
         pygame.draw.line(self.screen, WHITE, (0, ground_y), (Config.SCREEN_WIDTH, ground_y), 2)
 
     def _draw_debug_text(self):
-        """
-        Render debugging information.
-        Uses the last environment's state in multi_mode.
+        """Renders debugging information on the screen.
+
+        Uses the state of the last environment (in multi-mode) or the single environment.
+        Displays position, angle, fuel, FPS, elapsed time, and the current reward.
         """
         env = self.envs[-1] if self.multi_mode else self.env
         fps = self.clock.get_fps()
@@ -181,25 +231,49 @@ class LunarLanderGUI:
         self.screen.blit(text_surface, (10, 10))
 
     def set_key_callback(self, callback):
+        """Sets the key event callback.
+
+        Args:
+            callback (callable): A function to be called when a key event occurs.
+        """
         self._key_callback = callback
 
     def world_to_screen(self, x, y):
-        """
-        Convert world coordinates to screen coordinates.
-        View centre is (lander_x, (SCREEN HEIGHT / 2 - 50) / Config.RENDER_SCALE)
+        """Converts world coordinates to screen coordinates.
+
+        The view center is determined by the lander's x-position and a fixed offset in y.
+
+        Args:
+            x (float): World x-coordinate.
+            y (float): World y-coordinate.
+
+        Returns:
+            tuple: A tuple (screen_x, screen_y) representing the screen coordinates.
         """
         return self.world_to_screen_x(x), self.world_to_screen_y(y)
 
     def world_to_screen_x(self, x):
-        """
-        Convert world x-coordinate to screen x-coordinate.
-        (Last) lander is always in the centre of the screen.
+        """Converts a world x-coordinate to a screen x-coordinate.
+
+        The (last) lander's x-position is always centered on the screen.
+
+        Args:
+            x (float): World x-coordinate.
+
+        Returns:
+            int: Screen x-coordinate.
         """
         return int(Config.SCREEN_WIDTH // 2 + (x - self.view_ref_x) * Config.RENDER_SCALE)
 
     def world_to_screen_y(self, y):
+        """Converts a world y-coordinate to a screen y-coordinate.
+
+        The conversion uses the render scale and a fixed vertical offset.
+
+        Args:
+            y (float): World y-coordinate.
+
+        Returns:
+            int: Screen y-coordinate.
         """
-        Convert world y-coordinate to screen y-coordinate.
-        y = -(50 / Config.RENDER_SCALE) is the bottom of the screen.
-        """
-        return int(Config.SCREEN_HEIGHT - (y * Config.RENDER_SCALE + 50))
+        return int(Config.SCREEN_HEIGHT // 2 - (y - self.view_ref_y) * Config.RENDER_SCALE)

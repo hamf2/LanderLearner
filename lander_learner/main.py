@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+"""
+main.py
+
+This is the main entry point for LanderLearner, a lunar lander simulation and training framework.
+It parses command-line arguments, loads scenario defaults, conditionally imports RL agents and GUI
+modules, sets up the environment, and runs episodes in training, inference, or human-interactive mode.
+"""
+
 import sys
 import os
 import importlib
@@ -14,10 +22,21 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(message)s", stream=sys.stdout)
 
 
-# RL agent and GUI modules are imported conditionally based on the mode.
-
-
 def main():
+    """Main entry point for LanderLearner.
+
+    The function performs the following steps:
+      1. Logs the working directory.
+      2. Loads scenario defaults from a JSON file.
+      3. Parses command-line arguments using the scenario defaults.
+      4. Conditionally imports RL agent modules, vectorized environments, and GUI modules based on the mode.
+      5. Sets up the environment and agent based on the chosen mode (train, human, or inference).
+      6. Runs episodes, executing agent actions and rendering (if enabled).
+      7. Logs episode rewards and ensures proper cleanup.
+
+    Raises:
+        SystemExit: If scenarios cannot be loaded or arguments are parsed incorrectly.
+    """
     logger.info("LanderLearner started in %s", os.getcwd())
 
     # --- Scenario and Argument Parsing ---
@@ -48,18 +67,19 @@ def main():
                 importlib.import_module("lander_learner.agents.sac_agent").SACAgent,
                 {"device": RL_Config.SAC_DEVICE},
             ],
-            # Additional agents here.
+            # Additional agents can be added here.
         }
         args.rl_agent = args.rl_agent.upper()
         if args.rl_agent not in RL_AGENT_MAP:
             logger.warning(f"Warning: RL agent '{args.rl_agent}' not found. Defaulting to PPO.")
             args.rl_agent = "PPO"
         agent_class, agent_options = RL_AGENT_MAP.get(args.rl_agent, RL_AGENT_MAP["PPO"])
+
     # For training mode, import the vectorized environment.
     if args.mode == "train":
-        from stable_baselines3.common.vec_env import (
-            DummyVecEnv,
-        )  # Alternative: SubprocVecEnv - DummyVecEnv is faster in this case.
+        from stable_baselines3.common.vec_env import DummyVecEnv
+        # Alternative: SubprocVecEnv can be used for parallelism.
+
     # For human mode, import the human agent.
     if args.mode == "human":
         HumanAgent = importlib.import_module("lander_learner.agents.human_agent").HumanAgent
@@ -102,17 +122,18 @@ def main():
         )
         if args.mode == "human":
             agent = HumanAgent(env)
-        else:  # inference mode
+        else:  # Inference mode.
             agent = agent_class(env, **agent_options)
             agent.load_model(args.model_path)
 
         if args.gui:
             gui = LunarLanderGUI(env)
+            # Set key callback for human mode if applicable.
             if args.mode == "human" and hasattr(agent, "handle_key_event"):
                 gui.set_key_callback(agent.handle_key_event)
 
     # --- Run Episodes ---
-    # Run the specified number of episodes for human or inference mode.
+    # Execute the specified number of episodes for human or inference mode.
     for episode in range(args.episodes):
         obs, _ = env.reset()
         done = False
@@ -126,7 +147,8 @@ def main():
                 gui.render()
 
         logger.info(f"Episode {episode + 1} finished with total reward: {total_reward}")
-        agent.deterministic = False  # Ensure agent is stochastic after first episode.
+        # Ensure agent becomes stochastic after the first episode.
+        agent.deterministic = False
 
     env.close()
 
