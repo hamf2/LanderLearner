@@ -59,7 +59,7 @@ def main():
     AgentClass = getattr(agent_module, f"{args.agent_type.upper()}Agent")
 
     env_agents = []
-    env_seed = np.random.SeedSequence().entropy
+    env_seed = int(np.random.SeedSequence().generate_state(1)[0])
 
     # Create stochastic agent–env pairs.
     for _ in range(args.num_stochastic):
@@ -122,7 +122,7 @@ def main():
             if episode_count >= args.episodes:
                 break
             running = [True] * len(env_agents)
-            env_seed = np.random.SeedSequence(env_seed).entropy
+            env_seed = int(np.random.SeedSequence().generate_state(1)[0])
             for env, _, _ in env_agents:
                 env.reset(seed=env_seed)
         gui.render()
