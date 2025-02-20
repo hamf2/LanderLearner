@@ -6,7 +6,7 @@ def test_parse_args_defaults(monkeypatch):
     # Provide a dummy scenarios dictionary.
     scenarios = {
         "base": {
-            "rl_agent_type": "PPO",
+            "agent_type": "PPO",
             "reward_function": "rightward",
             "observation_function": "default",
             "target_zone": False,
@@ -17,6 +17,6 @@ def test_parse_args_defaults(monkeypatch):
     monkeypatch.setattr("sys.argv", test_args)
     args = parse_args(scenarios)
     # Check that the defaults are correctly set from the scenario.
-    assert args.rl_agent.upper() == "PPO"
+    assert args.agent_type.upper() == "PPO"
     assert args.reward_function == "rightward"
     assert args.observation_function == "default"

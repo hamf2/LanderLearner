@@ -131,4 +131,9 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
         default=3,
         help="Number of stochastic agent copies to run in multi-render mode"
     )
+    parser.add_argument(
+        "--record",
+        action="store_true",
+        help="Save rendered frames to disk (in a subfolder 'recordings/date-time-now')"
+    )
     return parser.parse_args()

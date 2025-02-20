@@ -117,7 +117,7 @@ def main():
             agent = AgentClass(env, **agent_options)
             agent.load_model(args.model_path)
         if args.gui:
-            gui = LunarLanderGUI(env)
+            gui = LunarLanderGUI(env, record=args.record)
             # Set key callback for human mode if applicable.
             if hasattr(agent, "handle_key_event"):
                 gui.set_key_callback(agent.handle_key_event)
@@ -179,7 +179,8 @@ def main():
             gui = LunarLanderGUI(
                 [env for env, _, _ in env_agents],
                 multi_mode=True,
-                styles=[style for _, _, style in env_agents]
+                styles=[style for _, _, style in env_agents],
+                record=args.record
             )
         # Simulation loop.
         running = [True] * len(env_agents)

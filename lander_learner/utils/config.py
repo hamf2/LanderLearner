@@ -48,6 +48,9 @@ class Config:
     PHYSICS_STEPS_PER_FRAME = int(1.0 / TIME_STEP / FPS)
     FRAME_TIME_STEP = 1 / FPS
 
+    # GUI recordings directory
+    DEFAULT_RECORDING_DIR = pathlib.Path(__file__).parent.parent.parent / "data" / "recordings"
+
 
 class RL_Config:
     DEFAULT_CHECKPOINT_DIR = pathlib.Path(__file__).parent.parent.parent / "data" / "checkpoints"

@@ -9,6 +9,8 @@ dictionaries (for tinting, transparency, etc.).
 
 import pygame
 import sys
+import os
+from datetime import datetime
 import importlib.resources as pkg_resources
 from lander_learner.utils.config import Config
 from lander_learner import assets
@@ -39,7 +41,7 @@ class LunarLanderGUI:
         _key_callback (callable): Optional callback for key events.
     """
 
-    def __init__(self, env, multi_mode=False, styles=None):
+    def __init__(self, env, multi_mode=False, styles=None, record=False):
         """Initializes the LunarLanderGUI.
 
         Args:
@@ -67,6 +69,12 @@ class LunarLanderGUI:
                 self.styles = {"color": GREEN, "alpha": 255}
             else:
                 self.styles = styles
+
+        self.record = record
+        if record:
+            self.record_dir = Config.DEFAULT_RECORDING_DIR / datetime.now().strftime("%Y%m%d-%H%M%S")
+            os.makedirs(str(self.record_dir), exist_ok=True)
+            self.frame_count = 0
 
         self._key_callback = None
         pygame.init()
@@ -112,6 +120,12 @@ class LunarLanderGUI:
             self._draw_lander(self.env, self.styles)
         self._draw_debug_text()
         pygame.display.flip()
+
+        if self.record:
+            frame_path = os.path.join(self.record_dir, f"frame_{self.frame_count:06d}.png")
+            pygame.image.save(self.screen, frame_path)
+            self.frame_count += 1
+
         self.clock.tick(Config.FPS * Config.REPLAY_SPEED)
 
     def _load_lander_image(self):
