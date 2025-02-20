@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: RL training",
+            "name": "RL training: Python Debugger",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceRoot}\\main.py",
+            "program": "${workspaceRoot}\\lander_learner\\main.py",
             "console": "integratedTerminal",
             "args": [
                 "--mode",
@@ -13,16 +13,18 @@
                 "--scenario",
                 "landing",
                 "--timesteps",
-                "1000000",
+                "50000000",
+                "--agent_type",
+                "sac",
                 "--num_envs",
-                "8"
+                "4"
             ]
         },
         {
-            "name": "Python Debugger: RL inference",
+            "name": "RL inference: Python Debugger",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceRoot}\\main.py",
+            "program": "${workspaceRoot}\\lander_learner\\main.py",
             "console": "integratedTerminal",
             "args": [
                 "--gui",
@@ -30,15 +32,19 @@
                 "inference",
                 "--scenario",
                 "landing",
+                "--agent_type",
+                "sac",
+                "--model_path",
+                "data/checkpoints/",
                 "--episodes",
                 "4"
             ]
         },
         {
-            "name": "Python Debugger: Human Operator",
+            "name": "Human Operator: Python Debugger",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceRoot}\\main.py",
+            "program": "${workspaceRoot}\\lander_learner\\main.py",
             "console": "integratedTerminal",
             "args": [
                 "--gui",
@@ -50,6 +56,30 @@
                 "3"
             ],
             "justMyCode": false
+        },
+        {
+            "name": "RL visualization: Python Debugger",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceRoot}\\lander_learner\\main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--mode",
+                "inference",
+                "--scenario",
+                "landing",
+                "--agent_type",
+                "sac",
+                "--model_path",
+                "data/checkpoints/",
+                "--multi",
+                "--num_stochastic",
+                "6",
+                "--episodes",
+                "5",
+                "--gui",
+                "--record"
+            ]
         }
     ]
 }
