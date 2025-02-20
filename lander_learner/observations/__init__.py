@@ -13,6 +13,9 @@ The factory function get_observation_class() enables easy selection of an observ
 from .base_observation import BaseObservation
 from .default_observation import DefaultObservation
 from .target_observation import TargetObservation
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_observation_class(name: str, **kwargs) -> BaseObservation:
@@ -29,5 +32,8 @@ def get_observation_class(name: str, **kwargs) -> BaseObservation:
         "default": DefaultObservation,
         "target": TargetObservation
     }
-    obs_cls = mapping.get(name, DefaultObservation)
+    try:
+        obs_cls = mapping.get(name, DefaultObservation)
+    except KeyError:
+        logger.warning(f"Observation function '{name}' not found; using default observation.")
     return obs_cls(**kwargs)

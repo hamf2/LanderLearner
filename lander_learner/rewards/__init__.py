@@ -14,6 +14,9 @@ from .base_reward import BaseReward
 from .default_reward import DefaultReward
 from .rightward_reward import RightwardReward
 from .soft_landing_reward import SoftLandingReward
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_reward_class(name: str, **kwargs) -> BaseReward:
@@ -31,5 +34,8 @@ def get_reward_class(name: str, **kwargs) -> BaseReward:
         "rightward": RightwardReward,
         "soft_landing": SoftLandingReward,
     }
-    reward_cls = mapping.get(name, DefaultReward)
+    try:
+        reward_cls = mapping.get(name, DefaultReward)
+    except KeyError:
+        logger.warning(f"Reward function '{name}' not found; using default reward.")
     return reward_cls(**kwargs)
