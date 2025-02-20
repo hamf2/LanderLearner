@@ -7,20 +7,29 @@ logger = logging.getLogger(__name__)
 
 
 class RightwardReward(BaseReward):
-    def __init__(self, **kwargs):
-        """
-        Initialize DefaultReward with configurable parameters.
+    """Computes a reward that emphasizes rightward motion and proper orientation.
 
-        Possible keyword arguments:
-            x_velocity_factor (float): Factor for rewarding rightward velocity.
-                                        Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["x_velocity_factor"]
-            angle_penalty_factor (float): Factor for penalizing deviation from π/2.
-                                          Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["angle_penalty_factor"]
-            collision_penalty (float): Penalty per time step when a collision is detected.
-                                       Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["collision_penalty"]
-            crash_penalty_multiplier (float): Multiplier for penalty based on collision impulse on termination.
-                                              Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["
-                                              crash_penalty_multiplier"]
+    This reward function promotes rightward velocity, penalizes deviations from an ideal heading,
+    and applies a penalty during collisions.
+
+    Attributes:
+        x_velocity_factor (float): Factor for rewarding rightward velocity.
+        angle_penalty_factor (float): Factor for penalizing deviation from π/2.
+        collision_penalty (float): Penalty applied per time step when a collision is detected.
+        crash_penalty_multiplier (float): Multiplier for collision impulse penalty upon termination.
+    """
+
+    def __init__(self, **kwargs):
+        """Initializes RightwardReward with configurable parameters.
+
+        Args:
+            **kwargs: Optional keyword arguments to override default parameters. Recognized keys:
+                - x_velocity_factor (float)
+                - angle_penalty_factor (float)
+                - collision_penalty (float)
+                - crash_penalty_multiplier (float)
+
+                Defaults are taken from RL_Config.DEFAULT_RIGHTWARD_REWARD_PARAMS.
         """
         defaults = RL_Config.DEFAULT_RIGHTWARD_REWARD_PARAMS
         recognised_params = (
@@ -39,23 +48,32 @@ class RightwardReward(BaseReward):
             logger.warning(f"Unrecognized parameter: {param}")
 
     def get_reward(self, env, done: bool) -> float:
-        reward = 0.0
+        """Computes the rightward reward based on the environment state.
 
-        # Penalize crash
+        If the episode is terminated and a crash occurred, a penalty based on the collision
+        impulse is applied. Otherwise, the reward promotes rightward motion and penalizes deviation
+        from an ideal angle, with an additional penalty during collisions.
+
+        Args:
+            env: The environment instance.
+            done (bool): Flag indicating whether the episode is terminated.
+
+        Returns:
+            float: The computed reward.
+        """
+        reward = 0.0
         if done:
             if env.crash_state:
                 reward -= env.collision_impulse * self.crash_penalty_multiplier
             logger.debug(f"Final reward: {reward:.2f}")
             return float(reward)
 
-        # Reward rightward motion and heading angle towards right
         x_velocity = env.lander_velocity[0]
         angle_error = abs((env.lander_angle - np.pi / 2) % np.pi)
         reward += (
             x_velocity * self.x_velocity_factor - angle_error * self.angle_penalty_factor
         ) * Config.FRAME_TIME_STEP
 
-        # Penalize collision
         if env.collision_state:
             reward -= self.collision_penalty * Config.FRAME_TIME_STEP
 

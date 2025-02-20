@@ -6,15 +6,33 @@ from datetime import datetime
 
 
 def flatten_state(*arrays):
-    """
-    Flatten multiple arrays into one.
+    """Flattens multiple arrays into a single one.
+
+    This function takes any number of numpy arrays as input, flattens each array (ignoring any that are None),
+    and concatenates them into a single 1D numpy array.
+
+    Args:
+        *arrays: Variable length argument list of numpy arrays. Any None values are skipped.
+
+    Returns:
+        numpy.ndarray: A 1D array resulting from the concatenation of the flattened input arrays.
     """
     return np.concatenate([arr.flatten() for arr in arrays if arr is not None])
 
 
 def load_scenarios(json_path: Path) -> dict:
-    """
-    Load the scenarios JSON file from the given path.
+    """Loads scenario configurations from a JSON file.
+
+    Reads the JSON file located at the specified path and returns its contents as a dictionary.
+
+    Args:
+        json_path (Path): A Path object pointing to the JSON file containing scenario configurations.
+
+    Returns:
+        dict: A dictionary of scenario configurations.
+
+    Raises:
+        RuntimeError: If an error occurs while opening or parsing the JSON file.
     """
     try:
         with json_path.open("r") as f:
@@ -24,12 +42,22 @@ def load_scenarios(json_path: Path) -> dict:
 
 
 def adjust_save_path(path: str, model_type: str = "") -> str:
-    """
-    Ensure the save path exists, and add default file name if directory is provided.
-    Default file name is of the form: "<model_type>_yymmdd_HHMMSS.zip".
+    """Adjusts the given path to ensure a valid save file path for the model.
+
+    If the provided path is a directory, a default filename is generated using the format
+    "<model_type>_yymmdd_HHMMSS.zip" (or "model_yymmdd_HHMMSS.zip" if model_type is empty) and appended
+    to the directory. If the path does not end with ".zip", the extension is appended.
+    Additionally, the directory for the file is created if it does not exist.
+
+    Args:
+        path (str): The desired save path, which may be a directory or a full file path.
+        model_type (str, optional): The model type used in the default filename. Defaults to an empty string.
+
+    Returns:
+        str: A valid file path ending with ".zip" suitable for saving the model.
     """
     if os.path.isdir(path):
-        filename = f"{model_type if model_type else "model"}_{datetime.now().strftime('%y%m%d_%H%M%S')}.zip"
+        filename = f"{model_type if model_type else 'model'}_{datetime.now().strftime('%y%m%d_%H%M%S')}.zip"
         path = os.path.join(path, filename)
     if not str(path).lower().endswith(".zip"):
         path = str(path) + ".zip"
@@ -38,8 +66,23 @@ def adjust_save_path(path: str, model_type: str = "") -> str:
 
 
 def adjust_load_path(path: str, model_type: str = "") -> str:
-    """
-    Ensure the load path exists. If a directory is provided, find the latest zip file for model_type.
+    """Adjusts the given path to ensure a valid model file path for loading.
+
+    If the provided path is a directory, the function searches for the latest zip file
+    whose name starts with the given model_type (or "model" if model_type is empty) and returns its path.
+    If the provided path is a file, it validates that it ends with ".zip".
+
+    Args:
+        path (str): The path or directory where the model file is expected.
+        model_type (str, optional): The model type prefix to search for if a directory is provided.
+            Defaults to an empty string, which is interpreted as "model".
+
+    Returns:
+        str: The path to the model file (a .zip file).
+
+    Raises:
+        FileNotFoundError: If the specified path does not exist or if no matching zip files are found in a directory.
+        ValueError: If the provided path is not a directory and does not end with ".zip".
     """
     if not model_type:
         model_type = "model"
