@@ -40,7 +40,7 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
 
     # Extract default values from the chosen scenario.
     scenario_defaults = scenarios[scenario_name]
-    default_rl_agent = scenario_defaults.get("rl_agent_type", "PPO")
+    default_agent_type = scenario_defaults.get("agent_type", "PPO")
     default_reward_function = scenario_defaults.get("reward_function", "default")
     default_observation_function = scenario_defaults.get("observation_function", "default")
     default_target_zone = scenario_defaults.get("target_zone", None)
@@ -86,9 +86,9 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
         help="Scenario name to use (as defined in scenarios.json)"
     )
     parser.add_argument(
-        "--rl_agent",
+        "--agent_type",
         type=str,
-        default=default_rl_agent,
+        default=default_agent_type,
         help="RL agent type to use (overrides scenario default)"
     )
     parser.add_argument(
@@ -119,5 +119,16 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
         type=str,
         default=None,
         help="Path to load a model checkpoint from (for continued training)"
+    )
+    parser.add_argument(
+        "--multi",
+        action="store_true",
+        help="Run inference in multi-render mode (multiple agent-environment pairs concurrently)"
+    )
+    parser.add_argument(
+        "--num_stochastic",
+        type=int,
+        default=3,
+        help="Number of stochastic agent copies to run in multi-render mode"
     )
     return parser.parse_args()

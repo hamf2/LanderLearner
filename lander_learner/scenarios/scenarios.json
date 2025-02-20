@@ -1,13 +1,13 @@
 {
     "base": {
-        "rl_agent_type": "PPO",
+        "agent_type": "PPO",
         "reward_function": "rightward",
         "observation_function": "default",
         "target_zone": false,
         "learning_frames": 10000
     },
     "landing": {
-        "rl_agent_type": "SAC",
+        "agent_type": "SAC",
         "reward_function": "soft_landing",
         "observation_function": "target",
         "target_zone": true,

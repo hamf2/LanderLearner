@@ -6,22 +6,25 @@ This is the main entry point for LanderLearner, a lunar lander simulation and tr
 It parses command-line arguments, loads scenario defaults, conditionally imports RL agents and GUI
 modules, sets up the environment, and runs episodes in training, inference, or human-interactive mode.
 """
-
 import sys
 import os
 import importlib
 import logging
+import numpy as np
 
 from lander_learner import scenarios
 from lander_learner.environment import LunarLanderEnv
 from lander_learner.utils.config import RL_Config
 from lander_learner.utils.helpers import load_scenarios
-from lander_learner.utils.parse_args import parse_args
+from lander_learner.utils.parse_args import parse_args  # see updated parse_args below
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(message)s", stream=sys.stdout)
 
 
+# ---------------------------
+# Main simulation entry point
+# ---------------------------
 def main():
     """Main entry point for LanderLearner.
 
@@ -51,58 +54,45 @@ def main():
     # Parse all arguments, using the appropriate scenario to set defaults.
     try:
         args = parse_args(scenario_list)
-    except ValueError:
+        del scenario_list
+    except (ValueError, KeyError):
         logger.fatal("Error parsing arguments", exc_info=True)
         sys.exit(1)
 
     # --- Conditional Imports ---
-    # Import RL agent modules only if needed.
     if args.mode in ["train", "inference"]:
-        RL_AGENT_MAP = {
-            "PPO": [
-                importlib.import_module("lander_learner.agents.ppo_agent").PPOAgent,
-                {"device": RL_Config.PPO_DEVICE},
-            ],
-            "SAC": [
-                importlib.import_module("lander_learner.agents.sac_agent").SACAgent,
-                {"device": RL_Config.SAC_DEVICE},
-            ],
-            # Additional agents can be added here.
-        }
-        args.rl_agent = args.rl_agent.upper()
-        if args.rl_agent not in RL_AGENT_MAP:
-            logger.warning(f"Warning: RL agent '{args.rl_agent}' not found. Defaulting to PPO.")
-            args.rl_agent = "PPO"
-        agent_class, agent_options = RL_AGENT_MAP.get(args.rl_agent, RL_AGENT_MAP["PPO"])
-
-    # For training mode, import the vectorized environment.
+        # Dynamically import the agent module.
+        try:
+            agent_module = importlib.import_module(f"lander_learner.agents.{args.agent_type.lower()}_agent")
+            AgentClass = getattr(agent_module, f"{args.agent_type.upper()}Agent")
+            agent_options = getattr(RL_Config, f"{args.agent_type.upper()}_OPTIONS")
+        except (ImportError, AttributeError):
+            logger.fatal(f"Error importing agent module or class for agent type: {args.agent_type}", exc_info=True)
+            sys.exit(1)
+    # For training mode, import vectorized environment.
     if args.mode == "train":
         from stable_baselines3.common.vec_env import DummyVecEnv
-        # Alternative: SubprocVecEnv can be used for parallelism.
-
     # For human mode, import the human agent.
     if args.mode == "human":
         HumanAgent = importlib.import_module("lander_learner.agents.human_agent").HumanAgent
-
     # Import GUI only if needed.
     if args.gui:
         LunarLanderGUI = importlib.import_module("lander_learner.gui").LunarLanderGUI
 
     # --- Environment and Agent Setup ---
     if args.mode == "train":
+        logging.info("Running in training mode")
         # Training mode: use a vectorized environment.
-        env = DummyVecEnv(
-            [
-                lambda: LunarLanderEnv(
-                    gui_enabled=False,
-                    reward_function=args.reward_function,
-                    observation_function=args.observation_function,
-                    target_zone=args.target_zone,
-                )
-                for _ in range(args.num_envs)
-            ]
-        )
-        agent = agent_class(env, **agent_options)
+        env = DummyVecEnv([
+            lambda: LunarLanderEnv(
+                gui_enabled=False,
+                reward_function=args.reward_function,
+                observation_function=args.observation_function,
+                target_zone=args.target_zone,
+            )
+            for _ in range(args.num_envs)
+        ])
+        agent = AgentClass(env, **agent_options)
         if args.load_checkpoint:
             agent.load_model(args.load_checkpoint)
         try:
@@ -112,8 +102,9 @@ def main():
         agent.save_model(args.model_path)
         env.close()
         sys.exit(0)
-    else:
-        # For human or inference mode, use a single environment instance.
+    if args.mode == "human" or (args.mode == "inference" and not args.multi):
+        logger.info("Running in %s mode", args.mode)
+        # Use single environment mode.
         env = LunarLanderEnv(
             gui_enabled=args.gui,
             reward_function=args.reward_function,
@@ -122,35 +113,98 @@ def main():
         )
         if args.mode == "human":
             agent = HumanAgent(env)
-        else:  # Inference mode.
-            agent = agent_class(env, **agent_options)
+        else:
+            agent = AgentClass(env, **agent_options)
             agent.load_model(args.model_path)
-
         if args.gui:
             gui = LunarLanderGUI(env)
             # Set key callback for human mode if applicable.
-            if args.mode == "human" and hasattr(agent, "handle_key_event"):
+            if hasattr(agent, "handle_key_event"):
                 gui.set_key_callback(agent.handle_key_event)
 
-    # --- Run Episodes ---
-    # Execute the specified number of episodes for human or inference mode.
-    for episode in range(args.episodes):
-        obs, _ = env.reset()
-        done = False
-        total_reward = 0.0
+        # --- Run Episodes ---
+        # Execute the specified number of episodes for human or inference mode.
+        for episode in range(args.episodes):
+            obs, _ = env.reset()
+            done = False
+            total_reward = 0.0
 
-        while not done:
-            action = agent.get_action(obs)
-            obs, reward, done, truncated, info = env.step(action)
-            total_reward += reward
+            while not done:
+                action = agent.get_action(obs)
+                obs, reward, done, truncated, info = env.step(action)
+                total_reward += reward
+                if args.gui:
+                    gui.render()
+
+            logger.info(f"Episode {episode + 1} finished with total reward: {total_reward}")
+            # Ensure agent becomes stochastic after the first episode.
+            agent.deterministic = False
+
+        env.close()
+    elif args.multi:
+        logger.info("Running in multi-render mode")
+        # --- Multi-render mode ---
+        env_agents = []
+        # Use a common seed for all environments.
+        env_seed = int(np.random.SeedSequence().generate_state(1)[0])
+        # Create stochastic agent–env pairs.
+        for _ in range(args.num_stochastic):
+            env_stoch = LunarLanderEnv(
+                gui_enabled=True,
+                reward_function=args.reward_function,
+                observation_function=args.observation_function,
+                target_zone=args.target_zone,
+                seed=env_seed
+            )
+            agent_stoch = AgentClass(env_stoch, deterministic=False, **agent_options)
+            agent_stoch.load_model(args.model_path)
+            # Use green with semi-transparency.
+            style_stoch = {"color": (0, 255, 0), "alpha": 128}
+            env_agents.append((env_stoch, agent_stoch, style_stoch))
+        # Create deterministic agent–env pair.
+        env_det = LunarLanderEnv(
+            gui_enabled=True,
+            reward_function=args.reward_function,
+            observation_function=args.observation_function,
+            target_zone=args.target_zone,
+            seed=env_seed
+        )
+        agent_det = AgentClass(env_det, deterministic=True, **agent_options)
+        agent_det.load_model(args.model_path)
+        # Use blue with full opacity.
+        style_det = {"color": (0, 0, 255), "alpha": 255}
+        env_agents.append((env_det, agent_det, style_det))
+        # Initialize multi-agent GUI.
+        if args.gui:
+            gui = LunarLanderGUI(
+                [env for env, _, _ in env_agents],
+                multi_mode=True,
+                styles=[style for _, _, style in env_agents]
+            )
+        # Simulation loop.
+        running = [True] * len(env_agents)
+        episode_count = 0
+        while True:
+            for i, (env, agent, _) in enumerate(env_agents):
+                if running[i]:
+                    obs = env._get_observation()  # using the internal observation getter
+                    action = agent.get_action(obs)
+                    obs, reward, done, truncated, info = env.step(action)
+                if done:
+                    running[i] = False
+            if not any(running):
+                episode_count += 1
+                logger.info(f"Episode {episode_count} finished.")
+                if episode_count >= args.episodes:
+                    break
+                running = [True] * len(env_agents)
+                env_seed = int(np.random.SeedSequence().generate_state(1)[0])
+                for env, _, _ in env_agents:
+                    env.reset(seed=env_seed)
             if args.gui:
                 gui.render()
-
-        logger.info(f"Episode {episode + 1} finished with total reward: {total_reward}")
-        # Ensure agent becomes stochastic after the first episode.
-        agent.deterministic = False
-
-    env.close()
+        for env, _, _ in env_agents:
+            env.close()
 
 
 if __name__ == "__main__":

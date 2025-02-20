@@ -55,10 +55,14 @@ class RL_Config:
     CHECKPOINT_FREQ = 500000
 
     # PPO Configuration
-    PPO_DEVICE = "cpu"
+    PPO_OPTIONS = {
+        "device": "cpu"
+    }
 
     # SAC Configuration
-    SAC_DEVICE = "auto"
+    SAC_OPTIONS = {
+        "device": "auto"
+    }
 
     # Default parameters for the DefaultReward
     DEFAULT_DEFAULT_REWARD_PARAMS = {
