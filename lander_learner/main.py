@@ -10,6 +10,9 @@ import sys
 import os
 import importlib
 import logging
+from importlib import resources
+from pathlib import Path
+
 import numpy as np
 
 from lander_learner import scenarios
@@ -45,8 +48,9 @@ def main():
     # --- Scenario and Argument Parsing ---
     # Load scenario defaults.
     try:
-        with importlib.resources.path(scenarios, "scenarios.json") as scn_path:
-            scenario_list = load_scenarios(scn_path)
+        scenario_resource = resources.files(scenarios).joinpath("scenarios.json")
+        with resources.as_file(scenario_resource) as scn_path:
+            scenario_list = load_scenarios(Path(scn_path))
     except RuntimeError:
         logger.fatal("Error loading scenarios", exc_info=True)
         sys.exit(1)

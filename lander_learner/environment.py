@@ -177,7 +177,7 @@ class LunarLanderEnv(gym.Env):
         """
         super().reset(seed=seed)
         self.reset_state_variables(reset_config=reset_config)
-        self.physics_engine.reset()
+        self.physics_engine.reset(env=self)
         return self._get_observation(), {}
 
     def step(self, action):

@@ -18,8 +18,10 @@ class DummyPhysicsEngine:
         fuel_used = (abs(left_thruster + 1) + abs(right_thruster + 1)) * 0.1
         env.fuel_remaining = max(0.0, env.fuel_remaining - fuel_used)
 
-    def reset(self):
+    def reset(self, env=None):
         self.updated = False
+        if env is not None:
+            env.lander_position = np.array([0.0, 10.0], dtype=np.float32)
 
 
 @pytest.fixture

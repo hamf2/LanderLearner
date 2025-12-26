@@ -1,13 +1,11 @@
-"""
-Physics Engine module for the Lunar Lander.
+"""Physics Engine module for the Lunar Lander."""
 
-This module implements a physics engine using pymunk to simulate the 2D lunar lander.
-It manages the creation and updating of dynamic bodies (the lander) and static bodies (the ground),
-as well as handling collisions.
-"""
+from typing import Optional
 
-import pymunk
 import numpy as np
+import pymunk
+
+from lander_learner.levels import BaseLevel, get_level
 from lander_learner.utils.config import Config
 
 
@@ -23,7 +21,7 @@ class PhysicsEngine:
         collision_impulse (float): Records the maximum impulse from collisions.
     """
 
-    def __init__(self):
+    def __init__(self, level: Optional[BaseLevel] = None):
         """Initializes the physics engine.
 
         Sets up the simulation space with gravity, creates the ground and the lander,
@@ -33,7 +31,8 @@ class PhysicsEngine:
         self.space = pymunk.Space()
         self.space.gravity = (0.0, -Config.GRAVITY)
 
-        self._create_ground()
+        self.level: BaseLevel = level or get_level()
+        self.level.generate_terrain(self.space)
         self._create_lander()
 
         # Add collision handler callbacks.
@@ -45,15 +44,18 @@ class PhysicsEngine:
         self.collision_state = False
         self.collision_impulse = 0.0
 
-    def reset(self):
+    def reset(self, env=None):
         """Resets the physics state for a new episode.
 
         Removes the existing lander body and shape, re-creates the lander,
-        repositions the ground, and resets collision-related variables.
+        refreshes the level terrain, and resets collision-related variables.
         """
         self.space.remove(self.lander_body, self.lander_shape)
+        self.level.reset(self.space)
         self._create_lander()
-        self._move_ground()
+
+        if env is not None:
+            self.level.configure_environment(env)
 
         self.collision_state = False
         self.collision_impulse = 0.0
@@ -67,7 +69,7 @@ class PhysicsEngine:
             env: The environment instance, whose state will be updated based on the simulation.
 
         This method applies forces based on thruster inputs, updates fuel consumption,
-        adjusts the ground position if needed, steps the simulation for a fixed number of steps,
+        delegates level updates, steps the simulation for a fixed number of steps,
         and updates the environment's state variables.
         """
         if env.fuel_remaining > 0.0:
@@ -87,13 +89,8 @@ class PhysicsEngine:
             fuel_used = (thruster_force_left + thruster_force_right) * Config.FUEL_COST
             env.fuel_remaining = max(0.0, env.fuel_remaining - fuel_used)
 
-        # Check if the lander is near the ground's current segment endpoints.
-        if (
-            self.lander_body.position.x - (self.ground_body.position.x + self.ground_shape.a.x) < Config.LANDER_WIDTH
-            or self.lander_body.position.x - (self.ground_body.position.x + self.ground_shape.b.x)
-            > -Config.LANDER_WIDTH
-        ):
-            self._move_ground()
+        frame_dt = Config.TIME_STEP * Config.PHYSICS_STEPS_PER_FRAME
+        self.level.update(frame_dt, env=env)
 
         # Step the physics simulation.
         for _ in range(Config.PHYSICS_STEPS_PER_FRAME):
@@ -107,29 +104,6 @@ class PhysicsEngine:
         env.collision_state = self.collision_state
         env.collision_impulse = self.collision_impulse
 
-    def _create_ground(self):
-        """Creates a static body for the ground.
-
-        The ground is represented by a segment with fixed endpoints. This is a placeholder
-        implementation; consider replacing it with a more complex or randomly generated terrain.
-        """
-        self.ground_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
-        self.ground_body.position = (0, 0)
-        self.ground_shape = pymunk.Segment(self.ground_body, (-100, 0), (100, 0), 0.1)
-        self.ground_shape.friction = 1.0
-        self.ground_shape.elasticity = 0.5
-        self.space.add(self.ground_body, self.ground_shape)
-
-    def _move_ground(self):
-        """Moves the ground to be centered under the lander.
-
-        Removes the current ground from the space, updates its position based on the lander's
-        x-coordinate, and re-adds it to the simulation.
-        """
-        self.space.remove(self.ground_body, self.ground_shape)
-        self.ground_body.position = (self.lander_body.position.x, 0)
-        self.space.add(self.ground_body, self.ground_shape)
-
     def _create_lander(self):
         """Creates a dynamic body for the lander.
 
@@ -141,13 +115,18 @@ class PhysicsEngine:
         )
         self.lander_body = pymunk.Body(Config.LANDER_MASS, lander_moment, body_type=pymunk.Body.DYNAMIC)
         self.lander_body.sleep_threshold = 0.1
-        self.lander_body.position = (0, 10)
+        spawn_point = self.level.get_spawn_point()
+        self.lander_body.position = (float(spawn_point[0]), float(spawn_point[1]))
+        self.lander_body.angle = float(self.level.get_spawn_rotation())
         self.lander_shape = pymunk.Poly.create_box(
             self.lander_body, (Config.LANDER_WIDTH, Config.LANDER_HEIGHT), radius=0.1
         )
         self.lander_shape.friction = Config.LANDER_COF
         self.lander_shape.elasticity = 0.5
         self.space.add(self.lander_body, self.lander_shape)
+
+        initial_velocity = self.level.get_initial_velocity()
+        self.lander_body.velocity = (float(initial_velocity[0]), float(initial_velocity[1]))
 
     def _collision_begin_callback(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
         """Callback invoked when collisions begin.

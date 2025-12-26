@@ -1,0 +1,4979 @@
+Folder Structure
+--------------------------------------------------
+./
+    .gitignore
+    agents.txt
+    installation.md
+    observations.txt
+    readme.md
+    requirements.txt
+    rewards.txt
+    setup.py
+    data/
+        checkpoints/
+            notes.txt
+            ppo_250213_181252.zip
+            sac_250213_181922.zip
+            sac_250213_184328.zip
+            sac_250213_201915.zip
+            sac_250215_145749.zip
+            sac_250215_185117.zip
+            sac_250216_060525.zip
+            sac_250216_173046.zip
+            sac_250219_102008.zip
+            sac_250220_044909.zip
+            sac_250221_032705.zip
+            sac_20250218-152934/
+                sac_10000000_steps.zip
+                sac_1000000_steps.zip
+                sac_10500000_steps.zip
+                sac_11000000_steps.zip
+                sac_11500000_steps.zip
+                sac_12000000_steps.zip
+                sac_12500000_steps.zip
+                sac_13000000_steps.zip
+                sac_13500000_steps.zip
+                sac_14000000_steps.zip
+                sac_14500000_steps.zip
+                sac_15000000_steps.zip
+                sac_1500000_steps.zip
+                sac_15500000_steps.zip
+                sac_16000000_steps.zip
+                sac_16500000_steps.zip
+                sac_17000000_steps.zip
+                sac_17500000_steps.zip
+                sac_18000000_steps.zip
+                sac_18500000_steps.zip
+                sac_19000000_steps.zip
+                sac_19500000_steps.zip
+                sac_20000000_steps.zip
+                sac_2000000_steps.zip
+                sac_20500000_steps.zip
+                sac_21000000_steps.zip
+                sac_21500000_steps.zip
+                sac_22000000_steps.zip
+                sac_22500000_steps.zip
+                sac_23000000_steps.zip
+                sac_23500000_steps.zip
+                sac_24000000_steps.zip
+                sac_24500000_steps.zip
+                sac_25000000_steps.zip
+                sac_2500000_steps.zip
+                sac_25500000_steps.zip
+                sac_26000000_steps.zip
+                sac_26500000_steps.zip
+                sac_27000000_steps.zip
+                sac_27500000_steps.zip
+                sac_28000000_steps.zip
+                sac_28500000_steps.zip
+                sac_29000000_steps.zip
+                sac_29500000_steps.zip
+                sac_30000000_steps.zip
+                sac_3000000_steps.zip
+                sac_3500000_steps.zip
+                sac_4000000_steps.zip
+                sac_4500000_steps.zip
+                sac_5000000_steps.zip
+                sac_500000_steps.zip
+                sac_5500000_steps.zip
+                sac_6000000_steps.zip
+                sac_6500000_steps.zip
+                sac_7000000_steps.zip
+                sac_7500000_steps.zip
+                sac_8000000_steps.zip
+                sac_8500000_steps.zip
+                sac_9000000_steps.zip
+                sac_9500000_steps.zip
+            sac_20250219-222434/
+                sac_10000000_steps.zip
+                sac_1000000_steps.zip
+                sac_1500000_steps.zip
+                sac_2000000_steps.zip
+                sac_2500000_steps.zip
+                sac_3000000_steps.zip
+                sac_3500000_steps.zip
+                sac_4000000_steps.zip
+                sac_4500000_steps.zip
+                sac_5000000_steps.zip
+                sac_500000_steps.zip
+                sac_5500000_steps.zip
+                sac_6000000_steps.zip
+                sac_6500000_steps.zip
+                sac_7000000_steps.zip
+                sac_7500000_steps.zip
+                sac_8000000_steps.zip
+                sac_8500000_steps.zip
+                sac_9000000_steps.zip
+                sac_9500000_steps.zip
+            sac_20250220-205556/
+                sac_10000000_steps.zip
+                sac_1000000_steps.zip
+                sac_1500000_steps.zip
+                sac_2000000_steps.zip
+                sac_2500000_steps.zip
+                sac_3000000_steps.zip
+                sac_3500000_steps.zip
+                sac_4000000_steps.zip
+                sac_4500000_steps.zip
+                sac_5000000_steps.zip
+                sac_500000_steps.zip
+                sac_5500000_steps.zip
+                sac_6000000_steps.zip
+                sac_6500000_steps.zip
+                sac_7000000_steps.zip
+                sac_7500000_steps.zip
+                sac_8000000_steps.zip
+                sac_8500000_steps.zip
+                sac_9000000_steps.zip
+                sac_9500000_steps.zip
+        logs/
+            lander_tensorboard/
+                SAC_20250213-182344_1/
+                    events.out.tfevents.1739471024.C-22-31.30280.0
+                SAC_20250213-185547_1/
+                    events.out.tfevents.1739472947.C-22-31.21944.0
+                SAC_20250215-135021_1/
+                    events.out.tfevents.1739627421.C-22-31.30428.0
+                SAC_20250215-174120_1/
+                    events.out.tfevents.1739641280.C-22-31.36228.0
+                SAC_20250215-174224_1/
+                    events.out.tfevents.1739641344.C-22-31.32672.0
+                SAC_20250215-213556_1/
+                    events.out.tfevents.1739655356.C-22-31.22228.0
+                SAC_20250215-233151_1/
+                    events.out.tfevents.1739662311.C-22-31.16164.0
+                SAC_20250216-101008_1/
+                    events.out.tfevents.1739700608.C-22-31.16276.0
+                SAC_20250216-230257_1/
+                    events.out.tfevents.1739746977.C-22-31.30788.0
+                SAC_20250218-152934_1/
+                    events.out.tfevents.1739892574.C-22-31.17428.0
+                SAC_20250219-222434_1/
+                    events.out.tfevents.1740003874.C-22-31.3788.0
+                SAC_20250220-205556_1/
+                    events.out.tfevents.1740084956.C-22-31.31368.0
+        recordings/
+    lander_learner/
+        environment.py
+        gui.py
+        main.py
+        physics.py
+        __init__.py
+        agents/
+            base_agent.py
+            human_agent.py
+            ppo_agent.py
+            sac_agent.py
+            __init__.py
+        assets/
+            lander.png
+            __init__.py
+        observations/
+            base_observation.py
+            default_observation.py
+            target_observation.py
+            wrappers.py
+            __init__.py
+        rewards/
+            base_reward.py
+            composite_reward.py
+            constant_reward.py
+            default_reward.py
+            rightward_reward.py
+            soft_landing_reward.py
+            __init__.py
+        scenarios/
+            scenarios.json
+            __init__.py
+        utils/
+            config.py
+            helpers.py
+            parse_args.py
+            pytorch_verif.ipynb
+            target.py
+            __init__.py
+    lander_learner.egg-info/
+        dependency_links.txt
+        entry_points.txt
+        PKG-INFO
+        requires.txt
+        SOURCES.txt
+        top_level.txt
+    tests/
+        test_environment.py
+        test_helpers.py
+        test_observations.py
+        test_parse_args.py
+        test_physics.py
+        test_rewards.py
+        test_target.py
+
+
+File Contents
+--------------------------------------------------
+
+
+.\agents.txt
+File type: .txt
+Folder Structure
+--------------------------------------------------
+agents/
+    base_agent.py
+    human_agent.py
+    ppo_agent.py
+    sac_agent.py
+    __init__.py
+    
+
+File Contents
+--------------------------------------------------
+
+
+lander_learner/agents\base_agent.py
+File type: .py
+class BaseAgent:
+    """
+    Base class for RL agents.
+    Subclasses should override the train, get_action, save_model, and load_model methods.
+    """
+
+    def __init__(self, env, deterministic=True):
+        """
+        env: The Gym environment.
+        deterministic: Whether the agent should act deterministically.
+        """
+        self.env = env
+        self.deterministic = deterministic
+        self.model = None
+
+    def train(self, timesteps):
+        """
+        Train the agent for a specified number of timesteps.
+        """
+        raise NotImplementedError("Subclasses must implement train()")
+
+    def get_action(self, observation):
+        """
+        Given an observation, return an action.
+        """
+        raise NotImplementedError("Subclasses must implement get_action()")
+
+    def save_model(self, path):
+        """
+        Save the model to the specified path.
+        """
+        raise NotImplementedError("Subclasses must implement save_model()")
+
+    def load_model(self, path):
+        """
+        Load the model from the specified path.
+        """
+        raise NotImplementedError("Subclasses must implement load_model()")
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/agents\human_agent.py
+File type: .py
+import numpy as np
+import pygame
+from lander_learner.agents.base_agent import BaseAgent
+
+
+class HumanAgent(BaseAgent):
+    """
+    Provides a simple interface to read user input for thruster control.
+    Integrated with the pygame event loop in `gui.py`.
+    """
+
+    def __init__(self, env):
+        super().__init__(env, deterministic=True)
+        self.state_flags = {"left_thruster": False, "right_thruster": False}
+
+    def get_action(self, observation):
+        """
+        Return a 2D action vector: [left_thruster, right_thruster].
+        The state_flags are set via keyboard events.
+        """
+        return np.array(
+            [-1.0 + 2.0 * self.state_flags["left_thruster"], -1.0 + 2.0 * self.state_flags["right_thruster"]],
+            dtype=np.float32,
+        )
+
+    def handle_key_event(self, event: pygame.event.Event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                self.state_flags["left_thruster"] = True
+            elif event.key == pygame.K_RIGHT:
+                self.state_flags["right_thruster"] = True
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                self.state_flags["left_thruster"] = False
+            elif event.key == pygame.K_RIGHT:
+                self.state_flags["right_thruster"] = False
+
+    def train(self, timesteps):
+        # Human agent learns independently.
+        pass
+
+    def save_model(self, path):
+        # Nothing to save for the human agent.
+        pass
+
+    def load_model(self, path):
+        # Nothing to load for the human agent.
+        pass
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/agents\ppo_agent.py
+File type: .py
+from datetime import datetime
+from stable_baselines3 import PPO
+from stable_baselines3.common.env_checker import check_env
+from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
+from lander_learner.utils.helpers import adjust_save_path, adjust_load_path
+from lander_learner.utils.config import RL_Config
+from lander_learner.agents.base_agent import BaseAgent
+from lander_learner.agents import default_callback
+
+
+class PPOAgent(BaseAgent):
+    """
+    An RL agent that uses Proximal Policy Optimization (PPO).
+    """
+
+    def __init__(self, env, deterministic=True, **kwargs):
+        # Only run check_env for non-vectorized environments.
+        if not (isinstance(env, SubprocVecEnv) or isinstance(env, DummyVecEnv)):
+            check_env(env, warn=True)
+        super().__init__(env, deterministic)
+        self.model = PPO(
+            "MlpPolicy",
+            env,
+            verbose=1,
+            tensorboard_log=str(RL_Config.DEFAULT_LOGGING_DIR / "lander_tensorboard"),
+            **kwargs  # Extra arguments passed to PPO, if any
+        )
+
+    def train(self, timesteps=RL_Config.CHECKPOINT_FREQ, callback=None):
+        if callback is None:
+            callback = default_callback(checkpoint_freq=timesteps, model_type="ppo")
+        self.model.learn(
+            total_timesteps=timesteps,
+            tb_log_name="PPO_" + datetime.now().strftime("%Y%m%d-%H%M%S"),
+            callback=callback
+        )
+
+    def get_action(self, observation):
+        action, _states = self.model.predict(observation, deterministic=self.deterministic)
+        return action
+
+    def save_model(self, path):
+        path = adjust_save_path(path, model_type="ppo")
+        self.model.save(path)
+
+    def load_model(self, path):
+        path = adjust_load_path(path, model_type="ppo")
+        self.model = PPO.load(path, env=self.env)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/agents\sac_agent.py
+File type: .py
+from datetime import datetime
+from stable_baselines3 import SAC
+from stable_baselines3.common.env_checker import check_env
+from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
+from lander_learner.utils.helpers import adjust_save_path, adjust_load_path
+from lander_learner.utils.config import RL_Config
+from lander_learner.agents.base_agent import BaseAgent
+from lander_learner.agents import default_callback
+
+
+class SACAgent(BaseAgent):
+    """
+    An RL agent that uses Soft Actor-Critic (SAC) with GPU acceleration where available.
+    """
+
+    def __init__(self, env, deterministic=True, device="auto", **kwargs):
+        # Only run check_env for non-vectorized environments.
+        if not (isinstance(env, SubprocVecEnv) or isinstance(env, DummyVecEnv)):
+            check_env(env, warn=True)
+        super().__init__(env, deterministic)
+        self.device = device
+        self.model = SAC(
+            "MlpPolicy",
+            env,
+            verbose=1,
+            tensorboard_log=str(RL_Config.DEFAULT_LOGGING_DIR / "lander_tensorboard"),
+            device=self.device,  # Uses GPU if available: "cuda" or "auto"
+            **kwargs  # Extra arguments passed to SAC, if any
+        )
+
+    def train(self, timesteps=100000, callback=None, checkpoint_freq=RL_Config.CHECKPOINT_FREQ):
+        if callback is None:
+            callback = default_callback(checkpoint_freq=checkpoint_freq, model_type="sac")
+        self.model.learn(
+            total_timesteps=timesteps,
+            tb_log_name="SAC_" + datetime.now().strftime("%Y%m%d-%H%M%S"),
+            callback=callback
+        )
+
+    def get_action(self, observation):
+        action, _states = self.model.predict(observation, deterministic=self.deterministic)
+        return action
+
+    def save_model(self, path):
+        path = adjust_save_path(path, model_type="sac")
+        self.model.save(path)
+
+    def load_model(self, path):
+        path = adjust_load_path(path, model_type="sac")
+        self.model = SAC.load(path, env=self.env)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/agents\__init__.py
+File type: .py
+from stable_baselines3.common.callbacks import CheckpointCallback
+from datetime import datetime
+from lander_learner.utils.config import RL_Config
+
+
+def default_callback(checkpoint_freq=100000, checkpoint_dir=None, model_type="model"):
+    """
+    Create a default CheckpointCallback for training an RL agent.
+
+    Args:
+        timesteps (int): The number of timesteps between each checkpoint.
+        checkpoint_dir (str): The directory to save checkpoints.
+
+    Returns:
+        CheckpointCallback: A callback that saves checkpoints every `timesteps` steps.
+    """
+    if checkpoint_dir is None:
+        checkpoint_dir = RL_Config.DEFAULT_CHECKPOINT_DIR / f"{model_type}_{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    return CheckpointCallback(save_freq=checkpoint_freq, save_path=checkpoint_dir, name_prefix=model_type)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\installation.md
+File type: .md
+# 2D Lunar Lander
+
+A modular Python project using:
+- **pymunk** for 2D physics (Chipmunk2D bindings)
+- **pygame** for optional GUI rendering
+- **gymnasium** for environment creation
+- **stable-baselines3** for RL training
+- **numpy** for numerical computations
+
+## Directory Structure
+```
+lunar_lander/  
+├── main.py  
+├── environment.py  
+├── gui.py  
+├── physics.py  
+├── agents/  
+│ ├── base_agent.py
+│ ├── human_agent.py  
+│ ├── ppo_agent.py 
+│ ├── sac_agent.py
+├── assets
+│ ├── lander.png
+├── observations/
+│ ├── base_observation.py
+│ ├── default_observation.py
+│ ├── target_observation.py
+│ ├── wrappers.py
+├── rewards/
+│ ├── base_reward.py
+│ ├── composite_reward.py
+│ ├── constant_reward.py
+│ ├── default_reward.py
+│ ├── rightward_reward.py
+│ ├── soft_landing_reward.py
+├── scenarios/
+│ ├── scenarios.json
+├── utils/ 
+│ ├── config.py 
+│ ├── helpers.py 
+│ ├── parse_args.py
+│ ├── target.py
+├── data/ 
+│ ├── checkpoints/
+│ ├── logs/
+│ ├── recordings/
+└── README.md
+```
+
+## Installation
+1. Create a virtual environment (recommended):
+   ```bash
+   python -m venv venv
+   source venv/bin/activate   # On Linux/macOS
+   # or:
+   venv\Scripts\activate      # On Windows
+   ```
+2. Install package:
+   ```bash
+   pip install -r requirements.txt
+   pip install .              # For a standard installation
+   # or:
+   pip install -e .           # For an editable installation
+   ```
+3. Run the main script:
+
+   - For a human-controlled GUI:
+   `lander_learner --gui --mode human`
+   
+   - For RL training:
+   `lander_learner --mode train`
+   
+   - For RL inference (after a model is saved):
+   `lander_learner --gui --mode inference`
+
+   - For multiple agent visualisation (renders multiple stachastic instances simultaneously):
+   `python lander_learner/utils/multiple_render.py --checkpoint [path] --agent_type [agent_type]`
+
+   - For TensorBoard log viewing:
+   `tensorboard --logdir=data/logs/lander_tensorboard`
+
+---
+
+# Final Notes
+
+1. **Modularity**  
+   - `environment.py` is **gym-compatible** for training or manual/human mode.  
+   - `gui.py` is **decoupled** from the environment, only reading its state.  
+   - `physics.py` handles **all** physics updates with pymunk.  
+   - `agents/` can be expanded with different agents (human, RL, scripted).  
+   - `utils/` keeps config constants and helper functions. 
+   - `utils/rewards.py` enables interchangable reward functions.
+   - `utils/observations.py` enables interchangable observation modes.
+   - `utils/target.py` implements multiple options for target spawning and motion. 
+
+2. **Optional Headless Mode**  
+   - Passing `--gui` toggles the UI. Without it, training can proceed faster.  
+   
+3. **Expanding This Project (possible directions)**
+
+   - Physics: Adjust or refine the shapes, collision detection, custom terrain.
+   - Rendering: Draw terrain accurately, display thruster flames, etc.
+   - Reward Shaping: Add partial rewards for stable flight, gentle landings, etc.
+   - Action Space: Use discrete or continuous thrusters, possibly rotational thrusters.
+   - Multiple Agents: Investigate multi-agent RL with cooperative or competing landers.
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\observations.txt
+File type: .txt
+Folder Structure
+--------------------------------------------------
+observations/
+    base_observation.py
+    default_observation.py
+    target_observation.py
+    wrappers.py
+    __init__.py
+
+
+File Contents
+--------------------------------------------------
+
+
+lander_learner/observations\base_observation.py
+File type: .py
+from abc import ABC, abstractmethod
+
+
+class BaseObservation(ABC):
+    def __init__(self, **kwargs):
+        """
+        Optionally accept parameters and set the observation size.
+        """
+        self.observation_size = None
+
+    @abstractmethod
+    def get_observation(self, env):
+        """
+        Given the environment state, return an observation vector.
+        """
+        pass
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/observations\default_observation.py
+File type: .py
+import numpy as np
+from lander_learner.observations.base_observation import BaseObservation
+
+
+class DefaultObservation(BaseObservation):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.observation_size = 8  # e.g. 8 dimensions
+
+    def get_observation(self, env):
+        angle = (env.lander_angle + np.pi) % (2 * np.pi) - np.pi
+        observation = np.array(
+            [
+                env.lander_position[0],
+                env.lander_position[1],
+                env.lander_velocity[0],
+                env.lander_velocity[1],
+                angle,
+                env.lander_angular_velocity,
+                env.fuel_remaining,
+                float(env.collision_state),
+            ],
+            dtype=np.float32,
+        )
+        return observation
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/observations\target_observation.py
+File type: .py
+import numpy as np
+from lander_learner.observations.default_observation import DefaultObservation
+
+
+class TargetObservation(DefaultObservation):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.observation_size = 13  # default (8) + 5 additional values
+
+    def get_observation(self, env):
+        base_obs = super().get_observation(env)
+        additional = np.array(
+            [
+                env.target_position[0] - env.lander_position[0],
+                env.target_position[1] - env.lander_position[1],
+                np.arctan2(
+                    env.target_position[1] - env.lander_position[1],
+                    env.target_position[0] - env.lander_position[0]
+                ),
+                env.target_zone_width,
+                env.target_zone_height,
+            ],
+            dtype=np.float32,
+        )
+        return np.concatenate([base_obs, additional])
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/observations\wrappers.py
+File type: .py
+import numpy as np
+import logging
+from lander_learner.observations.base_observation import BaseObservation
+
+logger = logging.getLogger(__name__)
+
+
+class ObservationWrapper(BaseObservation):
+    """
+    Base class for observation wrappers.
+    Wraps an existing observation object and can modify its output.
+
+    Parameters:
+        observation (BaseObservation): The underlying observation generator to wrap.
+    """
+    def __init__(self, observation: BaseObservation):
+        self.observation = observation
+        self.observation_size = observation.observation_size
+
+    def get_observation(self, env):
+        return self.observation.get_observation(env)
+
+
+class NoiseObservationWrapper(ObservationWrapper):
+    """
+    A wrapper that adds Gaussian noise to the observations.
+
+    Keyword Arguments (via **kwargs):
+      - noise_variance (array-like): A vector of variances for each observation dimension.
+                                     Noise is added as independent Gaussian noise if no covariance is provided.
+      - noise_covariance (array-like): A full covariance matrix to sample noise from a multivariate normal distribution.
+                                     If provided, this takes precedence over noise_variance.
+
+    Example usage:
+
+        from lander_learner.observations.default_observation import DefaultObservation
+        from lander_learner.observations.wrappers import NoiseObservationWrapper
+
+        base_obs = DefaultObservation()
+        # Add noise with a variance vector for an 8-dimensional observation:
+        noisy_obs = NoiseObservationWrapper(base_obs, noise_variance=[0.1]*8)
+
+        # Alternatively, using a full covariance matrix:
+        cov = [[0.1, 0, 0, 0, 0, 0, 0, 0],
+               [0, 0.1, 0, 0, 0, 0, 0, 0],
+               [0, 0, 0.1, 0, 0, 0, 0, 0],
+               [0, 0, 0, 0.1, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0.1, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0.1, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0.1, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0.1]]
+        noisy_obs = NoiseObservationWrapper(base_obs, noise_covariance=cov)
+    """
+    def __init__(self, observation: BaseObservation, **kwargs):
+        super().__init__(observation)
+        self.noise_variance = kwargs.get("noise_variance", None)
+        self.noise_covariance = kwargs.get("noise_covariance", None)
+        if self.noise_covariance is None and self.noise_variance is not None:
+            # Convert the variance vector into a diagonal covariance matrix.
+            self.noise_covariance = np.diag(self.noise_variance)
+        elif self.noise_covariance is None and self.noise_variance is None:
+            # If no noise parameters are provided, do not add noise.
+            self.noise_covariance = None
+            logger.warning("Noise parameters not provided. No noise will be added to observations.")
+
+    def get_observation(self, env):
+        obs = self.observation.get_observation(env)
+        if self.noise_covariance is not None:
+            n = obs.shape[0]
+            if self.noise_covariance.shape != (n, n):
+                raise ValueError("The provided noise covariance matrix shape does not match the observation dimension.")
+            # Sample noise from a multivariate normal distribution with mean zero.
+            noise = np.random.multivariate_normal(np.zeros(n), self.noise_covariance)
+            return obs + noise
+        else:
+            return obs
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/observations\__init__.py
+File type: .py
+from .base_observation import BaseObservation
+from .default_observation import DefaultObservation
+from .target_observation import TargetObservation
+
+
+def get_observation_class(name: str, **kwargs) -> BaseObservation:
+    mapping = {
+        "default": DefaultObservation,
+        "target": TargetObservation
+    }
+    obs_cls = mapping.get(name, DefaultObservation)
+    return obs_cls(**kwargs)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\readme.md
+File type: .md
+# Package Demonstration Readme
+
+Welcome to the package demonstration. This document gives a brief overview of the package features and intro to the reinforcement learning agents used.
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Features](#features)
+- [Performance Videos](#performance-videos)
+- [Algorithm Explanations in Brief](#algorithm-explanations-in-brief)
+    - [Proximal Policy Optimization (PPO)](#proximal-policy-optimization-ppo)
+    - [Soft Actor-Critic (SAC)](#soft-actor-critic-sac)
+- [Usage](#usage)
+- [License](#license)
+- [Contact](#contact)
+
+## Introduction
+
+This package is designed to bridge the gap between human intuition and model performance using cutting-edge deep reinforcement learning algorithms. The modular design ensures ease of integration and extensive customization options.
+
+## Installation
+
+Install the package via the following commands:
+
+```bash
+git clone https://github.com/hamf2/LanderLearner.git
+cd LanderLearner
+pip install .
+```
+
+For more detailed installation instructions, please refer to the [Installation Guide](./INSTALL.md).
+
+## Features
+
+- Modular architecture for reinforcement learning algorithms.
+- Integrated performance evaluation with video recording.
+- Extensible plugin support for custom metrics and reward functions.
+
+## Performance Videos
+
+### Human Performance Videos
+
+Embed or link videos showcasing human performance benchmarks:
+
+- [Human Performance Video 1](#)
+
+### Model Performance Videos
+
+Embed or link videos demonstrating model performance:
+
+- [Model Performance Video 1](#)
+
+## Algorithm Explanations in Brief
+
+### Proximal Policy Optimization (PPO)
+
+PPO optimizes a "surrogate" objective function to limit policy updates at each iteration preventing large changes:
+
+The **clipped surrogate objective** is given by:
+
+$$
+L^{CLIP}(\theta) = \hat{\mathbb{E}}_t \Big[ \min\Big( r_t(\theta) \hat{A}_t,\ \text{clip}(r_t(\theta), 1 - \epsilon, 1 + \epsilon) \hat{A}_t \Big) \Big],
+$$
+
+where
+
+$$
+r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{\text{old}}}(a_t|s_t)}
+$$
+
+and $ \hat{A}_t $ is an estimator of the advantage function, $ \epsilon $ is a hyperparameter that controls the update step, typically set to a small value such as 0.1 or 0.2.
+
+PPO’s strategy lies in balancing exploration and exploitation while ensuring stability in the policy updates.
+
+### Soft Actor-Critic (SAC)
+
+SAC is an off-policy actor-critic algorithm that incorporates a maximum entropy objective to promote exploration by encouraging policies to act as randomly as possible while still maximizing reward.
+
+The objective for the policy is:
+
+$$
+J(\pi) = \sum_{t=0}^{T} \mathbb{E}_{(s_t,a_t) \sim \rho_\pi} \left[ r(s_t,a_t) + \alpha \mathcal{H}(\pi(\cdot|s_t)) \right],
+$$
+
+where:
+- $ \mathcal{H}(\pi(\cdot|s_t)) $ is the entropy of the policy at state $ s_t $.
+- $ \alpha $ is the temperature parameter that balances the trade-off between maximizing the reward and maximizing entropy.
+- $ \rho_\pi $ denotes the state-action marginal distribution under policy $ \pi $.
+
+SAC leverages two Q-value functions to mitigate bias, and it adopts a soft policy evaluation step to update the critic networks, ensuring more stable and efficient learning.
+
+## License
+
+This project is licensed under the CC-BY [License](https://creativecommons.org/licenses/by/4.0/).
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\requirements.txt
+File type: .txt
+gymnasium==1.0.0
+stable-baselines3[extra]==2.5.0
+pymunk==6.11.1
+pygame==2.6.1
+numpy==2.2.2
+matplotlib
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\rewards.txt
+File type: .txt
+Folder Structure
+--------------------------------------------------
+rewards/
+    base_reward.py
+    composite_reward.py
+    constant_reward.py
+    default_reward.py
+    rightward_reward.py
+    soft_landing_reward.py
+    __init__.py
+
+
+File Contents
+--------------------------------------------------
+
+
+lander_learner/rewards\base_reward.py
+File type: .py
+from abc import ABC, abstractmethod
+import operator
+
+
+class BaseReward(ABC):
+    def __init__(self, **kwargs):
+        """
+        Base class for all reward objects.
+        Subclasses should override get_reward().
+
+        Operator overloading is enabled:
+          - r1 + r2 returns a CompositeReward computing r1.get_reward() + r2.get_reward()
+          - r1 - r2, r1 * r2, r1 / r2, etc., are similarly supported.
+          - Scalars are automatically wrapped in ConstantReward.
+        """
+        pass
+
+    @abstractmethod
+    def get_reward(self, env, done: bool) -> float:
+        """
+        Compute and return the reward given the environment state and termination flag.
+        """
+        pass
+
+    # Operator overloads:
+    def __add__(self, other):
+        from .composite_reward import CompositeReward
+        return CompositeReward(self, operator.add, other)
+
+    def __radd__(self, other):
+        from .composite_reward import CompositeReward
+        return CompositeReward(other, operator.add, self)
+
+    def __sub__(self, other):
+        from .composite_reward import CompositeReward
+        return CompositeReward(self, operator.sub, other)
+
+    def __rsub__(self, other):
+        from .composite_reward import CompositeReward
+        return CompositeReward(other, operator.sub, self)
+
+    def __mul__(self, other):
+        from .composite_reward import CompositeReward
+        return CompositeReward(self, operator.mul, other)
+
+    def __rmul__(self, other):
+        from .composite_reward import CompositeReward
+        return CompositeReward(other, operator.mul, self)
+
+    def __truediv__(self, other):
+        from .composite_reward import CompositeReward
+        return CompositeReward(self, operator.truediv, other)
+
+    def __rtruediv__(self, other):
+        from .composite_reward import CompositeReward
+        return CompositeReward(other, operator.truediv, self)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/rewards\composite_reward.py
+File type: .py
+from .base_reward import BaseReward
+from .constant_reward import ConstantReward
+
+
+class CompositeReward(BaseReward):
+    """
+    CompositeReward applies a binary operation on two reward operands.
+
+    The operands can be either:
+      - Instances of BaseReward
+      - Scalars (automatically wrapped into ConstantReward)
+
+    Parameters:
+        left (BaseReward or scalar): The left operand.
+        op (callable): A binary operator function (e.g. operator.add).
+        right (BaseReward or scalar): The right operand.
+    """
+    def __init__(self, left, op, right):
+        self.left = left if isinstance(left, BaseReward) else ConstantReward(left)
+        self.right = right if isinstance(right, BaseReward) else ConstantReward(right)
+        self.op = op
+
+    def get_reward(self, env, done: bool) -> float:
+        left_value = self.left.get_reward(env, done)
+        right_value = self.right.get_reward(env, done)
+        return self.op(left_value, right_value)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/rewards\constant_reward.py
+File type: .py
+from .base_reward import BaseReward
+
+
+class ConstantReward(BaseReward):
+    """
+    A constant reward that always returns a fixed scalar value.
+
+    Parameters:
+        value (float): The constant reward value.
+    """
+    def __init__(self, value: float):
+        self.value = value
+
+    def get_reward(self, env, done: bool) -> float:
+        return self.value
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/rewards\default_reward.py
+File type: .py
+import numpy as np
+from lander_learner.rewards.base_reward import BaseReward
+from lander_learner.utils.config import Config, RL_Config
+
+
+class DefaultReward(BaseReward):
+    def __init__(self, **kwargs):
+        """
+        Initialize DefaultReward with configurable parameters.
+
+        Possible keyword arguments:
+            x_velocity_factor (float): Factor for rewarding rightward velocity.
+                                        Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["x_velocity_factor"]
+            angle_penalty_factor (float): Factor for penalizing deviation from π/2.
+                                          Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["angle_penalty_factor"]
+            collision_penalty (float): Penalty per time step when a collision is detected.
+                                       Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["collision_penalty"]
+            crash_penalty_multiplier (float): Multiplier for penalty based on collision impulse on termination.
+                                              Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["
+                                              crash_penalty_multiplier"]
+        """
+        defaults = RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS
+        self.x_velocity_factor = kwargs.get("x_velocity_factor", defaults["x_velocity_factor"])
+        self.angle_penalty_factor = kwargs.get("angle_penalty_factor", defaults["angle_penalty_factor"])
+        self.collision_penalty = kwargs.get("collision_penalty", defaults["collision_penalty"])
+        self.crash_penalty_multiplier = kwargs.get("crash_penalty_multiplier", defaults["crash_penalty_multiplier"])
+
+    def get_reward(self, env, done: bool) -> float:
+        reward = 0.0
+        if done:
+            if env.crash_state:
+                reward -= env.collision_impulse * self.crash_penalty_multiplier
+            return float(reward)
+
+        # Reward rightward motion and penalize deviation from π/2.
+        x_velocity = env.lander_velocity[0]
+        angle_error = abs((env.lander_angle - np.pi / 2) % np.pi)
+        reward += (
+            x_velocity * self.x_velocity_factor - angle_error * self.angle_penalty_factor
+        ) * Config.FRAME_TIME_STEP
+
+        if env.collision_state:
+            reward -= self.collision_penalty * Config.FRAME_TIME_STEP
+
+        return float(reward)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/rewards\rightward_reward.py
+File type: .py
+import numpy as np
+from lander_learner.rewards.base_reward import BaseReward
+from lander_learner.utils.config import Config, RL_Config
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class RightwardReward(BaseReward):
+    def __init__(self, **kwargs):
+        """
+        Initialize DefaultReward with configurable parameters.
+
+        Possible keyword arguments:
+            x_velocity_factor (float): Factor for rewarding rightward velocity.
+                                        Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["x_velocity_factor"]
+            angle_penalty_factor (float): Factor for penalizing deviation from π/2.
+                                          Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["angle_penalty_factor"]
+            collision_penalty (float): Penalty per time step when a collision is detected.
+                                       Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["collision_penalty"]
+            crash_penalty_multiplier (float): Multiplier for penalty based on collision impulse on termination.
+                                              Default: RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS["
+                                              crash_penalty_multiplier"]
+        """
+        defaults = RL_Config.DEFAULT_RIGHTWARD_REWARD_PARAMS
+        recognised_params = (
+            "x_velocity_factor",
+            "angle_penalty_factor",
+            "collision_penalty",
+            "crash_penalty_multiplier"
+        )
+        for param in recognised_params:
+            try:
+                setattr(self, param, float(kwargs.get(param, defaults[param])))
+            except (ValueError, TypeError):
+                raise logger.fatal(f"{param} must be a float", exc_info=True)
+        extra_params = set(kwargs) - set(recognised_params)
+        for param in extra_params:
+            logger.warning(f"Unrecognized parameter: {param}")
+
+    def get_reward(self, env, done: bool) -> float:
+        reward = 0.0
+
+        # Penalize crash
+        if done:
+            if env.crash_state:
+                reward -= env.collision_impulse * self.crash_penalty_multiplier
+            logger.debug(f"Final reward: {reward:.2f}")
+            return float(reward)
+
+        # Reward rightward motion and heading angle towards right
+        x_velocity = env.lander_velocity[0]
+        angle_error = abs((env.lander_angle - np.pi / 2) % np.pi)
+        reward += (
+            x_velocity * self.x_velocity_factor - angle_error * self.angle_penalty_factor
+        ) * Config.FRAME_TIME_STEP
+
+        # Penalize collision
+        if env.collision_state:
+            reward -= self.collision_penalty * Config.FRAME_TIME_STEP
+
+        return float(reward)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/rewards\soft_landing_reward.py
+File type: .py
+import numpy as np
+from lander_learner.rewards.base_reward import BaseReward
+from lander_learner.utils.config import Config, RL_Config
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class SoftLandingReward(BaseReward):
+    def __init__(self, **kwargs):
+        """
+        Initialize SoftLandingReward with configurable parameters.
+
+        Possible keyword arguments:
+            on_target_touch_down_bonus (float): Bonus reward for a soft landing within the target zone.
+                Default: RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS["on_target_touch_down_bonus"]
+            off_target_touch_down_penalty (float): Penalty for touching down off target.
+                Default: RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS["off_target_touch_down_penalty"]
+            on_target_idle_bonus (float): Bonus reward for idling within the target zone.
+                Default: RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS["on_target_idle_bonus"]
+            off_target_idle_penalty (float): Penalty for idling off target.
+                Default: RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS["off_target_idle_penalty"]
+            crash_penalty_multiplier (float): Multiplier for penalty based on collision impulse on termination.
+                Default: RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS["crash_penalty_multiplier"]
+            time_penalty_factor (float): Factor for penalizing time taken.
+                Default: RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS["time_penalty_factor"]
+            travel_reward_factor (float): Factor for rewarding travel towards the target.
+                Default: RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS["travel_reward_factor"]
+            near_target_off_angle_penalty (float): Penalty for being off-angle near the target.
+                Default: RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS["near_target_off_angle_penalty"]
+            near_target_high_velocity_penalty (float): Penalty for high velocity near the target.
+                Default: RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS["near_target_high_velocity_penalty"]
+            near_target_unit_dist (float): Unit distance for near target calculations.
+                Default: RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS["near_target_unit_dist"]
+            near_target_max_multiplier (float): Maximum multiplier for near target calculations.
+                Default: RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS["near_target_max_multiplier"]
+        """
+        defaults = RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS
+        recognized_params = (
+            "on_target_touch_down_bonus",
+            "off_target_touch_down_penalty",
+            "on_target_idle_bonus",
+            "off_target_idle_penalty",
+            "crash_penalty_multiplier",
+            "time_penalty_factor",
+            "travel_reward_factor",
+            "near_target_off_angle_penalty",
+            "near_target_high_velocity_penalty",
+            "near_target_high_velocity_cut_off",
+            "near_target_unit_dist",
+            "near_target_max_multiplier",
+            "near_target_passive_bonus"
+        )
+        for param in recognized_params:
+            try:
+                setattr(self, param, float(kwargs.get(param, defaults[param])))
+            except (ValueError, TypeError):
+                raise logger.fatal(f"{param} must be a float", exc_info=True)
+        extra_params = set(kwargs) - set(recognized_params)
+        for param in extra_params:
+            logger.warning(f"Unrecognized parameter: {param}")
+
+    def get_reward(self, env, done: bool) -> float:
+        reward = 0.0
+
+        vector_to_target = env.target_position - env.lander_position
+        distance_to_target = np.linalg.norm(vector_to_target)
+
+        # Penalize crash and reward soft landing in target zone
+        if done:
+            if env.crash_state:
+                reward -= (self.crash_penalty_multiplier * env.collision_impulse
+                           + self.time_penalty_factor * (Config.MAX_EPISODE_DURATION - env.elapsed_time))
+            elif env.idle_state:
+                reward += (
+                    self.on_target_idle_bonus
+                    - (self.on_target_idle_bonus + self.off_target_idle_penalty)
+                    * np.clip(distance_to_target / env.target_zone_width, 0.0, 1.0)
+                    ) * (Config.MAX_EPISODE_DURATION - env.elapsed_time)
+                # in_target = (
+                #     env.target_position[0] - env.target_zone_width / 2
+                #     <= env.lander_position[0]
+                #     <= env.target_position[0] + env.target_zone_width / 2
+                #     and env.target_position[1] - env.target_zone_height / 2
+                #     <= env.lander_position[1]
+                #     <= env.target_position[1] + env.target_zone_height / 2
+                # )
+                # if in_target:
+                #     reward += self.on_target_idle_bonus * (Config.MAX_EPISODE_DURATION - env.elapsed_time)
+                # else:
+                #     reward -= self.off_target_idle_penalty * (Config.MAX_EPISODE_DURATION - env.elapsed_time)
+            elif env.time_limit_reached:
+                pass
+            else:
+                logger.warning("Unrecognised termination condition. No reward assigned.")
+            logger.debug(f"Final reward: {reward:.2f}")
+            return float(reward)
+
+        # Reward travel toward target position
+        reward += (
+            self.travel_reward_factor
+            * np.dot(env.lander_velocity, vector_to_target)
+            / distance_to_target
+            - self.time_penalty_factor
+            ) * Config.FRAME_TIME_STEP
+
+        # Encourage being upright and moving slowly near the target
+        angle_penalty = abs(((env.lander_angle + np.pi) % (2 * np.pi)) - np.pi) / np.pi
+        velocity_penalty = np.linalg.norm(np.clip(env.lander_velocity, 1.0, None) - 1.0)
+        reward -= (
+            (self.near_target_off_angle_penalty * angle_penalty
+             + self.near_target_high_velocity_penalty * velocity_penalty
+             + self.near_target_passive_bonus)
+            * (self.near_target_unit_dist
+               / np.clip(distance_to_target, self.near_target_unit_dist / self.near_target_max_multiplier, np.inf))
+            * Config.FRAME_TIME_STEP
+        )
+
+        # Penalize collision
+        if env.collision_state:
+            reward += (
+                self.on_target_touch_down_bonus
+                - (self.on_target_touch_down_bonus + self.off_target_touch_down_penalty)
+                * np.clip(distance_to_target / env.target_zone_width, 0.0, 1.0)
+                ) * Config.FRAME_TIME_STEP
+
+        return float(reward)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+lander_learner/rewards\__init__.py
+File type: .py
+from .base_reward import BaseReward
+from .default_reward import DefaultReward
+from .rightward_reward import RightwardReward
+from .soft_landing_reward import SoftLandingReward
+
+
+def get_reward_class(name: str, **kwargs) -> BaseReward:
+    """
+    Factory method to create a reward instance.
+
+    Keyword arguments are passed to the reward constructor and used to override the default parameters.
+
+    If an unknown name is provided, DefaultReward is used.
+    """
+    mapping = {
+        "default": DefaultReward,
+        "rightward": RightwardReward,
+        "soft_landing": SoftLandingReward,
+    }
+    reward_cls = mapping.get(name, DefaultReward)
+    return reward_cls(**kwargs)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\setup.py
+File type: .py
+from setuptools import setup, find_packages
+
+setup(
+    name="lander_learner",
+    version="0.1.0",
+    description="A 2D Lunar Lander simulation RL demo project",
+    author="Harry Fieldhouse",
+    author_email="harryamfieldhouse@gmail.com",
+    packages=find_packages(),
+    include_package_data=True,
+    package_data={
+        "lunar_lander": ["scenarios/*.json", "assets/*.png"],
+    },
+    install_requires=[
+        "gymnasium==1.0.0",
+        "stable-baselines3[extra]==2.5.0",
+        "pymunk==6.11.1",
+        "pygame==2.6.1",
+        "numpy==2.2.2"
+    ],
+    entry_points={
+        "console_scripts": [
+            "lander_learner=lander_learner.main:main",
+        ],
+    },
+)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\data\checkpoints\notes.txt
+File type: .txt
+agents\checkpoints\sac_250213_184328.zip - 1M ts on fixed target at (30,0) with soft landing reward, default sac on CUDA
+agents\checkpoints\sac_250213_201915.zip - prev + 2M ts - good performance!
+agents\checkpoints\sac_250215_145749.zip - prev + 3M ts, now with target positions randomly spawning on the ground in the range: x=(-50,50), same otherwise
+agents\checkpoints\sac_250215_185117.zip - prev + 3M ts, reward shaped for improved performance - added penalty for time elapsed and increased reward for vel -> target
+agents\checkpoints\sac_250215_....zip - prev + 6M ts, same as prev
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\environment.py
+File type: .py
+"""
+Lunar Lander Environment Module
+
+This module implements a 2D Lunar Lander environment based on Gymnasium's interface.
+It simulates a lunar landing task with physics simulation, configurable rewards, custom observations,
+and an optional target zone feature. The environment supports both headless and GUI modes and includes methods
+for resetting the simulation, advancing one time step, and performing cleanup.
+Classes:
+    LunarLanderEnv: A Gymnasium-compatible environment for simulating lunar landing, managing physics, rewards,
+                    observations, and termination conditions.
+Usage Example:
+    >>> env = LunarLanderEnv(
+            gui_enabled=True, reward_function="default", observation_function="default", target_zone=True
+        )
+    >>> observation, info = env.reset(seed=42)
+    >>> next_observation, reward, done, truncated, info = env.step([0.5, -0.2])
+"""
+
+import numpy as np
+import gymnasium as gym
+import logging
+
+from lander_learner.physics import PhysicsEngine
+from lander_learner.utils.config import Config
+from lander_learner.rewards import get_reward_class
+from lander_learner.observations import get_observation_class
+from lander_learner.utils.target import TargetZone
+
+logger = logging.getLogger(__name__)
+
+
+class LunarLanderEnv(gym.Env):
+    """A 2D Lunar Lander Environment conforming to Gymnasium's interface.
+
+    This environment simulates a 2D lunar lander using a physics engine.
+    It supports configurable reward and observation functions, as well as an optional
+    target zone feature whose parameters can be updated via keyword arguments.
+
+    Attributes:
+        lander_position (np.ndarray): Position of the lander.
+        lander_velocity (np.ndarray): Velocity of the lander.
+        lander_angle (np.ndarray): Angle of the lander.
+        lander_angular_velocity (np.ndarray): Angular velocity of the lander.
+        fuel_remaining (np.ndarray): Remaining fuel.
+        elapsed_time (np.ndarray): Elapsed time in the episode.
+        target_position (np.ndarray): Position of the target zone.
+        target_zone_width (np.ndarray): Width of the target zone.
+        target_zone_height (np.ndarray): Height of the target zone.
+        collision_state (bool): Flag indicating if a collision occurred.
+        collision_impulse (float): Impulse of the collision.
+        crash_state (bool): Flag indicating if a crash occurred.
+        idle_state (bool): Flag indicating if the lander is idle.
+        idle_timer (float): Timer for idle state.
+        time_limit_reached (bool): Flag indicating if the time limit was reached.
+        gui_enabled (bool): Flag to enable or disable GUI.
+        physics_engine (PhysicsEngine): Instance of the physics engine.
+        reward (Reward): Selected reward function.
+        observation (Observation): Selected observation function.
+        observation_space (gym.spaces.Box): Observation space definition.
+        action_space (gym.spaces.Box): Action space definition.
+        target_zone (bool): Flag to enable or disable target zone.
+        target_moves (bool): Flag to enable or disable target zone motion.
+        target_zone_obj (TargetZone or None): Instance of target zone management if enabled.
+        time_step (float): Time step for each frame.
+        max_episode_duration (float): Maximum duration of an episode.
+        impulse_threshold (float): Threshold for collision impulse to be considered a crash.
+        max_idle_time (float): Maximum idle time before termination.
+        initial_fuel (float): Initial fuel amount.
+    """
+
+    def __init__(
+        self,
+        gui_enabled=False,
+        reward_function="default",
+        observation_function="default",
+        target_zone=False,
+        seed=None,
+        **kwargs
+    ):
+        """Initializes the LunarLanderEnv instance.
+
+        Args:
+            gui_enabled (bool, optional): Enables or disables the graphical user interface.
+            reward_function (str, optional): Specifies the reward function to be employed.
+            observation_function (str, optional): Specifies the observation function used to
+                construct the observation vector.
+            target_zone (bool, optional): Enables or disables the target zone feature.
+            seed (int, optional): Seed for random number generation.
+            **kwargs: Additional keyword arguments passed to the TargetZone constructor.
+        """
+        super().__init__()
+
+        self.gui_enabled = gui_enabled
+
+        # Create a physics engine instance.
+        self.physics_engine = PhysicsEngine()
+
+        # Select the reward function based on the provided name.
+        self.reward = get_reward_class(reward_function)
+        # Select the observation function and determine observation size.
+        self.observation = get_observation_class(observation_function)
+
+        # Define the observation and action spaces.
+        self.observation_space = gym.spaces.Box(
+            low=-np.inf,
+            high=np.inf,
+            shape=(self.observation.observation_size,),
+            dtype=np.float32
+        )
+        self.action_space = gym.spaces.Box(low=-1.0, high=1.0, shape=(2,), dtype=np.float32)
+
+        # Set target zone mode and instantiate target zone management if enabled.
+        self.target_zone = target_zone
+        self.target_moves = target_zone and Config.TARGET_ZONE_MOTION
+        if self.target_zone:
+            self.target_zone_obj = TargetZone(**kwargs)
+        else:
+            self.target_zone_obj = None
+
+        # Load parameters from Config.
+        self.time_step = Config.FRAME_TIME_STEP
+        self.max_episode_duration = Config.MAX_EPISODE_DURATION
+        self.impulse_threshold = Config.IMPULSE_THRESHOLD
+        self.max_idle_time = Config.IDLE_TIMEOUT
+        self.initial_fuel = Config.INITIAL_FUEL
+
+        # Initialize the state by resetting the environment.
+        self.reset(seed=seed)
+
+    def reset_state_variables(self, reset_config: bool = False):
+        """Resets state variables required for a new episode.
+
+        Args:
+            reset_config (bool, optional): If True, reloads configuration parameters from Config.
+        """
+        if reset_config:
+            self.target_moves = self.target_zone and Config.TARGET_ZONE_MOTION
+            self.time_step = Config.FRAME_TIME_STEP
+            self.max_episode_duration = Config.MAX_EPISODE_DURATION
+            self.impulse_threshold = Config.IMPULSE_THRESHOLD
+            self.max_idle_time = Config.IDLE_TIMEOUT
+            self.initial_fuel = Config.INITIAL_FUEL
+
+        self.lander_position = np.array([0.0, 10.0], dtype=np.float32)
+        self.lander_velocity = np.array([0.0, 0.0], dtype=np.float32)
+        self.lander_angle = np.array(0.0, dtype=np.float32)
+        self.lander_angular_velocity = np.array(0.0, dtype=np.float32)
+        self.fuel_remaining = np.array(self.initial_fuel, dtype=np.float32)
+        self.elapsed_time = np.array(0.0, dtype=np.float32)
+
+        # Target zone parameters.
+        if self.target_zone:
+            self.target_zone_obj.reset(reset_config=reset_config, random_generator=self.np_random)
+            self.target_position = self.target_zone_obj.initial_position
+            self.target_zone_width = np.array(self.target_zone_obj.zone_width, dtype=np.float32)
+            self.target_zone_height = np.array(self.target_zone_obj.zone_height, dtype=np.float32)
+
+        # Collision and state flags.
+        self.collision_state = False
+        self.collision_impulse = 0.0
+        self.crash_state = False
+        self.idle_state = False
+        self.idle_timer = 0.0
+        self.time_limit_reached = False
+
+    def reset(self, seed=None, reset_config=False):
+        """Resets the environment to an initial state.
+
+        Args:
+            seed (int, optional): Seed for random number generation.
+            reset_config (bool, optional): If True, also reload configuration parameters from Config.
+
+        Returns:
+            tuple: A tuple containing:
+                - observation (np.ndarray): The initial observation.
+                - info (dict): An empty metadata dictionary.
+        """
+        super().reset(seed=seed)
+        self.reset_state_variables(reset_config=reset_config)
+        self.physics_engine.reset()
+        return self._get_observation(), {}
+
+    def step(self, action):
+        """Performs one simulation time step given an action.
+
+        Args:
+            action (np.ndarray): Action representing thruster forces (values in [-1, 1]).
+
+        Returns:
+            tuple: A tuple (observation, reward, done, truncated, info) where:
+                - observation (np.ndarray): The updated observation.
+                - reward (float): The computed reward.
+                - done (bool): Flag indicating whether the episode is terminated.
+                - truncated (bool): Flag indicating early termination (always False here).
+                - info (dict): Additional diagnostic information.
+        """
+        action = np.clip(action, -1.0, 1.0)
+        left_thruster, right_thruster = action
+
+        # Update physics.
+        self.physics_engine.update(left_thruster=left_thruster, right_thruster=right_thruster, env=self)
+        self.elapsed_time += self.time_step
+
+        # Update target zone position if enabled.
+        if self.target_moves:
+            self.target_position = self.target_zone_obj.get_target_position(self.elapsed_time)
+
+        done = self._check_done()
+        reward = self._calculate_reward(done)
+        obs = self._get_observation()
+        truncated = False
+        info = {"collision_state": self.collision_state}
+
+        return obs, reward, done, truncated, info
+
+    def _get_observation(self):
+        """Constructs and returns the current observation.
+
+        Returns:
+            np.ndarray: The observation vector.
+        """
+        return self.observation.get_observation(self)
+
+    def _calculate_reward(self, done):
+        """Computes the reward based on the current state and termination flag.
+
+        Args:
+            done (bool): Whether the episode is terminated.
+
+        Returns:
+            float: The reward value.
+        """
+        return self.reward.get_reward(self, done)
+
+    def _check_done(self):
+        """Determines whether the episode should terminate.
+
+        Returns:
+            bool: True if termination conditions are met, otherwise False.
+        """
+        # Check for time limit.
+        if self.elapsed_time >= self.max_episode_duration:
+            angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
+            logger.info(
+                f"Time limit reached.  Position: x = {self.lander_position[0]:.2f}, "
+                f"y = {self.lander_position[1]:.2f} Angle = {angle_display:.2f} "
+                f"({self.lander_angle:.2f})."
+            )
+            self.time_limit_reached = True
+            return True
+
+        # Check for crash due to collision impulse or unfavorable angle.
+        if self.collision_state and (
+            self.collision_impulse > self.impulse_threshold or
+            (np.pi / 2 <= self.lander_angle % (2 * np.pi) <= 3 * np.pi / 2)
+        ):
+            angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
+            logger.info(
+                f"Crash detected.      Position: x = {self.lander_position[0]:.2f}, "
+                f"y = {self.lander_position[1]:.2f}, Angle = {angle_display:.2f} "
+                f"({self.lander_angle:.2f}). Impulse: {self.collision_impulse:.2f}."
+            )
+            self.crash_state = True
+            return True
+
+        # Check if lander is below ground.
+        if self.lander_position[1] <= 0.0:
+            self.collision_state = True
+            angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
+            logger.info(
+                f"Lander below ground. Position: x = {self.lander_position[0]:.2f}, "
+                f"y = {self.lander_position[1]:.2f}, Angle = {angle_display:.2f} "
+                f"({self.lander_angle:.2f}). Velocity: vx = {self.lander_velocity[0]:.2f}, "
+                f"vy = {self.lander_velocity[1]:.2f}, vAng = {self.lander_angular_velocity:.2f}."
+            )
+            self.crash_state = True
+            return True
+
+        # Check for prolonged idle state.
+        if self.collision_state and np.linalg.norm(self.lander_velocity) < 0.1:
+            self.idle_timer += self.time_step
+            if self.idle_timer > self.max_idle_time:
+                angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
+                logger.info(
+                    f"Idle timeout. Position: x = {self.lander_position[0]:.2f}, "
+                    f"y = {self.lander_position[1]:.2f}, Angle = {angle_display:.2f} "
+                    f"({self.lander_angle:.2f}). Velocity: vx = {self.lander_velocity[0]:.2f}, "
+                    f"vy = {self.lander_velocity[1]:.2f}, vAng = {self.lander_angular_velocity:.2f}."
+                )
+                self.idle_state = True
+                return True
+        else:
+            self.idle_timer = 0.0
+
+        # If fuel is depleted, let it coast.
+        if self.fuel_remaining <= 0.0:
+            return False
+
+        return False
+
+    def close(self):
+        """Performs any necessary cleanup once the environment is no longer in use."""
+        pass
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\gui.py
+File type: .py
+"""
+LunarLanderGUI Module
+
+This module provides the LunarLanderGUI class, which manages a pygame window to visualize the
+lander and environment. It supports rendering a single environment or multiple environments in
+parallel. When in multi-mode, it accepts a list of environments and a corresponding list of style
+dictionaries (for tinting, transparency, etc.).
+"""
+
+import pygame
+import sys
+import os
+from datetime import datetime
+import importlib.resources as pkg_resources
+from lander_learner.utils.config import Config
+from lander_learner import assets
+
+# Colour constants
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+DARK_GREY = (50, 50, 50)
+BLACK = (0, 0, 0)
+
+
+class LunarLanderGUI:
+    """Manages a pygame window to visualize the lander and environment.
+
+    This class is capable of rendering either a single environment or multiple environments in parallel.
+
+    In single-mode, `env` is expected to be a single environment instance and a single style is applied.
+    In multi-mode, `env` should be a list of environment objects and `styles` should be a list of
+    dictionaries (one per environment) specifying drawing options such as tint colour and alpha.
+
+    Attributes:
+        view_ref_x (float): The reference x-coordinate for converting world coordinates to screen coordinates.
+        screen (pygame.Surface): The main display surface.
+        clock (pygame.time.Clock): Clock used for regulating frame rate.
+        font (pygame.font.Font): Font used for rendering debug text.
+        lander_surface (pygame.Surface): Surface containing the lander image.
+        _key_callback (callable): Optional callback for key events.
+    """
+
+    def __init__(self, env, multi_mode=False, styles=None, record=False):
+        """Initializes the LunarLanderGUI.
+
+        Args:
+            env: A single environment instance (if multi_mode is False) or a list of environment instances.
+            multi_mode (bool, optional): Flag indicating whether to render multiple environments.
+                Defaults to False.
+            styles (dict or list of dict, optional): For single-mode a dictionary specifying the style.
+                For multi-mode, a list of dictionaries (one per environment) specifying the style.
+                Each style dict may contain keys "color" (an RGB tuple) and "alpha" (an integer 0-255).
+                Defaults to None, in which case a default style is applied (GREEN, opaque).
+        """
+        self.multi_mode = multi_mode
+        if self.multi_mode:
+            # Expect a list of environments.
+            self.envs = env
+            # If no styles provided, default to green (opaque) for all.
+            if styles is None:
+                self.styles = [{"color": GREEN, "alpha": 255} for _ in self.envs]
+            else:
+                self.styles = styles
+        else:
+            # Single environment mode.
+            self.env = env
+            if styles is None:
+                self.styles = {"color": GREEN, "alpha": 255}
+            else:
+                self.styles = styles
+
+        self.record = record
+        if record:
+            self.record_dir = Config.DEFAULT_RECORDING_DIR / datetime.now().strftime("%Y%m%d-%H%M%S")
+            os.makedirs(str(self.record_dir), exist_ok=True)
+            self.frame_count = 0
+
+        self._key_callback = None
+        pygame.init()
+        pygame.display.set_caption("2D Lunar Lander")
+        self.screen = pygame.display.set_mode((Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT))
+        self.clock = pygame.time.Clock()
+        self.font = pygame.font.SysFont(None, 24)
+
+        self.view_ref_x = 0.0
+        self.view_ref_y = 25.0
+        self._load_lander_image()
+
+    def render(self):
+        """Draws the lander(s), terrain, and debug information to the screen.
+
+        Handles pygame events, clears the screen, draws the ground, background grid,
+        target zone (if enabled), lander(s), and debug text. Finally, it updates the display
+        and regulates the frame rate.
+        """
+        # Handle Pygame events (e.g., closing window, key events).
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit(0)
+            elif (event.type == pygame.KEYDOWN or event.type == pygame.KEYUP) and self._key_callback:
+                self._key_callback(event)
+
+        self.screen.fill(BLACK)  # Clear to black
+
+        self._draw_ground()
+
+        # Use the last environment in the list (or the single env) as reference for view.
+        view_ref_env = self.envs[-1] if self.multi_mode else self.env
+        self.view_ref_x = view_ref_env.lander_position[0]
+
+        if view_ref_env.target_zone:
+            self._draw_target_zone(view_ref_env)
+        self._draw_background()
+        if self.multi_mode:
+            for env, style in zip(self.envs, self.styles):
+                self._draw_lander(env, style)
+        else:
+            self._draw_lander(self.env, self.styles)
+        self._draw_debug_text()
+        pygame.display.flip()
+
+        if self.record:
+            frame_path = os.path.join(self.record_dir, f"frame_{self.frame_count:06d}.png")
+            pygame.image.save(self.screen, frame_path)
+            self.frame_count += 1
+
+        self.clock.tick(Config.FPS * Config.REPLAY_SPEED)
+
+    def _load_lander_image(self):
+        """Loads and scales the lander image from the assets.
+
+        The image is loaded from the assets package and scaled based on the configuration
+        settings for lander width, height, and render scale.
+        """
+        lander_width_px = int(Config.LANDER_WIDTH * Config.RENDER_SCALE)
+        lander_height_px = int(Config.LANDER_HEIGHT * Config.RENDER_SCALE)
+        self.lander_surface = pygame.Surface((lander_width_px, lander_height_px), pygame.SRCALPHA)
+        with pkg_resources.open_binary(assets, "lander.png") as img_file:
+            image = pygame.image.load(img_file).convert_alpha()
+        self.lander_surface = pygame.transform.smoothscale(image, (lander_width_px, lander_height_px))
+
+    def _draw_lander(self, env, style: dict = {}):
+        """Draws the lander for a given environment.
+
+        If a style dictionary is provided with "color" and "alpha", a tinted copy of the
+        lander image is created.
+
+        Args:
+            env: The environment instance whose lander state is to be drawn.
+            style (dict, optional): Dictionary with style parameters ("color" and "alpha").
+                Defaults to an empty dict.
+        """
+        # Determine the lander surface.
+        if style is not None and "color" in style and "alpha" in style:
+            # Make a copy to apply tint.
+            lander_surf = self.lander_surface.copy()
+            tint_color = style["color"]
+            lander_surf.fill(tint_color + (255,), None, pygame.BLEND_RGBA_MULT)
+            lander_surf.set_alpha(style["alpha"])
+        else:
+            lander_surf = self.lander_surface
+
+        # Get state info.
+        lander_x, lander_y = env.lander_position
+        lander_angle = env.lander_angle
+
+        # Rotate the image (note the multiplication factor converts radians to degrees).
+        rotated_surface = pygame.transform.rotate(lander_surf, lander_angle * 180 / 3.14159)
+        lander_rect = rotated_surface.get_rect(center=(
+            self.world_to_screen_x(lander_x),
+            self.world_to_screen_y(lander_y)
+        ))
+        self.screen.blit(rotated_surface, lander_rect)
+
+    def _draw_target_zone(self, env, style: dict = {}):
+        """Draws the target zone as a semi-transparent rectangular outline.
+
+        The target zone is drawn using the specified style (default is blue with 50% transparency).
+
+        Args:
+            env: The environment instance containing the target zone parameters.
+            style (dict, optional): Dictionary with style parameters ("color" and "alpha").
+                Defaults to an empty dict.
+        """
+        targ_x, targ_y = env.target_position
+        targ_w, targ_h = env.target_zone_width, env.target_zone_height
+        color = style.get("color", BLUE)
+        alpha = style.get("alpha", 128)
+
+        # Calculate the screen coordinates for the target zone.
+        target_x_px = self.world_to_screen_x(targ_x - targ_w / 2)
+        target_y_px = self.world_to_screen_y(targ_y + targ_h / 2)
+        target_rect = pygame.Rect(
+            target_x_px, target_y_px, int(targ_w * Config.RENDER_SCALE), int(targ_h * Config.RENDER_SCALE)
+        )
+        outline_surface = pygame.Surface((target_rect.width, target_rect.height), pygame.SRCALPHA)
+        pygame.draw.rect(
+            outline_surface,
+            (color[0], color[1], color[2], alpha),
+            outline_surface.get_rect(),
+            2  # Outline thickness.
+        )
+        self.screen.blit(outline_surface, target_rect.topleft)
+
+    def _draw_background(self):
+        """Draws a crosshatch pattern as a background grid.
+
+        The grid uses the view reference x-coordinate (from the last environment) to determine the offset.
+        """
+        hatch_size = 50
+        offset = hatch_size - ((self.view_ref_x * Config.RENDER_SCALE) % hatch_size)
+        for i in range(0, Config.SCREEN_WIDTH, hatch_size):
+            dx = int(i + offset)
+            pygame.draw.line(self.screen, DARK_GREY, (dx, 0), (dx, Config.SCREEN_HEIGHT))
+        for dy in range(0, Config.SCREEN_HEIGHT, hatch_size):
+            pygame.draw.line(self.screen, DARK_GREY, (0, dy), (Config.SCREEN_WIDTH, dy))
+
+    def _draw_ground(self):
+        """Draws a simple ground line corresponding to y = 0 in world coordinates.
+
+        Note:
+            This is a basic rendering of the ground. It may be replaced in the future with
+            automatic terrain rendering for more complex scenarios.
+        """
+        ground_y = self.world_to_screen_y(0)
+        pygame.draw.line(self.screen, WHITE, (0, ground_y), (Config.SCREEN_WIDTH, ground_y), 2)
+
+    def _draw_debug_text(self):
+        """Renders debugging information on the screen.
+
+        Uses the state of the last environment (in multi-mode) or the single environment.
+        Displays position, angle, fuel, FPS, elapsed time, and the current reward.
+        """
+        env = self.envs[-1] if self.multi_mode else self.env
+        fps = self.clock.get_fps()
+        debug_text = (
+            f"Pos=({env.lander_position[0]:.2f}, {env.lander_position[1]:.2f}), "
+            f"Angle={env.lander_angle:.2f}, Fuel={env.fuel_remaining:.2f}, "
+            f"FPS={fps:.1f}, time={env.elapsed_time:.1f}, "
+            f"reward={env._calculate_reward(False):.2f}"
+        )
+        text_surface = self.font.render(debug_text, True, WHITE)
+        self.screen.blit(text_surface, (10, 10))
+
+    def set_key_callback(self, callback):
+        """Sets the key event callback.
+
+        Args:
+            callback (callable): A function to be called when a key event occurs.
+        """
+        self._key_callback = callback
+
+    def world_to_screen(self, x, y):
+        """Converts world coordinates to screen coordinates.
+
+        The view center is determined by the lander's x-position and a fixed offset in y.
+
+        Args:
+            x (float): World x-coordinate.
+            y (float): World y-coordinate.
+
+        Returns:
+            tuple: A tuple (screen_x, screen_y) representing the screen coordinates.
+        """
+        return self.world_to_screen_x(x), self.world_to_screen_y(y)
+
+    def world_to_screen_x(self, x):
+        """Converts a world x-coordinate to a screen x-coordinate.
+
+        The (last) lander's x-position is always centered on the screen.
+
+        Args:
+            x (float): World x-coordinate.
+
+        Returns:
+            int: Screen x-coordinate.
+        """
+        return int(Config.SCREEN_WIDTH // 2 + (x - self.view_ref_x) * Config.RENDER_SCALE)
+
+    def world_to_screen_y(self, y):
+        """Converts a world y-coordinate to a screen y-coordinate.
+
+        The conversion uses the render scale and a fixed vertical offset.
+
+        Args:
+            y (float): World y-coordinate.
+
+        Returns:
+            int: Screen y-coordinate.
+        """
+        return int(Config.SCREEN_HEIGHT // 2 - (y - self.view_ref_y) * Config.RENDER_SCALE)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\main.py
+File type: .py
+#!/usr/bin/env python3
+"""
+main.py
+
+This is the main entry point for LanderLearner, a lunar lander simulation and training framework.
+It parses command-line arguments, loads scenario defaults, conditionally imports RL agents and GUI
+modules, sets up the environment, and runs episodes in training, inference, or human-interactive mode.
+"""
+import sys
+import os
+import importlib
+import logging
+import numpy as np
+
+from lander_learner import scenarios
+from lander_learner.environment import LunarLanderEnv
+from lander_learner.utils.config import RL_Config
+from lander_learner.utils.helpers import load_scenarios
+from lander_learner.utils.parse_args import parse_args  # see updated parse_args below
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(message)s", stream=sys.stdout)
+
+
+# ---------------------------
+# Main simulation entry point
+# ---------------------------
+def main():
+    """Main entry point for LanderLearner.
+
+    The function performs the following steps:
+      1. Logs the working directory.
+      2. Loads scenario defaults from a JSON file.
+      3. Parses command-line arguments using the scenario defaults.
+      4. Conditionally imports RL agent modules, vectorized environments, and GUI modules based on the mode.
+      5. Sets up the environment and agent based on the chosen mode (train, human, or inference).
+      6. Runs episodes, executing agent actions and rendering (if enabled).
+      7. Logs episode rewards and ensures proper cleanup.
+
+    Raises:
+        SystemExit: If scenarios cannot be loaded or arguments are parsed incorrectly.
+    """
+    logger.info("LanderLearner started in %s", os.getcwd())
+
+    # --- Scenario and Argument Parsing ---
+    # Load scenario defaults.
+    try:
+        with importlib.resources.path(scenarios, "scenarios.json") as scn_path:
+            scenario_list = load_scenarios(scn_path)
+    except RuntimeError:
+        logger.fatal("Error loading scenarios", exc_info=True)
+        sys.exit(1)
+
+    # Parse all arguments, using the appropriate scenario to set defaults.
+    try:
+        args = parse_args(scenario_list)
+        del scenario_list
+    except (ValueError, KeyError):
+        logger.fatal("Error parsing arguments", exc_info=True)
+        sys.exit(1)
+
+    # --- Conditional Imports ---
+    if args.mode in ["train", "inference"]:
+        # Dynamically import the agent module.
+        try:
+            agent_module = importlib.import_module(f"lander_learner.agents.{args.agent_type.lower()}_agent")
+            AgentClass = getattr(agent_module, f"{args.agent_type.upper()}Agent")
+            agent_options = getattr(RL_Config, f"{args.agent_type.upper()}_OPTIONS")
+        except (ImportError, AttributeError):
+            logger.fatal(f"Error importing agent module or class for agent type: {args.agent_type}", exc_info=True)
+            sys.exit(1)
+    # For training mode, import vectorized environment.
+    if args.mode == "train":
+        from stable_baselines3.common.vec_env import DummyVecEnv
+    # For human mode, import the human agent.
+    if args.mode == "human":
+        HumanAgent = importlib.import_module("lander_learner.agents.human_agent").HumanAgent
+    # Import GUI only if needed.
+    if args.gui:
+        LunarLanderGUI = importlib.import_module("lander_learner.gui").LunarLanderGUI
+
+    # --- Environment and Agent Setup ---
+    if args.mode == "train":
+        logging.info("Running in training mode")
+        # Training mode: use a vectorized environment.
+        env = DummyVecEnv([
+            lambda: LunarLanderEnv(
+                gui_enabled=False,
+                reward_function=args.reward_function,
+                observation_function=args.observation_function,
+                target_zone=args.target_zone,
+            )
+            for _ in range(args.num_envs)
+        ])
+        agent = AgentClass(env, **agent_options)
+        if args.load_checkpoint:
+            agent.load_model(args.load_checkpoint)
+        try:
+            agent.train(args.timesteps, checkpoint_freq=RL_Config.CHECKPOINT_FREQ // args.num_envs)
+        except KeyboardInterrupt:
+            logger.warning("Training interrupted.")
+        agent.save_model(args.model_path)
+        env.close()
+        sys.exit(0)
+    if args.mode == "human" or (args.mode == "inference" and not args.multi):
+        logger.info("Running in %s mode", args.mode)
+        # Use single environment mode.
+        env = LunarLanderEnv(
+            gui_enabled=args.gui,
+            reward_function=args.reward_function,
+            observation_function=args.observation_function,
+            target_zone=args.target_zone,
+        )
+        if args.mode == "human":
+            agent = HumanAgent(env)
+        else:
+            agent = AgentClass(env, **agent_options)
+            agent.load_model(args.model_path)
+        if args.gui:
+            gui = LunarLanderGUI(env, record=args.record)
+            # Set key callback for human mode if applicable.
+            if hasattr(agent, "handle_key_event"):
+                gui.set_key_callback(agent.handle_key_event)
+
+        # --- Run Episodes ---
+        # Execute the specified number of episodes for human or inference mode.
+        for episode in range(args.episodes):
+            obs, _ = env.reset()
+            done = False
+            total_reward = 0.0
+
+            while not done:
+                action = agent.get_action(obs)
+                obs, reward, done, truncated, info = env.step(action)
+                total_reward += reward
+                if args.gui:
+                    gui.render()
+
+            logger.info(f"Episode {episode + 1} finished with total reward: {total_reward}")
+            # Ensure agent becomes stochastic after the first episode.
+            agent.deterministic = False
+
+        env.close()
+    elif args.multi:
+        logger.info("Running in multi-render mode")
+        # --- Multi-render mode ---
+        env_agents = []
+        # Use a common seed for all environments.
+        env_seed = int(np.random.SeedSequence().generate_state(1)[0])
+        # Create stochastic agent–env pairs.
+        for _ in range(args.num_stochastic):
+            env_stoch = LunarLanderEnv(
+                gui_enabled=True,
+                reward_function=args.reward_function,
+                observation_function=args.observation_function,
+                target_zone=args.target_zone,
+                seed=env_seed
+            )
+            agent_stoch = AgentClass(env_stoch, deterministic=False, **agent_options)
+            agent_stoch.load_model(args.model_path)
+            # Use green with semi-transparency.
+            style_stoch = {"color": (0, 255, 0), "alpha": 128}
+            env_agents.append((env_stoch, agent_stoch, style_stoch))
+        # Create deterministic agent–env pair.
+        env_det = LunarLanderEnv(
+            gui_enabled=True,
+            reward_function=args.reward_function,
+            observation_function=args.observation_function,
+            target_zone=args.target_zone,
+            seed=env_seed
+        )
+        agent_det = AgentClass(env_det, deterministic=True, **agent_options)
+        agent_det.load_model(args.model_path)
+        # Use blue with full opacity.
+        style_det = {"color": (0, 0, 255), "alpha": 255}
+        env_agents.append((env_det, agent_det, style_det))
+        # Initialize multi-agent GUI.
+        if args.gui:
+            gui = LunarLanderGUI(
+                [env for env, _, _ in env_agents],
+                multi_mode=True,
+                styles=[style for _, _, style in env_agents],
+                record=args.record
+            )
+        # Simulation loop.
+        running = [True] * len(env_agents)
+        episode_count = 0
+        while True:
+            for i, (env, agent, _) in enumerate(env_agents):
+                if running[i]:
+                    obs = env._get_observation()  # using the internal observation getter
+                    action = agent.get_action(obs)
+                    obs, reward, done, truncated, info = env.step(action)
+                if done:
+                    running[i] = False
+            if not any(running):
+                episode_count += 1
+                logger.info(f"Episode {episode_count} finished.")
+                if episode_count >= args.episodes:
+                    break
+                running = [True] * len(env_agents)
+                env_seed = int(np.random.SeedSequence().generate_state(1)[0])
+                for env, _, _ in env_agents:
+                    env.reset(seed=env_seed)
+            if args.gui:
+                gui.render()
+        for env, _, _ in env_agents:
+            env.close()
+
+
+if __name__ == "__main__":
+    main()
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\physics.py
+File type: .py
+"""
+Physics Engine module for the Lunar Lander.
+
+This module implements a physics engine using pymunk to simulate the 2D lunar lander.
+It manages the creation and updating of dynamic bodies (the lander) and static bodies (the ground),
+as well as handling collisions.
+"""
+
+import pymunk
+import numpy as np
+from lander_learner.utils.config import Config
+
+
+class PhysicsEngine:
+    """Manages the Chipmunk2D/pymunk-based simulation for the Lunar Lander.
+
+    This class creates and updates the simulation space, including the lander and the ground.
+    It also handles collisions by setting and resetting the collision state and recording impulses.
+
+    Attributes:
+        space (pymunk.Space): The physics simulation space.
+        collision_state (bool): Indicates if a collision is currently active.
+        collision_impulse (float): Records the maximum impulse from collisions.
+    """
+
+    def __init__(self):
+        """Initializes the physics engine.
+
+        Sets up the simulation space with gravity, creates the ground and the lander,
+        and installs collision callbacks.
+        """
+        # Create the pymunk Space and set gravity.
+        self.space = pymunk.Space()
+        self.space.gravity = (0.0, -Config.GRAVITY)
+
+        self._create_ground()
+        self._create_lander()
+
+        # Add collision handler callbacks.
+        collision_handler = self.space.add_default_collision_handler()
+        collision_handler.begin = self._collision_begin_callback
+        collision_handler.separate = self._collision_separate_callback
+        collision_handler.post_solve = self._collision_post_solve_callback
+
+        self.collision_state = False
+        self.collision_impulse = 0.0
+
+    def reset(self):
+        """Resets the physics state for a new episode.
+
+        Removes the existing lander body and shape, re-creates the lander,
+        repositions the ground, and resets collision-related variables.
+        """
+        self.space.remove(self.lander_body, self.lander_shape)
+        self._create_lander()
+        self._move_ground()
+
+        self.collision_state = False
+        self.collision_impulse = 0.0
+
+    def update(self, left_thruster, right_thruster, env):
+        """Advances the physics simulation by one time step, applying thruster forces.
+
+        Args:
+            left_thruster (float): Thruster power for the left thruster (in [-1, 1]).
+            right_thruster (float): Thruster power for the right thruster (in [-1, 1]).
+            env: The environment instance, whose state will be updated based on the simulation.
+
+        This method applies forces based on thruster inputs, updates fuel consumption,
+        adjusts the ground position if needed, steps the simulation for a fixed number of steps,
+        and updates the environment's state variables.
+        """
+        if env.fuel_remaining > 0.0:
+            # Convert thruster power to force.
+            thruster_force_left = (left_thruster + 1.0) / 2.0 * Config.THRUST_POWER
+            thruster_force_right = (right_thruster + 1.0) / 2.0 * Config.THRUST_POWER
+
+            # Apply upward forces on opposite corners of the lander (in body coordinates).
+            self.lander_body.apply_force_at_local_point(
+                (0, thruster_force_left), (-Config.LANDER_WIDTH / 2, 0)
+            )
+            self.lander_body.apply_force_at_local_point(
+                (0, thruster_force_right), (Config.LANDER_WIDTH / 2, 0)
+            )
+
+            # Decrease fuel in env according to consumption rate.
+            fuel_used = (thruster_force_left + thruster_force_right) * Config.FUEL_COST
+            env.fuel_remaining = max(0.0, env.fuel_remaining - fuel_used)
+
+        # Check if the lander is near the ground's current segment endpoints.
+        if (
+            self.lander_body.position.x - (self.ground_body.position.x + self.ground_shape.a.x) < Config.LANDER_WIDTH
+            or self.lander_body.position.x - (self.ground_body.position.x + self.ground_shape.b.x)
+            > -Config.LANDER_WIDTH
+        ):
+            self._move_ground()
+
+        # Step the physics simulation.
+        for _ in range(Config.PHYSICS_STEPS_PER_FRAME):
+            self.space.step(Config.TIME_STEP)
+
+        # Update the environment's state from the pymunk body.
+        env.lander_position = np.array(self.lander_body.position, dtype=np.float32)
+        env.lander_velocity = np.array(self.lander_body.velocity, dtype=np.float32)
+        env.lander_angle = np.array(self.lander_body.angle, dtype=np.float32)
+        env.lander_angular_velocity = np.array(self.lander_body.angular_velocity, dtype=np.float32)
+        env.collision_state = self.collision_state
+        env.collision_impulse = self.collision_impulse
+
+    def _create_ground(self):
+        """Creates a static body for the ground.
+
+        The ground is represented by a segment with fixed endpoints. This is a placeholder
+        implementation; consider replacing it with a more complex or randomly generated terrain.
+        """
+        self.ground_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
+        self.ground_body.position = (0, 0)
+        self.ground_shape = pymunk.Segment(self.ground_body, (-100, 0), (100, 0), 0.1)
+        self.ground_shape.friction = 1.0
+        self.ground_shape.elasticity = 0.5
+        self.space.add(self.ground_body, self.ground_shape)
+
+    def _move_ground(self):
+        """Moves the ground to be centered under the lander.
+
+        Removes the current ground from the space, updates its position based on the lander's
+        x-coordinate, and re-adds it to the simulation.
+        """
+        self.space.remove(self.ground_body, self.ground_shape)
+        self.ground_body.position = (self.lander_body.position.x, 0)
+        self.space.add(self.ground_body, self.ground_shape)
+
+    def _create_lander(self):
+        """Creates a dynamic body for the lander.
+
+        The lander is represented as a box with physical properties defined in Config.
+        Its initial position is set, and its shape is added to the simulation space.
+        """
+        lander_moment = pymunk.moment_for_box(
+            Config.LANDER_MASS, (Config.LANDER_WIDTH, Config.LANDER_HEIGHT)
+        )
+        self.lander_body = pymunk.Body(Config.LANDER_MASS, lander_moment, body_type=pymunk.Body.DYNAMIC)
+        self.lander_body.sleep_threshold = 0.1
+        self.lander_body.position = (0, 10)
+        self.lander_shape = pymunk.Poly.create_box(
+            self.lander_body, (Config.LANDER_WIDTH, Config.LANDER_HEIGHT), radius=0.1
+        )
+        self.lander_shape.friction = Config.LANDER_COF
+        self.lander_shape.elasticity = 0.5
+        self.space.add(self.lander_body, self.lander_shape)
+
+    def _collision_begin_callback(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
+        """Callback invoked when collisions begin.
+
+        Args:
+            arbiter (pymunk.Arbiter): The arbiter object containing collision information.
+            space (pymunk.Space): The simulation space.
+            data (dict): Additional data provided by the collision handler.
+
+        Returns:
+            bool: True to process the collision.
+        """
+        self.collision_state = True
+        return True
+
+    def _collision_separate_callback(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
+        """Callback invoked when collisions end.
+
+        Args:
+            arbiter (pymunk.Arbiter): The arbiter object containing collision information.
+            space (pymunk.Space): The simulation space.
+            data (dict): Additional data provided by the collision handler.
+
+        Returns:
+            bool: True to process the separation.
+        """
+        self.collision_state = False
+        return True
+
+    def _collision_post_solve_callback(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
+        """Callback invoked after collision resolution to record the impulse.
+
+        Args:
+            arbiter (pymunk.Arbiter): The arbiter object containing collision resolution data.
+            space (pymunk.Space): The simulation space.
+            data (dict): Additional data provided by the collision handler.
+
+        Returns:
+            bool: True to indicate successful processing.
+        """
+        self.collision_impulse = max(self.collision_impulse, arbiter.total_impulse.length)
+        return True
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\agents\base_agent.py
+File type: .py
+class BaseAgent:
+    """Base class for RL agents.
+
+    This class defines the common interface for RL agents interacting with the Lunar Lander environment.
+    Subclasses should override the methods:
+      - train
+      - get_action
+      - save_model
+      - load_model
+
+    Attributes:
+        env: The Gym environment the agent interacts with.
+        deterministic (bool): If True, the agent acts deterministically.
+        model: The underlying model for the agent (to be set by subclasses).
+    """
+
+    def __init__(self, env, deterministic=True):
+        """Initializes a BaseAgent instance.
+
+        Args:
+            env: The Gym environment instance.
+            deterministic (bool, optional): Flag to specify whether the agent acts deterministically.
+                Defaults to True.
+        """
+        self.env = env
+        self.deterministic = deterministic
+        self.model = None
+
+    def train(self, timesteps):
+        """Trains the agent for a specified number of timesteps.
+
+        Args:
+            timesteps (int): The number of timesteps to train for.
+
+        Raises:
+            NotImplementedError: Must be implemented in a subclass.
+        """
+        raise NotImplementedError("Subclasses must implement train()")
+
+    def get_action(self, observation):
+        """Computes and returns an action given an observation.
+
+        Args:
+            observation: The observation from the environment.
+
+        Returns:
+            The action computed by the agent.
+
+        Raises:
+            NotImplementedError: Must be implemented in a subclass.
+        """
+        raise NotImplementedError("Subclasses must implement get_action()")
+
+    def save_model(self, path):
+        """Saves the agent's model to the specified path.
+
+        Args:
+            path (str): The file path to save the model.
+
+        Raises:
+            NotImplementedError: Must be implemented in a subclass.
+        """
+        raise NotImplementedError("Subclasses must implement save_model()")
+
+    def load_model(self, path):
+        """Loads the agent's model from the specified path.
+
+        Args:
+            path (str): The file path to load the model from.
+
+        Raises:
+            NotImplementedError: Must be implemented in a subclass.
+        """
+        raise NotImplementedError("Subclasses must implement load_model()")
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\agents\human_agent.py
+File type: .py
+import numpy as np
+import pygame
+from lander_learner.agents.base_agent import BaseAgent
+
+
+class HumanAgent(BaseAgent):
+    """An RL agent that obtains actions from human input.
+
+    This agent reads user input via keyboard events to control the lander thrusters.
+    It is integrated with the pygame event loop in the GUI.
+    """
+
+    def __init__(self, env):
+        """Initializes a HumanAgent instance.
+
+        Args:
+            env: The Gym environment instance.
+        """
+        super().__init__(env, deterministic=True)
+        self.state_flags = {"left_thruster": False, "right_thruster": False}
+
+    def get_action(self, observation):
+        """Returns an action based on the current key state flags.
+
+        The action is a 2D vector computed from the state flags for the left and right thrusters.
+
+        Args:
+            observation: The current observation (unused in this agent).
+
+        Returns:
+            numpy.ndarray: A 2-element action vector.
+        """
+        return np.array(
+            [
+                -1.0 + 2.0 * self.state_flags["left_thruster"],
+                -1.0 + 2.0 * self.state_flags["right_thruster"]
+            ],
+            dtype=np.float32,
+        )
+
+    def handle_key_event(self, event: pygame.event.Event):
+        """Handles keyboard events to update thruster state flags.
+
+        Args:
+            event (pygame.event.Event): The keyboard event.
+        """
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                self.state_flags["left_thruster"] = True
+            elif event.key == pygame.K_RIGHT:
+                self.state_flags["right_thruster"] = True
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                self.state_flags["left_thruster"] = False
+            elif event.key == pygame.K_RIGHT:
+                self.state_flags["right_thruster"] = False
+
+    def train(self, timesteps):
+        """Training method for HumanAgent.
+
+        Human agents do not train automatically; this method is a no-op.
+
+        Args:
+            timesteps (int): The number of timesteps (unused).
+        """
+        pass
+
+    def save_model(self, path):
+        """No-op for saving model in HumanAgent.
+
+        Args:
+            path (str): The path where a model would be saved (unused).
+        """
+        pass
+
+    def load_model(self, path):
+        """No-op for loading model in HumanAgent.
+
+        Args:
+            path (str): The path from which a model would be loaded (unused).
+        """
+        pass
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\agents\ppo_agent.py
+File type: .py
+from datetime import datetime
+from stable_baselines3 import PPO
+from stable_baselines3.common.env_checker import check_env
+from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
+from lander_learner.utils.helpers import adjust_save_path, adjust_load_path
+from lander_learner.utils.config import RL_Config
+from lander_learner.agents.base_agent import BaseAgent
+from lander_learner.agents import default_callback
+
+
+class PPOAgent(BaseAgent):
+    """An RL agent that uses Proximal Policy Optimization (PPO).
+
+    This agent is implemented using the stable_baselines3 PPO algorithm.
+    It checks the environment, sets up the model, and provides methods to train,
+    predict actions, and save/load the model.
+    """
+
+    def __init__(self, env, deterministic=True, **kwargs):
+        """Initializes a PPOAgent instance.
+
+        Args:
+            env: The Gym environment instance.
+            deterministic (bool, optional): Whether the agent acts deterministically. Defaults to True.
+            **kwargs: Additional keyword arguments to pass to the PPO constructor.
+        """
+        # Only run check_env for non-vectorized environments.
+        if not (isinstance(env, SubprocVecEnv) or isinstance(env, DummyVecEnv)):
+            check_env(env, warn=True)
+        super().__init__(env, deterministic)
+        self.model = PPO(
+            "MlpPolicy",
+            env,
+            verbose=1,
+            tensorboard_log=str(RL_Config.DEFAULT_LOGGING_DIR / "lander_tensorboard"),
+            **kwargs  # Extra arguments passed to PPO, if any.
+        )
+
+    def train(self, timesteps=RL_Config.CHECKPOINT_FREQ, callback=None):
+        """Trains the PPO agent for a specified number of timesteps.
+
+        Args:
+            timesteps (int, optional): The total number of timesteps for training.
+                Defaults to RL_Config.CHECKPOINT_FREQ.
+            callback (optional): A callback function for saving checkpoints.
+                Defaults to a default callback provided by the default_callback function.
+
+        The model's learning process is logged and a tensorboard log is generated.
+        """
+        if callback is None:
+            callback = default_callback(checkpoint_freq=timesteps, model_type="ppo")
+        self.model.learn(
+            total_timesteps=timesteps,
+            tb_log_name="PPO_" + datetime.now().strftime("%Y%m%d-%H%M%S"),
+            callback=callback
+        )
+
+    def get_action(self, observation):
+        """Returns an action given an observation using the PPO model.
+
+        Args:
+            observation: The observation input to the model.
+
+        Returns:
+            The predicted action.
+        """
+        action, _states = self.model.predict(observation, deterministic=self.deterministic)
+        return action
+
+    def save_model(self, path):
+        """Saves the PPO model to the specified path.
+
+        Args:
+            path (str): The file path or directory where the model will be saved.
+        """
+        path = adjust_save_path(path, model_type="ppo")
+        self.model.save(path)
+
+    def load_model(self, path):
+        """Loads the PPO model from the specified path.
+
+        Args:
+            path (str): The file path or directory from which to load the model.
+        """
+        path = adjust_load_path(path, model_type="ppo")
+        self.model = PPO.load(path, env=self.env)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\agents\sac_agent.py
+File type: .py
+from datetime import datetime
+from stable_baselines3 import SAC
+from stable_baselines3.common.env_checker import check_env
+from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
+from lander_learner.utils.helpers import adjust_save_path, adjust_load_path
+from lander_learner.utils.config import RL_Config
+from lander_learner.agents.base_agent import BaseAgent
+from lander_learner.agents import default_callback
+
+
+class SACAgent(BaseAgent):
+    """An RL agent that uses Soft Actor-Critic (SAC) with GPU acceleration if available.
+
+    This agent is implemented using the stable_baselines3 SAC algorithm.
+    It performs environment checking, sets up the SAC model, and provides methods to train,
+    predict actions, and save/load the model.
+    """
+
+    def __init__(self, env, deterministic=True, device="auto", **kwargs):
+        """Initializes a SACAgent instance.
+
+        Args:
+            env: The Gym environment instance.
+            deterministic (bool, optional): Whether the agent acts deterministically. Defaults to True.
+            device (str, optional): The device to use ("auto", "cpu", or "cuda"). Defaults to "auto".
+            **kwargs: Additional keyword arguments to pass to the SAC constructor.
+        """
+        # Only run check_env for non-vectorized environments.
+        if not (isinstance(env, SubprocVecEnv) or isinstance(env, DummyVecEnv)):
+            check_env(env, warn=True)
+        super().__init__(env, deterministic)
+        self.device = device
+        self.model = SAC(
+            "MlpPolicy",
+            env,
+            verbose=1,
+            tensorboard_log=str(RL_Config.DEFAULT_LOGGING_DIR / "lander_tensorboard"),
+            device=self.device,  # Uses GPU if available.
+            **kwargs  # Extra arguments passed to SAC.
+        )
+
+    def train(self, timesteps=100000, callback=None, checkpoint_freq=RL_Config.CHECKPOINT_FREQ):
+        """Trains the SAC agent for a specified number of timesteps.
+
+        Args:
+            timesteps (int, optional): The total number of timesteps for training.
+                Defaults to 100000.
+            callback (optional): A callback function for checkpointing during training.
+                Defaults to a callback provided by default_callback.
+            checkpoint_freq (int, optional): Frequency of checkpoints. Defaults to RL_Config.CHECKPOINT_FREQ.
+
+        The model's learning is logged and monitored via TensorBoard.
+        """
+        if callback is None:
+            callback = default_callback(checkpoint_freq=checkpoint_freq, model_type="sac")
+        self.model.learn(
+            total_timesteps=timesteps,
+            tb_log_name="SAC_" + datetime.now().strftime("%Y%m%d-%H%M%S"),
+            callback=callback
+        )
+
+    def get_action(self, observation):
+        """Returns an action given an observation using the SAC model.
+
+        Args:
+            observation: The observation input to the model.
+
+        Returns:
+            The predicted action.
+        """
+        action, _states = self.model.predict(observation, deterministic=self.deterministic)
+        return action
+
+    def save_model(self, path):
+        """Saves the SAC model to the specified path.
+
+        Args:
+            path (str): The file path or directory where the model will be saved.
+        """
+        path = adjust_save_path(path, model_type="sac")
+        self.model.save(path)
+
+    def load_model(self, path):
+        """Loads the SAC model from the specified path.
+
+        Args:
+            path (str): The file path or directory from which to load the model.
+        """
+        path = adjust_load_path(path, model_type="sac")
+        self.model = SAC.load(path, env=self.env)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\observations\base_observation.py
+File type: .py
+from abc import ABC, abstractmethod
+
+
+class BaseObservation(ABC):
+    """Abstract base class for observation generators.
+
+    This class defines the interface for generating observation vectors from an environment.
+    Subclasses must override the `get_observation` method and set the `observation_size` attribute.
+
+    Attributes:
+        observation_size (int or None): The dimensionality of the observation vector. Should be set by subclasses.
+    """
+
+    def __init__(self, **kwargs):
+        """Initializes the BaseObservation.
+
+        Optionally accepts parameters to customize the observation; however, the default implementation
+        only sets `observation_size` to None.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments (not used by default).
+        """
+        self.observation_size = None
+
+    @abstractmethod
+    def get_observation(self, env):
+        """Generates and returns an observation vector from the given environment.
+
+        Args:
+            env: The environment instance from which to generate the observation.
+
+        Returns:
+            numpy.ndarray: The observation vector.
+        """
+        pass
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\observations\default_observation.py
+File type: .py
+import numpy as np
+from lander_learner.observations.base_observation import BaseObservation
+
+
+class DefaultObservation(BaseObservation):
+    """Default observation generator for the Lunar Lander environment.
+
+    This generator produces an 8-dimensional observation vector based on the lander's state.
+    The observation includes the lander's position, velocity, orientation, angular velocity,
+    fuel remaining, and collision state.
+
+    Attributes:
+        observation_size (int): The size of the observation vector (set to 8).
+    """
+
+    def __init__(self, **kwargs):
+        """Initializes the DefaultObservation.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments (not used in the default implementation).
+        """
+        super().__init__(**kwargs)
+        self.observation_size = 8  # e.g., 8 dimensions
+
+    def get_observation(self, env):
+        """Generates an observation vector based on the environment state.
+
+        The observation vector contains:
+          - Lander x-position.
+          - Lander y-position.
+          - Lander x-velocity.
+          - Lander y-velocity.
+          - Lander angle (normalized between -π and π).
+          - Lander angular velocity.
+          - Fuel remaining.
+          - Collision state as a float (0.0 or 1.0).
+
+        Args:
+            env: The environment instance containing the lander state.
+
+        Returns:
+            numpy.ndarray: An 8-dimensional observation vector of type float32.
+        """
+        angle = (env.lander_angle + np.pi) % (2 * np.pi) - np.pi
+        observation = np.array(
+            [
+                env.lander_position[0],
+                env.lander_position[1],
+                env.lander_velocity[0],
+                env.lander_velocity[1],
+                angle,
+                env.lander_angular_velocity,
+                env.fuel_remaining,
+                float(env.collision_state),
+            ],
+            dtype=np.float32,
+        )
+        return observation
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\observations\target_observation.py
+File type: .py
+import numpy as np
+from lander_learner.observations.default_observation import DefaultObservation
+
+
+class TargetObservation(DefaultObservation):
+    """Extended observation generator that includes target zone information.
+
+    In addition to the default 8-dimensional observation, this generator appends 5 more
+    values related to the target zone:
+      - Relative x-position to the target.
+      - Relative y-position to the target.
+      - Angle (in radians) from the lander to the target.
+      - Target zone width.
+      - Target zone height.
+
+    Attributes:
+        observation_size (int): The size of the observation vector (set to 13).
+    """
+
+    def __init__(self, **kwargs):
+        """Initializes the TargetObservation.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments (not used in the default implementation).
+        """
+        super().__init__(**kwargs)
+        self.observation_size = 13  # default (8 from base) + 5 additional values
+
+    def get_observation(self, env):
+        """Generates an observation vector that includes target zone information.
+
+        The observation consists of the default observation followed by:
+          - The x offset between the target and the lander.
+          - The y offset between the target and the lander.
+          - The angle to the target computed using arctan2.
+          - The target zone's width.
+          - The target zone's height.
+
+        Args:
+            env: The environment instance containing both the lander and target zone state.
+
+        Returns:
+            numpy.ndarray: A 13-dimensional observation vector.
+        """
+        base_obs = super().get_observation(env)
+        additional = np.array(
+            [
+                env.target_position[0] - env.lander_position[0],
+                env.target_position[1] - env.lander_position[1],
+                np.arctan2(
+                    env.target_position[1] - env.lander_position[1],
+                    env.target_position[0] - env.lander_position[0]
+                ),
+                env.target_zone_width,
+                env.target_zone_height,
+            ],
+            dtype=np.float32,
+        )
+        return np.concatenate([base_obs, additional])
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\observations\wrappers.py
+File type: .py
+import numpy as np
+import logging
+from lander_learner.observations.base_observation import BaseObservation
+
+logger = logging.getLogger(__name__)
+
+
+class ObservationWrapper(BaseObservation):
+    """Base class for observation wrappers.
+
+    This class wraps an existing observation generator and can modify or extend its output.
+
+    Attributes:
+        observation (BaseObservation): The underlying observation generator.
+        observation_size (int): The observation size as defined by the wrapped generator.
+    """
+
+    def __init__(self, observation: BaseObservation):
+        """Initializes the ObservationWrapper.
+
+        Args:
+            observation (BaseObservation): The observation generator to wrap.
+        """
+        self.observation = observation
+        self.observation_size = observation.observation_size
+
+    def get_observation(self, env):
+        """Generates an observation by delegating to the wrapped observation generator.
+
+        Args:
+            env: The environment instance.
+
+        Returns:
+            numpy.ndarray: The observation vector produced by the underlying generator.
+        """
+        return self.observation.get_observation(env)
+
+
+class NoiseObservationWrapper(ObservationWrapper):
+    """An observation wrapper that adds Gaussian noise to observations.
+
+    The wrapper can use either a vector of noise variances (which will be converted into a diagonal covariance matrix)
+    or a full covariance matrix for adding noise to the observation.
+
+    Keyword Args:
+        noise_variance (array-like): Variance for each observation dimension.
+        noise_covariance (array-like): A full covariance matrix to sample noise from.
+            Takes precedence over noise_variance.
+    """
+
+    def __init__(self, observation: BaseObservation, **kwargs):
+        """Initializes the NoiseObservationWrapper.
+
+        Args:
+            observation (BaseObservation): The base observation generator to wrap.
+            **kwargs: Additional keyword arguments for noise parameters. Recognized keys:
+                - noise_variance: Variance for each observation dimension.
+                - noise_covariance: A full covariance matrix for noise sampling.
+        """
+        super().__init__(observation)
+        self.noise_variance = kwargs.get("noise_variance", None)
+        self.noise_covariance = kwargs.get("noise_covariance", None)
+        if self.noise_covariance is None and self.noise_variance is not None:
+            # Convert the variance vector into a diagonal covariance matrix.
+            self.noise_covariance = np.diag(self.noise_variance)
+        elif self.noise_covariance is None and self.noise_variance is None:
+            # If no noise parameters are provided, do not add noise.
+            self.noise_covariance = None
+            logger.warning("Noise parameters not provided. No noise will be added to observations.")
+
+    def get_observation(self, env):
+        """Generates a noisy observation by adding Gaussian noise to the base observation.
+
+        The noise is sampled from a multivariate normal distribution with mean zero and the specified covariance.
+
+        Args:
+            env: The environment instance.
+
+        Returns:
+            numpy.ndarray: The noisy observation vector.
+
+        Raises:
+            ValueError: If the noise covariance matrix dimensions do not match the observation dimension.
+        """
+        obs = self.observation.get_observation(env)
+        if self.noise_covariance is not None:
+            n = obs.shape[0]
+            if self.noise_covariance.shape != (n, n):
+                raise ValueError("The provided noise covariance matrix shape does not match the observation dimension.")
+            noise = np.random.multivariate_normal(np.zeros(n), self.noise_covariance)
+            return obs + noise
+        else:
+            return obs
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\rewards\base_reward.py
+File type: .py
+from abc import ABC, abstractmethod
+import operator
+
+
+class BaseReward(ABC):
+    """Base class for all reward objects.
+
+    Subclasses must implement the get_reward() method to compute the reward based on
+    the environment state and termination condition.
+
+    Operator overloading is enabled:
+      - r1 + r2 returns a CompositeReward computing r1.get_reward() + r2.get_reward()
+      - Similarly, subtraction, multiplication, and division are supported.
+      - Scalars are automatically wrapped in a ConstantReward.
+    """
+
+    def __init__(self, **kwargs):
+        """Initializes a BaseReward instance.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments for subclass configuration.
+        """
+        pass
+
+    @abstractmethod
+    def get_reward(self, env, done: bool) -> float:
+        """Computes and returns the reward.
+
+        Args:
+            env: The environment instance containing the state.
+            done (bool): A flag indicating whether the episode is terminated.
+
+        Returns:
+            float: The computed reward.
+        """
+        pass
+
+    def __add__(self, other):
+        """Overloads the '+' operator to combine rewards.
+
+        Args:
+            other: A reward or scalar.
+
+        Returns:
+            CompositeReward: A reward representing the sum.
+        """
+        from .composite_reward import CompositeReward
+        return CompositeReward(self, operator.add, other)
+
+    def __radd__(self, other):
+        """Overloads the reverse '+' operator.
+
+        Args:
+            other: A scalar or reward.
+
+        Returns:
+            CompositeReward: A reward representing the sum.
+        """
+        from .composite_reward import CompositeReward
+        return CompositeReward(other, operator.add, self)
+
+    def __sub__(self, other):
+        """Overloads the '-' operator to subtract rewards.
+
+        Args:
+            other: A reward or scalar.
+
+        Returns:
+            CompositeReward: A reward representing the difference.
+        """
+        from .composite_reward import CompositeReward
+        return CompositeReward(self, operator.sub, other)
+
+    def __rsub__(self, other):
+        """Overloads the reverse '-' operator.
+
+        Args:
+            other: A scalar or reward.
+
+        Returns:
+            CompositeReward: A reward representing the difference.
+        """
+        from .composite_reward import CompositeReward
+        return CompositeReward(other, operator.sub, self)
+
+    def __mul__(self, other):
+        """Overloads the '*' operator to multiply rewards.
+
+        Args:
+            other: A reward or scalar.
+
+        Returns:
+            CompositeReward: A reward representing the product.
+        """
+        from .composite_reward import CompositeReward
+        return CompositeReward(self, operator.mul, other)
+
+    def __rmul__(self, other):
+        """Overloads the reverse '*' operator.
+
+        Args:
+            other: A scalar or reward.
+
+        Returns:
+            CompositeReward: A reward representing the product.
+        """
+        from .composite_reward import CompositeReward
+        return CompositeReward(other, operator.mul, self)
+
+    def __truediv__(self, other):
+        """Overloads the '/' operator to divide rewards.
+
+        Args:
+            other: A reward or scalar.
+
+        Returns:
+            CompositeReward: A reward representing the quotient.
+        """
+        from .composite_reward import CompositeReward
+        return CompositeReward(self, operator.truediv, other)
+
+    def __rtruediv__(self, other):
+        """Overloads the reverse '/' operator.
+
+        Args:
+            other: A scalar or reward.
+
+        Returns:
+            CompositeReward: A reward representing the quotient.
+        """
+        from .composite_reward import CompositeReward
+        return CompositeReward(other, operator.truediv, self)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\rewards\composite_reward.py
+File type: .py
+from .base_reward import BaseReward
+from .constant_reward import ConstantReward
+
+
+class CompositeReward(BaseReward):
+    """A reward composed by applying a binary operation to two reward operands.
+
+    The operands can be either instances of BaseReward or scalars (which are automatically
+    wrapped in a ConstantReward).
+
+    Attributes:
+        left (BaseReward): The left operand.
+        right (BaseReward): The right operand.
+        op (callable): The binary operator used to combine the operands.
+    """
+
+    def __init__(self, left, op, right):
+        """Initializes a CompositeReward instance.
+
+        Args:
+            left (BaseReward or scalar): The left operand.
+            op (callable): A binary operator (e.g., operator.add) to apply.
+            right (BaseReward or scalar): The right operand.
+        """
+        self.left = left if isinstance(left, BaseReward) else ConstantReward(left)
+        self.right = right if isinstance(right, BaseReward) else ConstantReward(right)
+        self.op = op
+
+    def get_reward(self, env, done: bool) -> float:
+        """Computes the composite reward by applying the operator to the operands' rewards.
+
+        Args:
+            env: The environment instance.
+            done (bool): Flag indicating if the episode is terminated.
+
+        Returns:
+            float: The computed composite reward.
+        """
+        left_value = self.left.get_reward(env, done)
+        right_value = self.right.get_reward(env, done)
+        return self.op(left_value, right_value)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\rewards\constant_reward.py
+File type: .py
+from .base_reward import BaseReward
+
+
+class ConstantReward(BaseReward):
+    """A reward that always returns a fixed constant value.
+
+    Attributes:
+        value (float): The constant reward value.
+    """
+
+    def __init__(self, value: float):
+        """Initializes a ConstantReward instance.
+
+        Args:
+            value (float): The constant reward value.
+        """
+        self.value = value
+
+    def get_reward(self, env, done: bool) -> float:
+        """Returns the constant reward value.
+
+        Args:
+            env: The environment instance (unused).
+            done (bool): Termination flag (unused).
+
+        Returns:
+            float: The constant reward value.
+        """
+        return self.value
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\rewards\default_reward.py
+File type: .py
+import numpy as np
+from lander_learner.rewards.base_reward import BaseReward
+from lander_learner.utils.config import Config, RL_Config
+
+
+class DefaultReward(BaseReward):
+    """Computes a default reward based on rightward motion and orientation.
+
+    The reward encourages rightward velocity and penalizes deviations from an upright orientation.
+    Additional penalties are applied for collisions.
+
+    Attributes:
+        x_velocity_factor (float): Factor for rewarding rightward velocity.
+        angle_penalty_factor (float): Factor for penalizing deviation from π/2.
+        collision_penalty (float): Penalty applied per time step during collision.
+        crash_penalty_multiplier (float): Multiplier for collision impulse penalty upon termination.
+    """
+
+    def __init__(self, **kwargs):
+        """Initializes DefaultReward with configurable parameters.
+
+        Args:
+            **kwargs: Optional keyword arguments to override default parameters. Recognized keys:
+                - x_velocity_factor (float)
+                - angle_penalty_factor (float)
+                - collision_penalty (float)
+                - crash_penalty_multiplier (float)
+
+                Defaults are taken from RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS.
+        """
+        defaults = RL_Config.DEFAULT_DEFAULT_REWARD_PARAMS
+        self.x_velocity_factor = kwargs.get("x_velocity_factor", defaults["x_velocity_factor"])
+        self.angle_penalty_factor = kwargs.get("angle_penalty_factor", defaults["angle_penalty_factor"])
+        self.collision_penalty = kwargs.get("collision_penalty", defaults["collision_penalty"])
+        self.crash_penalty_multiplier = kwargs.get("crash_penalty_multiplier", defaults["crash_penalty_multiplier"])
+
+    def get_reward(self, env, done: bool) -> float:
+        """Computes the default reward based on the environment state.
+
+        If the episode is terminated and a crash occurred, a penalty proportional to the collision
+        impulse is applied. Otherwise, the reward promotes rightward motion and penalizes deviation
+        from an ideal angle, as well as applying a penalty during collisions.
+
+        Args:
+            env: The environment instance.
+            done (bool): Flag indicating whether the episode is terminated.
+
+        Returns:
+            float: The computed reward.
+        """
+        reward = 0.0
+        if done:
+            if env.crash_state:
+                reward -= env.collision_impulse * self.crash_penalty_multiplier
+            return float(reward)
+
+        # Reward rightward motion and penalize angle deviation.
+        x_velocity = env.lander_velocity[0]
+        angle_error = abs((env.lander_angle - np.pi / 2) % np.pi)
+        reward += (
+            x_velocity * self.x_velocity_factor - angle_error * self.angle_penalty_factor
+        ) * Config.FRAME_TIME_STEP
+
+        if env.collision_state:
+            reward -= self.collision_penalty * Config.FRAME_TIME_STEP
+
+        return float(reward)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\rewards\rightward_reward.py
+File type: .py
+import numpy as np
+from lander_learner.rewards.base_reward import BaseReward
+from lander_learner.utils.config import Config, RL_Config
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class RightwardReward(BaseReward):
+    """Computes a reward that emphasizes rightward motion and proper orientation.
+
+    This reward function promotes rightward velocity, penalizes deviations from an ideal heading,
+    and applies a penalty during collisions.
+
+    Attributes:
+        x_velocity_factor (float): Factor for rewarding rightward velocity.
+        angle_penalty_factor (float): Factor for penalizing deviation from π/2.
+        collision_penalty (float): Penalty applied per time step when a collision is detected.
+        crash_penalty_multiplier (float): Multiplier for collision impulse penalty upon termination.
+    """
+
+    def __init__(self, **kwargs):
+        """Initializes RightwardReward with configurable parameters.
+
+        Args:
+            **kwargs: Optional keyword arguments to override default parameters. Recognized keys:
+                - x_velocity_factor (float)
+                - angle_penalty_factor (float)
+                - collision_penalty (float)
+                - crash_penalty_multiplier (float)
+
+                Defaults are taken from RL_Config.DEFAULT_RIGHTWARD_REWARD_PARAMS.
+        """
+        defaults = RL_Config.DEFAULT_RIGHTWARD_REWARD_PARAMS
+        recognised_params = (
+            "x_velocity_factor",
+            "angle_penalty_factor",
+            "collision_penalty",
+            "crash_penalty_multiplier"
+        )
+        for param in recognised_params:
+            try:
+                setattr(self, param, float(kwargs.get(param, defaults[param])))
+            except (ValueError, TypeError):
+                raise logger.fatal(f"{param} must be a float", exc_info=True)
+        extra_params = set(kwargs) - set(recognised_params)
+        for param in extra_params:
+            logger.warning(f"Unrecognized parameter: {param}")
+
+    def get_reward(self, env, done: bool) -> float:
+        """Computes the rightward reward based on the environment state.
+
+        If the episode is terminated and a crash occurred, a penalty based on the collision
+        impulse is applied. Otherwise, the reward promotes rightward motion and penalizes deviation
+        from an ideal angle, with an additional penalty during collisions.
+
+        Args:
+            env: The environment instance.
+            done (bool): Flag indicating whether the episode is terminated.
+
+        Returns:
+            float: The computed reward.
+        """
+        reward = 0.0
+        if done:
+            if env.crash_state:
+                reward -= env.collision_impulse * self.crash_penalty_multiplier
+            logger.debug(f"Final reward: {reward:.2f}")
+            return float(reward)
+
+        x_velocity = env.lander_velocity[0]
+        angle_error = abs((env.lander_angle - np.pi / 2) % np.pi)
+        reward += (
+            x_velocity * self.x_velocity_factor - angle_error * self.angle_penalty_factor
+        ) * Config.FRAME_TIME_STEP
+
+        if env.collision_state:
+            reward -= self.collision_penalty * Config.FRAME_TIME_STEP
+
+        return float(reward)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\rewards\soft_landing_reward.py
+File type: .py
+import numpy as np
+from lander_learner.rewards.base_reward import BaseReward
+from lander_learner.utils.config import Config, RL_Config
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class SoftLandingReward(BaseReward):
+    """Computes a reward that promotes a soft landing near a target zone.
+
+    The reward function applies different bonuses and penalties depending on:
+      - Whether the lander touches down within the target zone.
+      - How close the lander idles to the target.
+      - The travel towards the target.
+      - The orientation and velocity near the target.
+      - Collision penalties.
+
+    Attributes:
+        on_target_touch_down_bonus (float): Bonus for a soft touchdown within the target zone.
+        off_target_touch_down_penalty (float): Penalty for touchdown outside the target zone.
+        on_target_idle_bonus (float): Bonus for idling within the target zone.
+        off_target_idle_penalty (float): Penalty for idling outside the target zone.
+        crash_penalty_multiplier (float): Multiplier for collision impulse penalty upon termination.
+        time_penalty_factor (float): Factor for penalizing time taken.
+        travel_reward_factor (float): Factor for rewarding travel toward the target.
+        near_target_off_angle_penalty (float): Penalty for deviation from the target angle.
+        near_target_high_velocity_penalty (float): Penalty for high velocity near the target.
+        near_target_high_velocity_cut_off (float): Cutoff for the high velocity penalty.
+        near_target_unit_dist (float): Unit distance for near-target calculations.
+        near_target_max_multiplier (float): Maximum multiplier for near-target calculations.
+        near_target_passive_bonus (float): Bonus for passive behavior near the target.
+    """
+
+    def __init__(self, **kwargs):
+        """Initializes SoftLandingReward with configurable parameters.
+
+        Args:
+            **kwargs: Optional keyword arguments to override default parameters. Recognized keys:
+                - on_target_touch_down_bonus (float)
+                - off_target_touch_down_penalty (float)
+                - on_target_idle_bonus (float)
+                - off_target_idle_penalty (float)
+                - crash_penalty_multiplier (float)
+                - time_penalty_factor (float)
+                - travel_reward_factor (float)
+                - near_target_off_angle_penalty (float)
+                - near_target_high_velocity_penalty (float)
+                - near_target_high_velocity_cut_off (float)
+                - near_target_unit_dist (float)
+                - near_target_max_multiplier (float)
+                - near_target_passive_bonus (float)
+
+            Defaults are taken from RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS.
+        """
+        defaults = RL_Config.DEFAULT_SOFT_LANDING_REWARD_PARAMS
+        recognized_params = (
+            "on_target_touch_down_bonus",
+            "off_target_touch_down_penalty",
+            "on_target_idle_bonus",
+            "off_target_idle_penalty",
+            "crash_penalty_multiplier",
+            "time_penalty_factor",
+            "travel_reward_factor",
+            "near_target_off_angle_penalty",
+            "near_target_high_velocity_penalty",
+            "near_target_high_velocity_cut_off",
+            "near_target_unit_dist",
+            "near_target_max_multiplier",
+            "near_target_passive_bonus"
+        )
+        for param in recognized_params:
+            try:
+                setattr(self, param, float(kwargs.get(param, defaults[param])))
+            except (ValueError, TypeError):
+                raise logger.fatal(f"{param} must be a float", exc_info=True)
+        extra_params = set(kwargs) - set(recognized_params)
+        for param in extra_params:
+            logger.warning(f"Unrecognized parameter: {param}")
+
+    def get_reward(self, env, done: bool) -> float:
+        """Computes the soft landing reward based on the environment state.
+
+        The computation includes:
+          - A bonus or penalty on touchdown depending on target proximity.
+          - A reward for travel towards the target.
+          - A penalty based on the lander's orientation and velocity near the target.
+          - A collision penalty if the lander is in collision.
+
+        Args:
+            env: The environment instance containing state variables.
+            done (bool): Flag indicating whether the episode is terminated.
+
+        Returns:
+            float: The computed soft landing reward.
+        """
+        reward = 0.0
+
+        vector_to_target = env.target_position - env.lander_position
+        distance_to_target = np.linalg.norm(vector_to_target)
+
+        # If the episode is terminated, apply touchdown rewards or penalties.
+        if done:
+            if env.crash_state:
+                reward -= (self.crash_penalty_multiplier * env.collision_impulse +
+                           self.time_penalty_factor * (Config.MAX_EPISODE_DURATION - env.elapsed_time))
+            elif env.idle_state:
+                reward += (
+                    self.on_target_idle_bonus
+                    - (self.on_target_idle_bonus + self.off_target_idle_penalty)
+                    * np.clip(distance_to_target / env.target_zone_width, 0.0, 1.0)
+                ) * (Config.MAX_EPISODE_DURATION - env.elapsed_time)
+            elif env.time_limit_reached:
+                pass
+            else:
+                logger.warning("Unrecognised termination condition. No reward assigned.")
+            logger.debug(f"Final reward: {reward:.2f}")
+            return float(reward)
+
+        # Reward travel toward the target.
+        reward += (
+            self.travel_reward_factor
+            * np.dot(env.lander_velocity, vector_to_target)
+            / distance_to_target
+            - self.time_penalty_factor
+        ) * Config.FRAME_TIME_STEP
+
+        # Penalize deviations in orientation and excessive velocity near the target.
+        angle_penalty = abs(((env.lander_angle + np.pi) % (2 * np.pi)) - np.pi) / np.pi
+        velocity_penalty = np.linalg.norm(np.clip(env.lander_velocity, 1.0, None) - 1.0)
+        reward -= (
+            (self.near_target_off_angle_penalty * angle_penalty +
+             self.near_target_high_velocity_penalty * velocity_penalty +
+             self.near_target_passive_bonus)
+            * (self.near_target_unit_dist /
+               np.clip(distance_to_target, self.near_target_unit_dist / self.near_target_max_multiplier, np.inf))
+            * Config.FRAME_TIME_STEP
+        )
+
+        # Penalize collision if it occurs near the target.
+        if env.collision_state:
+            reward += (
+                self.on_target_touch_down_bonus
+                - (self.on_target_touch_down_bonus + self.off_target_touch_down_penalty)
+                * np.clip(distance_to_target / env.target_zone_width, 0.0, 1.0)
+            ) * Config.FRAME_TIME_STEP
+
+        return float(reward)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\scenarios\scenarios.json
+File type: .json
+{
+    "base": {
+        "agent_type": "PPO",
+        "reward_function": "rightward",
+        "observation_function": "default",
+        "target_zone": false,
+        "learning_frames": 10000
+    },
+    "landing": {
+        "agent_type": "SAC",
+        "reward_function": "soft_landing",
+        "observation_function": "target",
+        "target_zone": true,
+        "learning_frames": 50000
+    }
+  }
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\utils\config.py
+File type: .py
+import pathlib
+
+
+class Config:
+    # Physics / Environment
+    GRAVITY = 1.0
+    TIME_STEP = 1.0 / 60.0
+    THRUST_POWER = 40.0  # Max force from each thruster
+    FUEL_COST = 0.003  # Fuel cost per Newton of thrust
+    INITIAL_FUEL = 100.0  # Starting fuel
+    IMPULSE_THRESHOLD = 30.0  # Max impulse before crash (Newton-seconds)
+    IDLE_TIMEOUT = 3.0  # Max time lander can be idle before episode termination (seconds)
+    MAX_EPISODE_DURATION = 20.0  # Max duration of an episode (seconds)
+
+    # Lander dimensions
+    LANDER_WIDTH = 3.0
+    LANDER_HEIGHT = 1.0
+    LANDER_MASS = 10.0
+    LANDER_COF = 1.0
+
+    # Target zone (if target_zone_mode is True in environment)
+    # Target zone is a rectangular area where the lander is incentivised to travel/land
+    # Target zone is defined by its center position, width, and height
+    # Spawn mode options are "deterministic", "on_ground", "above_ground"
+    TARGET_ZONE_SPAWN_MODE = "on_ground"
+    TARGET_ZONE_SPAWN_RANGE_X = 60.0
+    TARGET_ZONE_SPAWN_RANGE_Y = 50.0
+    TARGET_ZONE_X = 30.0
+    TARGET_ZONE_Y = 0.0
+    TARGET_ZONE_WIDTH = 10.0
+    TARGET_ZONE_HEIGHT = 5.0
+    TARGET_ZONE_MOTION = False  # If True, target zone moves randomly with piecewise linear motion
+    TARGET_ZONE_MOTION_INTERVAL = 5.0
+    TARGET_ZONE_VELOCITY_RANGE_X = 5.0
+    TARGET_ZONE_VELOCITY_RANGE_Y = 2.0
+
+    # Sensor specifications
+    LASER_RANGE = 100.0
+
+    # Rendering
+    SCREEN_WIDTH = 800
+    SCREEN_HEIGHT = 600
+    FPS = 60
+    REPLAY_SPEED = 1.0
+    RENDER_SCALE = 10.0
+
+    # Calculated
+    PHYSICS_STEPS_PER_FRAME = int(1.0 / TIME_STEP / FPS)
+    FRAME_TIME_STEP = 1 / FPS
+
+    # GUI recordings directory
+    DEFAULT_RECORDING_DIR = pathlib.Path(__file__).parent.parent.parent / "data" / "recordings"
+
+
+class RL_Config:
+    DEFAULT_CHECKPOINT_DIR = pathlib.Path(__file__).parent.parent.parent / "data" / "checkpoints"
+    DEFAULT_LOGGING_DIR = pathlib.Path(__file__).parent.parent.parent / "data" / "logs"
+    CHECKPOINT_FREQ = 500000
+
+    # PPO Configuration
+    PPO_OPTIONS = {
+        "device": "cpu"
+    }
+
+    # SAC Configuration
+    SAC_OPTIONS = {
+        "device": "auto"
+    }
+
+    # Default parameters for the DefaultReward
+    DEFAULT_DEFAULT_REWARD_PARAMS = {
+        "x_velocity_factor": 10.0,
+        "angle_penalty_factor": 1.0,
+        "collision_penalty": 5.0,
+        "crash_penalty_multiplier": 1.0,
+    }
+
+    # Default parameters for the RightwardReward
+    DEFAULT_RIGHTWARD_REWARD_PARAMS = {
+        "x_velocity_factor": 10.0,
+        "angle_penalty_factor": 1.0,
+        "collision_penalty": 5.0,
+        "crash_penalty_multiplier": 1.0,
+    }
+
+    # Default parameters for the SoftLandingReward
+    DEFAULT_SOFT_LANDING_REWARD_PARAMS = {
+        "on_target_touch_down_bonus": 10.0,
+        "off_target_touch_down_penalty": 5.0,
+        "on_target_idle_bonus": 20.0,
+        "off_target_idle_penalty": 2.0,
+        "crash_penalty_multiplier": 1.0,
+        "time_penalty_factor": 1.0,
+        "travel_reward_factor": 3.0,
+        "near_target_off_angle_penalty": 3.0,
+        "near_target_high_velocity_penalty": 3.0,
+        "near_target_high_velocity_cut_off": 1.0,
+        "near_target_unit_dist": 5.0,
+        "near_target_max_multiplier": 2.5,
+        "near_target_passive_bonus": 1.0
+    }
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\utils\helpers.py
+File type: .py
+import numpy as np
+import json
+from pathlib import Path
+import os
+from datetime import datetime
+
+
+def flatten_state(*arrays):
+    """Flattens multiple arrays into a single one.
+
+    This function takes any number of numpy arrays as input, flattens each array (ignoring any that are None),
+    and concatenates them into a single 1D numpy array.
+
+    Args:
+        *arrays: Variable length argument list of numpy arrays. Any None values are skipped.
+
+    Returns:
+        numpy.ndarray: A 1D array resulting from the concatenation of the flattened input arrays.
+    """
+    return np.concatenate([arr.flatten() for arr in arrays if arr is not None])
+
+
+def load_scenarios(json_path: Path) -> dict:
+    """Loads scenario configurations from a JSON file.
+
+    Reads the JSON file located at the specified path and returns its contents as a dictionary.
+
+    Args:
+        json_path (Path): A Path object pointing to the JSON file containing scenario configurations.
+
+    Returns:
+        dict: A dictionary of scenario configurations.
+
+    Raises:
+        RuntimeError: If an error occurs while opening or parsing the JSON file.
+    """
+    try:
+        with json_path.open("r") as f:
+            return json.load(f)
+    except Exception as e:
+        raise RuntimeError(f"Error loading {json_path}: {e}")
+
+
+def adjust_save_path(path: str, model_type: str = "") -> str:
+    """Adjusts the given path to ensure a valid save file path for the model.
+
+    If the provided path is a directory, a default filename is generated using the format
+    "<model_type>_yymmdd_HHMMSS.zip" (or "model_yymmdd_HHMMSS.zip" if model_type is empty) and appended
+    to the directory. If the path does not end with ".zip", the extension is appended.
+    Additionally, the directory for the file is created if it does not exist.
+
+    Args:
+        path (str): The desired save path, which may be a directory or a full file path.
+        model_type (str, optional): The model type used in the default filename. Defaults to an empty string.
+
+    Returns:
+        str: A valid file path ending with ".zip" suitable for saving the model.
+    """
+    if os.path.isdir(path):
+        filename = f"{model_type if model_type else 'model'}_{datetime.now().strftime('%y%m%d_%H%M%S')}.zip"
+        path = os.path.join(path, filename)
+    if not str(path).lower().endswith(".zip"):
+        path = str(path) + ".zip"
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    return path
+
+
+def adjust_load_path(path: str, model_type: str = "") -> str:
+    """Adjusts the given path to ensure a valid model file path for loading.
+
+    If the provided path is a directory, the function searches for the latest zip file
+    whose name starts with the given model_type (or "model" if model_type is empty) and returns its path.
+    If the provided path is a file, it validates that it ends with ".zip".
+
+    Args:
+        path (str): The path or directory where the model file is expected.
+        model_type (str, optional): The model type prefix to search for if a directory is provided.
+            Defaults to an empty string, which is interpreted as "model".
+
+    Returns:
+        str: The path to the model file (a .zip file).
+
+    Raises:
+        FileNotFoundError: If the specified path does not exist or if no matching zip files are found in a directory.
+        ValueError: If the provided path is not a directory and does not end with ".zip".
+    """
+    if not model_type:
+        model_type = "model"
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Model file not found: {path}")
+    if os.path.isdir(path):
+        dir_path = Path(path)
+        zip_files = list(dir_path.glob(f"{model_type}*.zip"))
+        if not zip_files:
+            raise FileNotFoundError(f"No {model_type} zip files found in directory: {path}")
+        latest_zip = max(zip_files, key=lambda f: f.stat().st_mtime)
+        path = str(latest_zip)
+    elif not path.lower().endswith(".zip"):
+        raise ValueError(f"Invalid model file or directory: {path}")
+    return path
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\utils\parse_args.py
+File type: .py
+import argparse
+from lander_learner.utils.config import RL_Config
+
+
+def parse_args(scenarios: dict) -> argparse.Namespace:
+    """Parses command-line arguments using scenario defaults.
+
+    This function performs a preliminary parse to extract the scenario name from the
+    command line so that default parameters for that scenario (loaded from a JSON file)
+    can be applied to subsequent argument definitions. It then builds a full parser with
+    arguments for GUI mode, training mode, agent type, reward and observation functions,
+    target zone settings, and model paths.
+
+    Args:
+        scenarios (dict): A dictionary of scenario configurations, typically loaded from
+            "scenarios.json". Each key is a scenario name and each value is a dictionary of
+            default parameters such as "rl_agent_type", "reward_function", "observation_function",
+            "target_zone", and "learning_frames".
+
+    Returns:
+        argparse.Namespace: An argparse namespace containing all parsed command-line arguments.
+
+    Raises:
+        ValueError: If the scenario specified in the command line is not found in the scenarios dictionary.
+    """
+    # Preliminary parser to extract the scenario argument.
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument(
+        "--scenario",
+        type=str,
+        default="base",
+        help="Scenario name to use (as defined in scenarios.json)"
+    )
+    # Only the scenario argument is parsed here.
+    args, _ = parser.parse_known_args()
+
+    scenario_name = args.scenario
+    if scenario_name not in scenarios:
+        raise ValueError(f"Scenario '{scenario_name}' not found in scenario file (scenarios/scenarios.json).")
+
+    # Extract default values from the chosen scenario.
+    scenario_defaults = scenarios[scenario_name]
+    default_agent_type = scenario_defaults.get("agent_type", "PPO")
+    default_reward_function = scenario_defaults.get("reward_function", "default")
+    default_observation_function = scenario_defaults.get("observation_function", "default")
+    default_target_zone = scenario_defaults.get("target_zone", None)
+    default_learning_frames = scenario_defaults.get("learning_frames", 10000)
+
+    # Build the full argument parser with scenario-based defaults.
+    parser = argparse.ArgumentParser(
+        description="2D Lunar Lander with Scenario Selection and Conditional Imports"
+    )
+    parser.add_argument(
+        "--gui",
+        action="store_true",
+        help="Enable GUI Rendering (only available in single environment mode)"
+    )
+    parser.add_argument(
+        "--mode",
+        choices=["human", "train", "inference"],
+        default="human",
+        help="Mode to run the environment in (human|train|inference)"
+    )
+    parser.add_argument(
+        "--episodes",
+        type=int,
+        default=1,
+        help="Number of episodes to run (for human/inference modes)"
+    )
+    parser.add_argument(
+        "--timesteps",
+        type=int,
+        default=default_learning_frames,
+        help="Number of training timesteps (only for train mode)"
+    )
+    parser.add_argument(
+        "--num_envs",
+        type=int,
+        default=4,
+        help="Number of environments to run in parallel during training"
+    )
+    parser.add_argument(
+        "--scenario",
+        type=str,
+        default="base_scenario",
+        help="Scenario name to use (as defined in scenarios.json)"
+    )
+    parser.add_argument(
+        "--agent_type",
+        type=str,
+        default=default_agent_type,
+        help="RL agent type to use (overrides scenario default)"
+    )
+    parser.add_argument(
+        "--reward_function",
+        type=str,
+        default=default_reward_function,
+        help="Reward function to use (overrides scenario default)"
+    )
+    parser.add_argument(
+        "--observation_function",
+        type=str,
+        default=default_observation_function,
+        help="Observation function to use (overrides scenario default)"
+    )
+    parser.add_argument(
+        "--target_zone",
+        action="store_false" if default_target_zone else "store_true",
+        help="Enable target zone mode (overrides scenario default)"
+    )
+    parser.add_argument(
+        "--model_path",
+        type=str,
+        default=RL_Config.DEFAULT_CHECKPOINT_DIR,
+        help="Path to save/load the model (for train and inference mode)"
+    )
+    parser.add_argument(
+        "--load_checkpoint",
+        type=str,
+        default=None,
+        help="Path to load a model checkpoint from (for continued training)"
+    )
+    parser.add_argument(
+        "--multi",
+        action="store_true",
+        help="Run inference in multi-render mode (multiple agent-environment pairs concurrently)"
+    )
+    parser.add_argument(
+        "--num_stochastic",
+        type=int,
+        default=3,
+        help="Number of stochastic agent copies to run in multi-render mode"
+    )
+    parser.add_argument(
+        "--record",
+        action="store_true",
+        help="Save rendered frames to disk (in a subfolder 'recordings/date-time-now')"
+    )
+    return parser.parse_args()
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\utils\pytorch_verif.ipynb
+File type: .ipynb
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Torch version: 2.6.0+cu126\n",
+      "CUDA available: True\n",
+      "CUDA version: 12.6\n",
+      "cuDNN version: 90501\n",
+      "Number of GPUs: 1\n",
+      "GPU Name: NVIDIA GeForce MX250\n",
+      "GPU Device: 0\n"
+     ]
+    }
+   ],
+   "source": [
+    "# C:\\Users\\harry\\Coding\\LanderLearner\\pytorch_verif.ipynb\n",
+    "import torch\n",
+    "\n",
+    "print(\"Torch version:\", torch.__version__)\n",
+    "print(\"CUDA available:\", torch.cuda.is_available())\n",
+    "print(\"CUDA version:\", torch.version.cuda)\n",
+    "print(\"cuDNN version:\", torch.backends.cudnn.version())\n",
+    "print(\"Number of GPUs:\", torch.cuda.device_count())\n",
+    "\n",
+    "if torch.cuda.is_available():\n",
+    "    print(\"GPU Name:\", torch.cuda.get_device_name(0))\n",
+    "    print(\"GPU Device:\", torch.cuda.current_device())\n",
+    "else:\n",
+    "    print(\"CUDA is not available. PyTorch is running on CPU.\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "RL_GPU",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.8"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner\utils\target.py
+File type: .py
+"""
+target.py
+
+This module defines the TargetZone class, which encapsulates the placement and motion of the target zone.
+The target zone can be spawned in various modes (deterministic, on_ground, or above_ground) and, if enabled,
+can move in piecewise linear segments based on randomly sampled velocities.
+"""
+
+import numpy as np
+from lander_learner.utils.config import Config
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class TargetZone:
+    """Encapsulates target zone placement and motion.
+
+    The target zone can be spawned in different modes:
+      - "deterministic": Always at a fixed location defined in the configuration.
+      - "on_ground": Randomly placed along the ground (y = 0) within a specified x-range.
+      - "above_ground": Randomly placed with y > 0 within specified ranges.
+
+    If motion is enabled (TARGET_ZONE_MOTION is True), the target zone will follow a piecewise linear
+    trajectory. The trajectory is updated every TARGET_ZONE_MOTION_INTERVAL seconds, during which a new
+    random velocity is sampled and applied.
+    """
+
+    def __init__(self, **kwargs):
+        """Initializes the TargetZone instance.
+
+        Reads spawn parameters and motion configurations from keyword arguments or falls back to defaults
+        specified in the Config. Also initializes the random number generator.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments that may override configuration defaults.
+                Recognized keys include:
+                  - spawn_mode: The mode for spawning the target zone ("deterministic", "on_ground", "above_ground").
+                  - deterministic_x: Fixed x-coordinate for deterministic spawn.
+                  - deterministic_y: Fixed y-coordinate for deterministic spawn.
+                  - zone_width: Width of the target zone.
+                  - zone_height: Height of the target zone.
+                  - spawn_range_x: Range for random x-position (for non-deterministic modes).
+                  - spawn_range_y: Range for random y-position (for non-deterministic modes).
+                  - motion_enabled: Flag indicating whether target motion is enabled.
+                  - motion_interval: Time interval for each motion segment.
+                  - vel_range_x: Range for random x-velocity during motion.
+                  - vel_range_y: Range for random y-velocity during motion.
+        """
+        # Initialize the random generator.
+        self.np_random = np.random.default_rng()
+
+        # Read basic spawn parameters from kwargs or defaults.
+        self.spawn_mode = kwargs.get("spawn_mode", Config.TARGET_ZONE_SPAWN_MODE)
+        self.deterministic_x = kwargs.get("deterministic_x", Config.TARGET_ZONE_X)
+        self.deterministic_y = kwargs.get("deterministic_y", Config.TARGET_ZONE_Y)
+        self.zone_width = kwargs.get("zone_width", Config.TARGET_ZONE_WIDTH)
+        self.zone_height = kwargs.get("zone_height", Config.TARGET_ZONE_HEIGHT)
+
+        # Spawn ranges for random placement.
+        self.spawn_range_x = kwargs.get("spawn_range_x", Config.TARGET_ZONE_SPAWN_RANGE_X)
+        self.spawn_range_y = kwargs.get("spawn_range_y", Config.TARGET_ZONE_SPAWN_RANGE_Y)
+
+        # Motion configuration.
+        self.motion_enabled = kwargs.get("motion_enabled", Config.TARGET_ZONE_MOTION)
+        if self.motion_enabled:
+            self.motion_interval = kwargs.get("motion_interval", Config.TARGET_ZONE_MOTION_INTERVAL)
+            self.vel_range_x = kwargs.get("vel_range_x", Config.TARGET_ZONE_VELOCITY_RANGE_X)
+            self.vel_range_y = kwargs.get("vel_range_y", Config.TARGET_ZONE_VELOCITY_RANGE_Y)
+            # Set up for piecewise linear motion.
+            self.current_velocity = np.array([0.0, 0.0], dtype=np.float32)
+            self.last_segment_time = np.array(0.0, dtype=np.float32)
+        # Declare the initial target position; call reset() to initialize with random values.
+        self.initial_position = np.array([0.0, 0.0], dtype=np.float32)
+
+    def _sample_spawn_position(self) -> np.ndarray:
+        """Samples the initial target zone center position based on the spawn mode.
+
+        Returns:
+            np.ndarray: A 2D numpy array representing the target zone's center position.
+        """
+        if self.spawn_mode == "deterministic":
+            return np.array([self.deterministic_x, self.deterministic_y], dtype=np.float32)
+        elif self.spawn_mode == "on_ground":
+            # Place target randomly along the ground (y = 0) within the x-range.
+            x = self.np_random.uniform(-self.spawn_range_x / 2, self.spawn_range_x / 2)
+            return np.array([x, 0.0], dtype=np.float32)
+        elif self.spawn_mode == "above_ground":
+            # Place target randomly with y in [0, spawn_range_y] and x in the specified range.
+            x = self.np_random.uniform(-self.spawn_range_x / 2, self.spawn_range_x / 2)
+            y = self.np_random.uniform(0, self.spawn_range_y)
+            return np.array([x, y], dtype=np.float32)
+        else:
+            # Fallback: use deterministic spawn.
+            logger.warning(f"Unknown spawn mode: {self.spawn_mode}. Falling back to deterministic spawn.")
+            return np.array([self.deterministic_x, self.deterministic_y], dtype=np.float32)
+
+    def _sample_random_velocity(self) -> np.ndarray:
+        """Samples a random velocity vector for target motion.
+
+        Returns:
+            np.ndarray: A 2D numpy array representing the random velocity vector.
+        """
+        vx = self.np_random.uniform(-self.vel_range_x, self.vel_range_x)
+        vy = self.np_random.uniform(-self.vel_range_y if self.initial_position[1] != 0 else 0, self.vel_range_y)
+        return np.array([vx, vy], dtype=np.float32)
+
+    def get_target_position(self, elapsed_time: np.ndarray) -> np.ndarray:
+        """Computes and returns the current target zone position given elapsed time.
+
+        Args:
+            elapsed_time (np.ndarray): The elapsed time (in seconds) since the start of the episode.
+
+        Returns:
+            np.ndarray: The current target zone position as a 2D numpy array.
+
+        If motion is disabled, the target remains at its initial position.
+        If motion is enabled, the target moves in piecewise linear segments.
+        At the beginning of each segment (every `motion_interval` seconds), a new random velocity is sampled.
+        The target's position is updated linearly within each segment and clamped so that y ≥ 0.
+        """
+        if not self.motion_enabled:
+            return self.initial_position
+
+        # Determine the time elapsed in the current motion segment.
+        time_in_segment = elapsed_time - self.last_segment_time
+        if time_in_segment >= self.motion_interval:
+            # Start a new motion segment.
+            self.initial_position = self.initial_position + self.current_velocity * self.motion_interval
+            # Clamp the y-coordinate to ensure the target remains above the ground.
+            self.initial_position[1] = max(self.initial_position[1], 0.0)
+            # Reset the segment timer.
+            self.last_segment_time = elapsed_time.copy()
+            # Sample a new random velocity.
+            self.current_velocity = self._sample_random_velocity()
+            # Reset time_in_segment.
+            time_in_segment = 0.0
+
+        # Compute the current target position within the segment.
+        current_position = self.initial_position + self.current_velocity * time_in_segment
+        # Clamp the y-coordinate so it is not below zero.
+        current_position[1] = max(current_position[1], 0.0)
+        return current_position
+
+    def reset(self, reset_config: bool = False, random_generator: np.random.Generator = None):
+        """Resets the target zone to its initial state.
+
+        Args:
+            reset_config (bool, optional): If True, reinitializes configuration parameters by calling __init__().
+                Defaults to False.
+            random_generator (np.random.Generator, optional): An optional external random generator.
+                If provided, it replaces the internal random generator. Defaults to None.
+
+        This method re-samples the initial position based on the spawn mode and, if motion is enabled,
+        resets the current velocity and segment timer.
+        """
+        if reset_config:
+            # Reload the configuration values by reinitializing the instance.
+            self.__init__()
+        if random_generator is not None:
+            self.np_random = random_generator
+        self.initial_position = self._sample_spawn_position()
+        if self.motion_enabled:
+            self.current_velocity = self._sample_random_velocity()
+            self.last_segment_time = 0.0
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner.egg-info\dependency_links.txt
+File type: .txt
+
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner.egg-info\entry_points.txt
+File type: .txt
+[console_scripts]
+lander_learner = lander_learner.main:main
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner.egg-info\PKG-INFO
+File type: 
+Metadata-Version: 2.2
+Name: lander_learner
+Version: 0.1.0
+Summary: A 2D Lunar Lander simulation RL demo project
+Author: Harry Fieldhouse
+Author-email: harryamfieldhouse@gmail.com
+Requires-Dist: gymnasium==1.0.0
+Requires-Dist: stable-baselines3[extra]==2.5.0
+Requires-Dist: pymunk==6.11.1
+Requires-Dist: pygame==2.6.1
+Requires-Dist: numpy==2.2.2
+Dynamic: author
+Dynamic: author-email
+Dynamic: requires-dist
+Dynamic: summary
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner.egg-info\requires.txt
+File type: .txt
+gymnasium==1.0.0
+stable-baselines3[extra]==2.5.0
+pymunk==6.11.1
+pygame==2.6.1
+numpy==2.2.2
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner.egg-info\SOURCES.txt
+File type: .txt
+setup.py
+lander_learner/__init__.py
+lander_learner/environment.py
+lander_learner/gui.py
+lander_learner/main.py
+lander_learner/physics.py
+lander_learner.egg-info/PKG-INFO
+lander_learner.egg-info/SOURCES.txt
+lander_learner.egg-info/dependency_links.txt
+lander_learner.egg-info/entry_points.txt
+lander_learner.egg-info/requires.txt
+lander_learner.egg-info/top_level.txt
+lander_learner/agents/__init__.py
+lander_learner/agents/base_agent.py
+lander_learner/agents/human_agent.py
+lander_learner/agents/ppo_agent.py
+lander_learner/agents/sac_agent.py
+lander_learner/assets/__init__.py
+lander_learner/observations/__init__.py
+lander_learner/observations/base_observation.py
+lander_learner/observations/default_observation.py
+lander_learner/observations/target_observation.py
+lander_learner/observations/wrappers.py
+lander_learner/rewards/__init__.py
+lander_learner/rewards/base_reward.py
+lander_learner/rewards/composite_reward.py
+lander_learner/rewards/constant_reward.py
+lander_learner/rewards/default_reward.py
+lander_learner/rewards/rightward_reward.py
+lander_learner/rewards/soft_landing_reward.py
+lander_learner/scenarios/__init__.py
+lander_learner/utils/__init__.py
+lander_learner/utils/config.py
+lander_learner/utils/helpers.py
+lander_learner/utils/observations.py
+lander_learner/utils/parse_args.py
+lander_learner/utils/rewards.py
+lander_learner/utils/rl_config.py
+lander_learner/utils/target.py
+tests/test_environment.py
+tests/test_helpers.py
+tests/test_observations.py
+tests/test_parse_args.py
+tests/test_physics.py
+tests/test_rewards.py
+tests/test_target.py
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\lander_learner.egg-info\top_level.txt
+File type: .txt
+lander_learner
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\tests\test_environment.py
+File type: .py
+import numpy as np
+import pytest
+from stable_baselines3.common.env_checker import check_env
+from lander_learner.environment import LunarLanderEnv
+from lander_learner.utils.config import Config
+
+
+# Use a dummy physics engine to avoid running a full pymunk simulation.
+class DummyPhysicsEngine:
+    def __init__(self):
+        self.updated = False
+
+    def update(self, left_thruster, right_thruster, env):
+        self.updated = True
+        # For testing, just nudge the position by a small amount
+        env.lander_position += np.array([left_thruster, right_thruster], dtype=np.float32)
+        # Simulate fuel consumption
+        fuel_used = (abs(left_thruster + 1) + abs(right_thruster + 1)) * 0.1
+        env.fuel_remaining = max(0.0, env.fuel_remaining - fuel_used)
+
+    def reset(self):
+        self.updated = False
+
+
+@pytest.fixture
+def env_default():
+    # Create an environment with default reward/observation and no target zone.
+    env = LunarLanderEnv(
+        gui_enabled=False, reward_function="rightward", observation_function="default", target_zone=False
+    )
+    # Replace the real physics engine with our dummy.
+    env.physics_engine = DummyPhysicsEngine()
+    env.reset()
+    return env
+
+
+def test_gymnasium_env_specification_match(env_default):
+    # Check that the environment meets the Gym API requirements.
+    check_env(env_default)
+
+
+def test_time_limit_reached(env_default):
+    # Trigger done flag by setting elapsed_time to MAX_EPISODE_DURATION.
+    env_default.elapsed_time = Config.MAX_EPISODE_DURATION
+    obs, reward, done, truncated, info = env_default.step([0.0, 0.0])
+    assert done is True
+
+
+def test_crash_due_to_impulse(env_default):
+    # Trigger crash: collision state with impulse exceeding threshold.
+    env_default.collision_state = True
+    env_default.collision_impulse = Config.IMPULSE_THRESHOLD + 1.0
+    obs, reward, done, truncated, info = env_default.step([0.0, 0.0])
+    assert done is True
+    assert env_default.crash_state is True
+
+
+def test_crash_due_to_angle(env_default):
+    # Trigger crash: collision state with upside-down lander (angle between 90 and 270 degrees).
+    env_default.collision_state = True
+    env_default.lander_angle = np.pi  # 180 degrees.
+    env_default.collision_impulse = 0.0
+    obs, reward, done, truncated, info = env_default.step([0.0, 0.0])
+    assert done is True
+    assert env_default.crash_state is True
+
+
+def test_lander_below_ground(env_default):
+    # Trigger termination: lander position below ground level.
+    env_default.lander_position[1] = -1.0
+    obs, reward, done, truncated, info = env_default.step([0.0, 0.0])
+    assert done is True
+    assert env_default.collision_state is True
+
+
+def test_idle_timeout_leads_to_done(env_default):
+    # Trigger idle timeout: set collision state and nearly zero velocity, then simulate multiple steps.
+    env_default.collision_state = True
+    env_default.lander_velocity = np.array([0.05, 0.05], dtype=np.float32)
+    # Simulate enough steps to exceed the idle timeout.
+    steps = int(Config.IDLE_TIMEOUT / Config.TIME_STEP) + 1
+    done_flag = False
+    for _ in range(steps):
+        obs, reward, done, truncated, info = env_default.step([0.0, 0.0])
+        if done:
+            done_flag = True
+            break
+    assert done_flag is True
+
+
+def test_fuel_depletion_does_not_immediately_end_episode(env_default):
+    # Fuel is depleted: env should not terminate immediately; let it coast.
+    env_default.fuel_remaining = 0.0
+    obs, reward, done, truncated, info = env_default.step([0.0, 0.0])
+    assert done is False
+
+
+def test_normal_step_no_termination(env_default):
+    # Under normal conditions, a step should not trigger termination.
+    obs, reward, done, truncated, info = env_default.step([0.1, -0.1])
+    assert done is False
+    assert env_default.physics_engine.updated is True
+
+
+def test_reset(env_default):
+    # Test that the environment can be reset without errors.
+    env_default.step([1.0, 1.0])
+    env_default.step([1.0, 1.0])
+    env_default.reset()
+    assert env_default.physics_engine.updated is False
+    assert env_default.elapsed_time == 0.0
+    assert env_default.fuel_remaining == Config.INITIAL_FUEL
+    assert env_default.collision_state is False
+    assert env_default.collision_impulse == 0.0
+    assert env_default.crash_state is False
+    assert env_default.idle_state is False
+    assert env_default.idle_timer == 0.0
+    assert env_default.time_limit_reached is False
+    assert env_default.target_zone is False
+    assert env_default.gui_enabled is False
+    assert env_default.observation_space.shape == (8,)
+    assert env_default.action_space.shape == (2,)
+    assert env_default.metadata == {"render_modes": []}
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\tests\test_helpers.py
+File type: .py
+import os
+import numpy as np
+import pytest  # noqa: F401
+from lander_learner.utils.helpers import flatten_state, adjust_save_path, adjust_load_path
+
+
+def test_flatten_state():
+    a = np.array([1, 2])
+    b = np.array([[3, 4], [5, 6]])
+    flattened = flatten_state(a, b)
+    # Expected flatten: [1, 2, 3, 4, 5, 6]
+    np.testing.assert_array_equal(flattened, np.array([1, 2, 3, 4, 5, 6]))
+
+
+def test_adjust_save_path_directory(tmp_path):
+    # Create a temporary directory to simulate providing a directory path.
+    directory = tmp_path / "models"
+    directory.mkdir()
+    path = str(directory)
+    save_path = adjust_save_path(path, model_type="test")
+    # Check that the returned path is within the directory and ends with .zip.
+    assert save_path.startswith(str(directory))
+    assert save_path.endswith(".zip")
+
+
+def test_adjust_load_path_file(tmp_path):
+    # Create a dummy zip file in a temporary directory.
+    directory = tmp_path / "models"
+    directory.mkdir()
+    file_path = directory / "test_210101_000000.zip"
+    file_path.write_text("dummy content")
+    # adjust_load_path should return the same file if given the file path.
+    load_path = adjust_load_path(str(file_path), model_type="test")
+    assert load_path == str(file_path)
+
+
+def test_adjust_load_path_directory(tmp_path):
+    # Create multiple dummy zip files and check that the latest is selected.
+    directory = tmp_path / "models"
+    directory.mkdir()
+    file1 = directory / "test_210101_000000.zip"
+    file2 = directory / "test_210101_010000.zip"
+    file1.write_text("dummy content")
+    file2.write_text("dummy content")
+    # Ensure file1 has an earlier modification time than file2.
+    os.utime(file1, (file1.stat().st_atime, file1.stat().st_mtime - 10))
+    load_path = adjust_load_path(str(directory), model_type="test")
+    # The latest file (file2) should be returned.
+    assert load_path == str(file2)
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\tests\test_observations.py
+File type: .py
+import numpy as np
+import pytest  # noqa: F401
+from lander_learner.observations import get_observation_class
+from lander_learner.observations.wrappers import NoiseObservationWrapper
+
+
+# Dummy environment for testing observation functions.
+class DummyEnv:
+    def __init__(self):
+        self.lander_position = np.array([0.0, 10.0], dtype=np.float32)
+        self.lander_velocity = np.array([1.0, 0.5], dtype=np.float32)
+        self.lander_angle = np.pi / 2  # upright
+        self.lander_angular_velocity = 0.0
+        self.fuel_remaining = 100.0
+        self.collision_state = False
+        # For target-related observations:
+        self.target_position = np.array([5.0, 0.0], dtype=np.float32)
+        self.target_zone_width = 10.0
+        self.target_zone_height = 5.0
+
+
+def test_default_observation_shape():
+    env = DummyEnv()
+    # Get the default observation class and instantiate it.
+    obs_class = get_observation_class("default")
+    obs = obs_class.get_observation(env)
+    assert isinstance(obs, np.ndarray)
+    # Default observation is expected to be 8-dimensional.
+    assert obs.shape[0] == 8
+
+
+def test_target_landing_observation_shape():
+    env = DummyEnv()
+    # Get the target landing observation class and instantiate it.
+    obs_class = get_observation_class("target")
+    obs = obs_class.get_observation(env)
+    # Target landing observation should be 13-dimensional (8 base + 5 extra values).
+    assert isinstance(obs, np.ndarray)
+    assert obs.shape[0] == 13
+
+
+def test_noise_observation_wrapper_zero_variance():
+    env = DummyEnv()
+    # Use a default observation with noise set to zero so that outputs remain unchanged.
+    base_obs = get_observation_class("default")
+    noise_obs = NoiseObservationWrapper(base_obs, noise_variance=[0.0] * base_obs.observation_size)
+    base_output = base_obs.get_observation(env)
+    noisy_output = noise_obs.get_observation(env)
+    np.testing.assert_allclose(noisy_output, base_output, atol=1e-5)
+
+
+def test_noise_observation_wrapper_nonzero_variance():
+    env = DummyEnv()
+    # Use a default observation with nonzero noise.
+    base_obs = get_observation_class("default")
+    noise_obs = NoiseObservationWrapper(base_obs, noise_variance=[1.0] * base_obs.observation_size)
+    base_output = base_obs.get_observation(env)
+    noisy_output = noise_obs.get_observation(env)
+    # Verify the observation shape remains the same.
+    assert noisy_output.shape == base_output.shape
+    # With nonzero noise, the outputs should not be almost equal.
+    assert not np.allclose(noisy_output, base_output, atol=1e-6), (
+        "Noise observation should not be equal to the base observation "
+        "(random failure at 2x10^-49)."
+    )
+    num_samples = 100
+    differences = np.array([noise_obs.get_observation(env) - base_output for _ in range(num_samples)])
+    sample_variance = np.var(differences.flatten())
+    assert np.allclose(sample_variance, 1.0, rtol=0.3), (
+        "Sample variance should be close to the noise variance. "
+        "(random failure at 2x10^-9 probability)"
+    )
+
+
+def test_noise_observation_wrapper_selective_variance():
+    env = DummyEnv()
+    base_obs = get_observation_class("default")
+    obs_size = base_obs.observation_size
+    # Set nonzero noise only for the first half of the indices.
+    selective_indices = list(range(obs_size // 2))
+    noise_variance = [
+        1.0 if i in selective_indices else 0.0 for i in range(obs_size)
+    ]
+    noise_obs = NoiseObservationWrapper(base_obs, noise_variance=noise_variance)
+    base_output = base_obs.get_observation(env)
+    noisy_output = noise_obs.get_observation(env)
+
+    # Check that components with zero variance remain unchanged.
+    assert np.allclose(
+        noisy_output[len(selective_indices):],
+        base_output[len(selective_indices):],
+        atol=1e-6,
+    ), "Zero noise indices were affected by noise."
+
+    # Check that components with nonzero variance have noise added.
+    differences = noisy_output[:len(selective_indices)] - base_output[:len(selective_indices)]
+    # With nonzero noise, it is very unlikely that all differences are exactly zero.
+    assert not np.allclose(
+        differences, np.zeros_like(differences), atol=1e-6
+    ), "Nonzero noise indices were not affected by noise. (random failure at 4x10^-25)"
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\tests\test_parse_args.py
+File type: .py
+import pytest  # noqa: F401
+from lander_learner.utils.parse_args import parse_args
+
+
+def test_parse_args_defaults(monkeypatch):
+    # Provide a dummy scenarios dictionary.
+    scenarios = {
+        "base": {
+            "agent_type": "PPO",
+            "reward_function": "rightward",
+            "observation_function": "default",
+            "target_zone": False,
+            "learning_frames": 10000,
+        }
+    }
+    test_args = ["program", "--scenario", "base"]
+    monkeypatch.setattr("sys.argv", test_args)
+    args = parse_args(scenarios)
+    # Check that the defaults are correctly set from the scenario.
+    assert args.agent_type.upper() == "PPO"
+    assert args.reward_function == "rightward"
+    assert args.observation_function == "default"
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\tests\test_physics.py
+File type: .py
+import numpy as np
+import pytest  # noqa: F401
+from lander_learner.physics import PhysicsEngine
+from lander_learner.utils.config import Config
+
+
+# Create a dummy environment class for testing the physics engine.
+class DummyEnv:
+    def __init__(self):
+        self.lander_position = np.array([0.0, 10.0], dtype=np.float32)
+        self.lander_velocity = np.array([0.0, 0.0], dtype=np.float32)
+        self.lander_angle = 0.0
+        self.lander_angular_velocity = 0.0
+        self.fuel_remaining = Config.INITIAL_FUEL
+        self.collision_state = False
+        self.collision_impulse = 0.0
+        self.elapsed_time = 0.0
+
+
+def test_physics_update():
+    env = DummyEnv()
+    physics_engine = PhysicsEngine()
+    physics_engine.reset()
+    initial_velocity = np.array(env.lander_velocity)
+    initial_position = np.array(env.lander_position)
+    # Apply max forces so that something happens.
+    physics_engine.update(1.0, 1.0, env)
+    # Check that the lander velocity has changed.
+    assert not np.array_equal(env.lander_velocity, initial_velocity)
+    # Apply max forces so that something happens.
+    physics_engine.update(1.0, 1.0, env)
+    # Check that the lander position has changed.
+    assert not np.array_equal(env.lander_position, initial_position)
+    # Fuel should have decreased.
+    assert env.fuel_remaining < Config.INITIAL_FUEL
+
+
+def test_physics_reset():
+    physics_engine = PhysicsEngine()
+    # Simulate a collision impulse
+    physics_engine.collision_impulse = 50.0
+    physics_engine.reset()
+    # After reset, the collision impulse should be reset.
+    assert physics_engine.collision_impulse == 0.0
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\tests\test_rewards.py
+File type: .py
+import numpy as np
+import pytest  # noqa: F401
+from lander_learner.rewards import get_reward_class
+from lander_learner.rewards.constant_reward import ConstantReward
+from lander_learner.utils.config import Config
+
+
+# A dummy environment class for reward testing.
+class DummyEnv:
+    def __init__(self):
+        self.lander_position = np.array([0.0, 10.0], dtype=np.float32)
+        self.lander_velocity = np.array([1.0, 0.0], dtype=np.float32)
+        self.lander_angle = np.pi / 2  # upright
+        self.lander_angular_velocity = 0.0
+        self.fuel_remaining = Config.INITIAL_FUEL
+        self.collision_state = False
+        self.collision_impulse = 0.0
+        self.elapsed_time = 5.0
+        self.target_position = np.array([10.0, 0.0], dtype=np.float32)
+        self.target_zone_width = 10.0
+        self.target_zone_height = 5.0
+        self.crash_state = False
+        self.idle_state = False
+        self.time_limit_reached = False
+
+
+def test_default_reward_flight():
+    env = DummyEnv()
+    default_reward = get_reward_class("default")
+    reward = default_reward.get_reward(env, done=False)
+    # When not done, reward is computed from velocity and angle.
+    assert isinstance(reward, float)
+
+
+def test_default_reward_done_crash():
+    env = DummyEnv()
+    env.crash_state = True
+    env.collision_impulse = 30.0
+    default_reward = get_reward_class("default")
+    reward = default_reward.get_reward(env, done=True)
+    # Expect negative reward for a crash.
+    assert reward < 0
+
+
+def test_soft_landing_reward_done_landing_on_target():
+    env = DummyEnv()
+    env.idle_state = True
+    env.lander_position = env.target_position.copy()
+    soft_landing_reward = get_reward_class("soft_landing")
+    reward = soft_landing_reward.get_reward(env, done=True)
+    # For a soft landing on target, we expect a positive reward.
+    assert reward > 0
+
+
+def test_soft_landing_reward_done_landing_off_target():
+    env = DummyEnv()
+    env.idle_state = True
+    # Move the lander off target zone by shifting its x position far from the target.
+    env.lander_position[0] = env.target_position[0] + 2.0 * env.target_zone_width
+    soft_landing_reward = get_reward_class("soft_landing")
+    reward = soft_landing_reward.get_reward(env, done=True)
+    # For a landing off the target zone, reward should be negative.
+    assert reward < 0
+
+
+def test_soft_landing_reward_done_no_landing():
+    env = DummyEnv()
+    env.time_limit_reached = True
+    soft_landing_reward = get_reward_class("soft_landing")
+    reward = soft_landing_reward.get_reward(env, done=True)
+    # Reaching time limit, landing did not occur, so reward should be zero or negative.
+    assert reward <= 0
+
+
+def test_reward_addition():
+    # Create two constant rewards with known values.
+    reward1 = ConstantReward(5.0)
+    reward2 = ConstantReward(3.0)
+    # Using overloaded addition.
+    composite = reward1 + reward2
+    env = DummyEnv()
+    # The composite reward should yield the sum of the two constant rewards.
+    value = composite.get_reward(env, done=False)
+    assert value == 8.0
+
+
+def test_reward_multiplication_by_scalar():
+    # Create a constant reward.
+    reward = ConstantReward(4.0)
+    scalar = 3.0
+    # Multiply reward by a scalar using both left and right operations.
+    product1 = reward * scalar
+    product2 = scalar * reward
+    env = DummyEnv()
+    value1 = product1.get_reward(env, done=False)
+    value2 = product2.get_reward(env, done=False)
+    assert value1 == 12.0
+    assert value2 == 12.0
+
+
+def test_combined_rightward_and_soft_landing_scalars():
+    # Test the addition of scalar multiples of a rightward reward and a soft_landing reward.
+    # Scalars to use.
+    a = 2.0
+    b = 3.0
+    # Create reward instances.
+    rightward_reward = get_reward_class("rightward")
+    soft_landing_reward = get_reward_class("soft_landing")
+    # Compute scalar multiples and their sum.
+    combined_reward = a * rightward_reward + b * soft_landing_reward
+
+    env = DummyEnv()
+    # Use a non-terminal scenario (done=False) for consistent reward computations.
+    # Get individual rewards.
+    reward_right = rightward_reward.get_reward(env, done=False)
+    reward_soft = soft_landing_reward.get_reward(env, done=False)
+    expected_value = a * reward_right + b * reward_soft
+    composite_value = combined_reward.get_reward(env, done=False)
+    # Allow a small numerical tolerance.
+    assert abs(composite_value - expected_value) < 1e-6
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+.\tests\test_target.py
+File type: .py
+import numpy as np
+import pytest  # noqa: F401
+from lander_learner.utils.target import TargetZone
+
+
+def test_target_zone_reset_and_initial_position():
+    tz = TargetZone()
+    tz.reset()
+    pos = tz.initial_position
+    # Check that initial_position is a 2-element numpy array.
+    assert isinstance(pos, np.ndarray)
+    assert pos.shape[0] == 2
+
+
+def test_target_zone_get_position_static():
+    tz = TargetZone()
+    # Disable motion to test static behavior.
+    tz.motion_enabled = False
+    tz.reset()
+    pos1 = tz.get_target_position(elapsed_time=0)
+    pos2 = tz.get_target_position(elapsed_time=100)
+    # With motion disabled, the position should remain constant.
+    assert np.array_equal(pos1, pos2)
+
+
+def test_target_zone_get_position_motion():
+    tz = TargetZone(motion_enabled=True, vel_range_x=5)
+    tz.motion_interval = 1.0
+    tz.reset()
+    non_zero_velocity = False
+    for i in range(5):
+        pos_initial = tz.get_target_position(elapsed_time=np.array([0.0 + i]))
+        pos_after = tz.get_target_position(elapsed_time=np.array([1.0 + i]))
+        if not np.array_equal(tz.current_velocity, np.array([0.0, 0.0])):
+            # With motion enabled, the position should change after a full motion segment.
+            assert not np.array_equal(pos_initial, pos_after)
+            non_zero_velocity = True
+            break
+    assert non_zero_velocity, "Target position did not change after multiple motion segments."
+
+
+def test_target_zone_get_position_on_ground():
+    tz = TargetZone(spawn_mode="on_ground", motion_enabled=False)
+    tz.reset()
+    assert tz.initial_position[1] == 0.0, "Target did not spawn on the ground."
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
