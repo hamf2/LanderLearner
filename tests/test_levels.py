@@ -8,6 +8,7 @@ from lander_learner.levels import (
     LapPresetLevel,
     PointToPointLevel,
     PointToPointPresetLevel,
+    get_level,
 )
 from lander_learner.physics import PhysicsEngine
 from lander_learner.utils.dataclasses import BodySegment
@@ -25,7 +26,7 @@ def test_half_plane_initialisation_and_alignment(pymunk_space):
     level.generate_terrain(pymunk_space)
 
     assert level.get_spawn_point().shape == (2,)
-    assert level.get_bounds() == (-75.0, 75.0, 0.0, float("inf"))
+    assert level.get_bounds() == (-float("inf"), float("inf"), 0.0, float("inf"))
 
     level.reset(pymunk_space)
     half_width = level.plane_width / 2.0
@@ -122,6 +123,28 @@ def test_body_vertices_point_to_point_static_geometry():
     assert not geometry.polys
 
 
+def test_half_plane_ground_target_preset():
+    level = get_level("hp_ground_target")
+    assert isinstance(level, HalfPlaneLevel)
+
+    kwargs = level.get_target_zone_kwargs()
+    assert kwargs is not None
+    assert kwargs["spawn_mode"] == "on_ground"
+    assert kwargs["motion_enabled"] is False
+    assert kwargs["spawn_range_x"] == 80.0
+
+
+def test_half_plane_moving_target_preset():
+    level = get_level("hp_moving_target")
+    assert isinstance(level, HalfPlaneLevel)
+
+    kwargs = level.get_target_zone_kwargs()
+    assert kwargs is not None
+    assert kwargs["spawn_mode"] == "above_ground"
+    assert kwargs["motion_enabled"] is True
+    assert kwargs["vel_range_y"] == 3.0
+
+
 def test_lap_level_lap_tracking(pymunk_space):
     control_points = [
         (0.0, 0.0),
@@ -163,12 +186,12 @@ def test_lap_level_lap_tracking(pymunk_space):
 
 
 def test_lap_preset_metadata_and_geometry(pymunk_space):
-    level = LapPresetLevel("lapp001", spawn_offset=(0.0, 6.0))
+    level = LapPresetLevel("lap001", spawn_offset=(0.0, 6.0))
     level.generate_terrain(pymunk_space)
     level.reset(pymunk_space)
 
     metadata = level.get_metadata()
-    assert metadata["preset"] == "lapp001"
+    assert metadata["preset"] == "lap001"
     assert metadata["type"] == "lap"
     assert metadata["target_laps"] >= 1
 

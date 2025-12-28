@@ -23,6 +23,10 @@ class DummyPhysicsEngine:
         if env is not None:
             env.lander_position = np.array([0.0, 10.0], dtype=np.float32)
 
+    def get_bounds(self):
+        # Mirror the default half-plane bounds used by the production engine.
+        return (float("-inf"), float("inf"), 0.0, float("inf"))
+
 
 @pytest.fixture
 def env_default():

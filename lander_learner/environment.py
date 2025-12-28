@@ -24,7 +24,6 @@ from lander_learner.physics import PhysicsEngine
 from lander_learner.utils.config import Config
 from lander_learner.rewards import get_reward_class
 from lander_learner.observations import get_observation_class
-from lander_learner.utils.target import TargetZone
 
 logger = logging.getLogger(__name__)
 
@@ -33,8 +32,8 @@ class LunarLanderEnv(gym.Env):
     """A 2D Lunar Lander Environment conforming to Gymnasium's interface.
 
     This environment simulates a 2D lunar lander using a :class:`PhysicsEngine` instance.
-    It supports configurable reward and observation functions, as well as an optional
-    target zone feature whose parameters can be updated via keyword arguments.
+    It supports configurable reward and observation functions, an optional target zone,
+    and termination checks that honour the active level's axis-aligned bounds.
 
     Attributes:
         lander_position (np.ndarray): Position of the lander centroid.
@@ -77,7 +76,6 @@ class LunarLanderEnv(gym.Env):
         level_name="half_plane",
         target_zone=False,
         seed=None,
-        **kwargs
     ):
         """Initializes the LunarLanderEnv instance.
 
@@ -88,7 +86,6 @@ class LunarLanderEnv(gym.Env):
             level_name (str, optional): Level factory key or preset. Defaults to ``"half_plane"``.
             target_zone (bool, optional): Enables the moving target zone feature. Defaults to ``False``.
             seed (int, optional): Random seed forwarded to :meth:`gym.Env.reset`.
-            **kwargs: Additional keyword arguments forwarded to :class:`TargetZone`.
         """
         super().__init__()
 
@@ -96,6 +93,7 @@ class LunarLanderEnv(gym.Env):
 
         # Create a physics engine instance.
         self.physics_engine = PhysicsEngine(level=level_name)
+        self.level_name = level_name
 
         # Select the reward function based on the provided name.
         self.reward = get_reward_class(reward_function)
@@ -113,11 +111,7 @@ class LunarLanderEnv(gym.Env):
 
         # Set target zone mode and instantiate target zone management if enabled.
         self.target_zone = target_zone
-        self.target_moves = target_zone and Config.TARGET_ZONE_MOTION
-        if self.target_zone:
-            self.target_zone_obj = TargetZone(**kwargs)
-        else:
-            self.target_zone_obj = None
+        self.target_moves = False
 
         # Load parameters from Config.
         self.time_step = Config.FRAME_TIME_STEP
@@ -136,7 +130,6 @@ class LunarLanderEnv(gym.Env):
             reset_config (bool, optional): If ``True``, reloads configuration parameters from Config.
         """
         if reset_config:
-            self.target_moves = self.target_zone and Config.TARGET_ZONE_MOTION
             self.time_step = Config.FRAME_TIME_STEP
             self.max_episode_duration = Config.MAX_EPISODE_DURATION
             self.impulse_threshold = Config.IMPULSE_THRESHOLD
@@ -150,12 +143,7 @@ class LunarLanderEnv(gym.Env):
         self.fuel_remaining = np.array(self.initial_fuel, dtype=np.float32)
         self.elapsed_time = np.array(0.0, dtype=np.float32)
 
-        # Target zone parameters.
-        if self.target_zone:
-            self.target_zone_obj.reset(reset_config=reset_config, random_generator=self.np_random)
-            self.target_position = self.target_zone_obj.initial_position
-            self.target_zone_width = np.array(self.target_zone_obj.zone_width, dtype=np.float32)
-            self.target_zone_height = np.array(self.target_zone_obj.zone_height, dtype=np.float32)
+        self._sync_target_zone(reset_config=reset_config)
 
         # Collision and state flags.
         self.collision_state = False
@@ -178,8 +166,8 @@ class LunarLanderEnv(gym.Env):
                 - info (dict): An empty metadata dictionary.
         """
         super().reset(seed=seed)
+        self.physics_engine.reset()
         self.reset_state_variables(reset_config=reset_config)
-        self.physics_engine.reset(env=self)
         return self._get_observation(), {}
 
     def step(self, action):
@@ -204,7 +192,7 @@ class LunarLanderEnv(gym.Env):
         self.elapsed_time += self.time_step
 
         # Update target zone position if enabled.
-        if self.target_moves:
+        if self.target_moves and self.target_zone_obj is not None:
             self.target_position = self.target_zone_obj.get_target_position(self.elapsed_time)
 
         done = self._check_done()
@@ -269,6 +257,40 @@ class LunarLanderEnv(gym.Env):
             lander=lander,
         )
 
+    def _sync_target_zone(self, reset_config: bool) -> None:
+        """Updates environment-facing target zone state from the active level.
+
+        Args:
+            reset_config (bool): If ``True``, reinitializes target zone configuration.
+        """
+
+        if not self.target_zone:
+            self.target_zone_obj = None
+            self.target_position = np.array([0.0, 0.0], dtype=np.float32)
+            self.target_zone_width = np.array(0.0, dtype=np.float32)
+            self.target_zone_height = np.array(0.0, dtype=np.float32)
+            self.target_moves = False
+            return
+
+        target_zone = self.physics_engine.get_target()
+        if target_zone is None:
+            target_zone = self.physics_engine.level.create_target_zone()
+
+        if target_zone is None:
+            self.target_zone_obj = None
+            self.target_position = np.array([0.0, 0.0], dtype=np.float32)
+            self.target_zone_width = np.array(0.0, dtype=np.float32)
+            self.target_zone_height = np.array(0.0, dtype=np.float32)
+            self.target_moves = False
+            return
+
+        target_zone.reset(reset_config=reset_config, random_generator=self.np_random)
+        self.target_zone_obj = target_zone
+        self.target_position = target_zone.initial_position
+        self.target_zone_width = np.array(target_zone.zone_width, dtype=np.float32)
+        self.target_zone_height = np.array(target_zone.zone_height, dtype=np.float32)
+        self.target_moves = bool(getattr(target_zone, "motion_enabled", False))
+
     def _check_done(self):
         """Determines whether the episode should terminate.
 
@@ -300,12 +322,23 @@ class LunarLanderEnv(gym.Env):
             self.crash_state = True
             return True
 
-        # Check if lander is below ground.
-        if self.lander_position[1] <= 0.0:
+        # Check if lander is outside the level bounds.
+        min_x, max_x, min_y, max_y = self.physics_engine.get_bounds()
+
+        lander_x = float(self.lander_position[0])
+        lander_y = float(self.lander_position[1])
+        out_of_bounds = (
+            (np.isfinite(min_x) and lander_x < min_x)
+            or (np.isfinite(max_x) and lander_x > max_x)
+            or (np.isfinite(min_y) and lander_y < min_y)
+            or (np.isfinite(max_y) and lander_y > max_y)
+        )
+
+        if out_of_bounds:
             self.collision_state = True
             angle_display = ((self.lander_angle + np.pi) % (2 * np.pi)) - np.pi
             logger.info(
-                f"Lander below ground. Position: x = {self.lander_position[0]:.2f}, "
+                f"Lander outside bounds. Position: x = {self.lander_position[0]:.2f}, "
                 f"y = {self.lander_position[1]:.2f}, Angle = {angle_display:.2f} "
                 f"({self.lander_angle:.2f}). Velocity: vx = {self.lander_velocity[0]:.2f}, "
                 f"vy = {self.lander_velocity[1]:.2f}, vAng = {self.lander_angular_velocity:.2f}."

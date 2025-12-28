@@ -224,11 +224,13 @@ class LunarLanderGUI:
         The grid uses the view reference x-coordinate (from the last environment) to determine the offset.
         """
         hatch_size = 50
-        offset = hatch_size - ((self.view_ref_x * Config.RENDER_SCALE) % hatch_size)
+        offset_x = hatch_size - ((self.view_ref_x * Config.RENDER_SCALE) % hatch_size)
+        offset_y = hatch_size + ((self.view_ref_y * Config.RENDER_SCALE) % hatch_size)
         for i in range(0, Config.SCREEN_WIDTH, hatch_size):
-            dx = int(i + offset)
+            dx = int(i + offset_x)
             pygame.draw.line(self.screen, DARK_GREY, (dx, 0), (dx, Config.SCREEN_HEIGHT))
-        for dy in range(0, Config.SCREEN_HEIGHT, hatch_size):
+        for j in range(0, Config.SCREEN_HEIGHT, hatch_size):
+            dy = int(j + offset_y)
             pygame.draw.line(self.screen, DARK_GREY, (0, dy), (Config.SCREEN_WIDTH, dy))
 
     def _draw_ground(self):

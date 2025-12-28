@@ -1,0 +1,23 @@
+{
+  "name": "HalfPlane-MovingTarget",
+  "type": "half_plane",
+  "description": "Half-plane with an aerial target that drifts above the surface.",
+  "plane_width": 200.0,
+  "surface_friction": 1.0,
+  "surface_elasticity": 0.5,
+  "target_zone_kwargs": {
+    "spawn_mode": "above_ground",
+    "motion_enabled": true,
+    "motion_interval": 4.0,
+    "vel_range_x": 6.0,
+    "vel_range_y": 3.0,
+    "spawn_range_x": 80.0,
+    "spawn_range_y": 45.0,
+    "zone_width": 12.0,
+    "zone_height": 6.0
+  },
+  "metadata": {
+    "preset": "hp_moving_target",
+    "label": "Moving Target Half-Plane"
+  }
+}

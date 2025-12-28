@@ -1,0 +1,19 @@
+{
+  "name": "HalfPlane-GroundTarget",
+  "type": "half_plane",
+  "description": "Wide half-plane with a stationary target randomly placed along the surface.",
+  "plane_width": 200.0,
+  "surface_friction": 1.0,
+  "surface_elasticity": 0.5,
+  "target_zone_kwargs": {
+    "spawn_mode": "on_ground",
+    "motion_enabled": false,
+    "zone_width": 12.0,
+    "zone_height": 6.0,
+    "spawn_range_x": 80.0
+  },
+  "metadata": {
+    "preset": "hp_ground_target",
+    "label": "Ground Target Half-Plane"
+  }
+}

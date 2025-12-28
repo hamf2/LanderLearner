@@ -20,6 +20,8 @@ class HalfPlaneLevel(BaseLevel):
         plane_width: float = 200.0,
         surface_friction: float = 1.0,
         surface_elasticity: float = 0.5,
+        target_zone_kwargs: Optional[Dict[str, Any]] = None,
+        name="Half Plane",
         description: str = "Kinematic plane that recenters under the lander.",
         metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
@@ -29,6 +31,7 @@ class HalfPlaneLevel(BaseLevel):
             plane_width (float): Width of the plane segment placed beneath the lander.
             surface_friction (float): Friction coefficient applied to the landing surface.
             surface_elasticity (float): Elasticity coefficient applied to the landing surface.
+            target_zone_kwargs (Optional[Dict[str, Any]]): Optional kwargs forwarded to target zone creation.
             description (str): Human-readable description for UI or logging.
             metadata (Optional[Dict[str, Any]]): Optional metadata overrides merged into the base metadata.
         """
@@ -37,7 +40,12 @@ class HalfPlaneLevel(BaseLevel):
         payload.setdefault("plane_width", plane_width)
         payload.setdefault("surface_friction", surface_friction)
         payload.setdefault("surface_elasticity", surface_elasticity)
-        super().__init__(name="Half Plane", description=description, metadata=payload)
+        super().__init__(
+            name=name,
+            description=description,
+            metadata=payload,
+            target_zone_kwargs=target_zone_kwargs,
+        )
 
         self.plane_width = plane_width
         self.surface_friction = surface_friction
@@ -78,7 +86,6 @@ class HalfPlaneLevel(BaseLevel):
         Returns:
             np.ndarray: Spawn coordinates above the plane.
         """
-
         return np.array([0.0, 12.0], dtype=float)
 
     def check_objectives(self, env) -> Dict[str, bool]:
@@ -102,16 +109,15 @@ class HalfPlaneLevel(BaseLevel):
         Returns:
             Tuple[float, float, float, float]: Axis-aligned bounds for the level.
         """
-
-        return (-self.plane_width / 2.0, self.plane_width / 2.0, 0.0, float("inf"))
+        return (float("-inf"), float("inf"), 0.0, float("inf"))
 
     def configure_environment(self, env) -> None:
-        """Half-plane level does not require environment configuration.
+        """Configures environment hooks including optional target zone registration.
 
         Args:
             env: Environment instance provided for configuration hooks.
         """
-        return None
+        super().configure_environment(env)
 
     def reset(self, space: pymunk.Space) -> None:
         """Restores the ground segment to its initial position in the space.

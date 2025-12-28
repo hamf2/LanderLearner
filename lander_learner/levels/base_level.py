@@ -1,8 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pymunk
+
+if TYPE_CHECKING:  # pragma: no cover - assist typing only
+    from lander_learner.utils.target import TargetZone
 
 
 class BaseLevel(ABC):
@@ -12,19 +15,30 @@ class BaseLevel(ABC):
     hooks for environment configuration or dynamic updates.
     """
 
-    def __init__(self, name: str, description: str = "", metadata: Optional[Dict[str, Any]] = None):
+    def __init__(
+        self,
+        name: str,
+        description: str = "",
+        metadata: Optional[Dict[str, Any]] = None,
+        target_zone_kwargs: Optional[Dict[str, Any]] = None,
+    ) -> None:
         """Initialises shared level attributes.
 
         Args:
             name (str): Human-readable level name.
             description (str): Short description displayed in menus or logs.
             metadata (Optional[Dict[str, Any]]): Optional metadata dictionary merged into the level metadata.
+            target_zone_kwargs (Optional[Dict[str, Any]]): Default kwargs used when instantiating a target zone.
         """
 
         self.name = name
         self.description = description
         self._metadata: Dict[str, Any] = metadata.copy() if metadata else {}
         self._state: Dict[str, Any] = {}
+        self._target_zone_kwargs: Optional[Dict[str, Any]] = (
+            target_zone_kwargs.copy() if target_zone_kwargs is not None else None
+        )
+        self._target_zone: Optional["TargetZone"] = None
 
     @abstractmethod
     def generate_terrain(self, space: pymunk.Space):
@@ -104,6 +118,7 @@ class BaseLevel(ABC):
             space (pymunk.Space): Pymunk space supplied for level reuse or regeneration.
         """
         self._state.clear()
+        self.create_target_zone()
 
     def update(self, dt: float, env=None) -> None:
         """Optional: Handle dynamic level elements (moving platforms).
@@ -123,3 +138,37 @@ class BaseLevel(ABC):
         details = {"name": self.name, "description": self.description}
         details.update(self._metadata)
         return details.copy()
+
+    def set_target_zone_kwargs(self, kwargs: Optional[Dict[str, Any]]) -> None:
+        """Stores default kwargs used to instantiate the target zone.
+
+        Args:
+            kwargs (Optional[Dict[str, Any]]): Keyword arguments for target zone creation.
+        """
+
+        self._target_zone_kwargs = kwargs.copy() if kwargs else None
+
+    def get_target_zone_kwargs(self) -> Optional[Dict[str, Any]]:
+        """Returns the current target zone configuration kwargs."""
+
+        return self._target_zone_kwargs.copy() if self._target_zone_kwargs is not None else None
+
+    def create_target_zone(self, **overrides: Any) -> Optional["TargetZone"]:
+        """Instantiates a target zone using stored kwargs and optional overrides."""
+
+        if self._target_zone_kwargs is None and not overrides:
+            return None
+        from lander_learner.utils.target import TargetZone
+
+        kwargs: Dict[str, Any] = {}
+        if self._target_zone_kwargs:
+            kwargs.update(self._target_zone_kwargs)
+        if overrides:
+            kwargs.update(overrides)
+        self._target_zone = TargetZone(**kwargs)
+        return self._target_zone
+
+    def get_target_zone(self) -> Optional["TargetZone"]:
+        """Returns the cached target zone instance if one has been created."""
+
+        return self._target_zone

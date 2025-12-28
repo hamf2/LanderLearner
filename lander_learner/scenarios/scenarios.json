@@ -11,9 +11,17 @@
         "agent_type": "SAC",
         "reward_function": "soft_landing",
         "observation_function": "target",
-        "level_name": "half_plane",
+        "level_name": "hp_ground_target",
         "target_zone": true,
         "learning_frames": 50000
+    },
+    "moving_target": {
+        "agent_type": "SAC",
+        "reward_function": "target_zone",
+        "observation_function": "target",
+        "level_name": "hp_moving_target",
+        "target_zone": true,
+        "learning_frames": 80000
     },
     "p2p": {
         "agent_type": "PPO",

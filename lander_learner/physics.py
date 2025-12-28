@@ -5,12 +5,16 @@ This module defines helper dataclasses for exposing world-space geometry and the
 and steps the simulation forward while collecting diagnostic information.
 """
 
-from typing import List, Optional, Tuple
+from typing import TYPE_CHECKING, List, Optional, Tuple
+
+if TYPE_CHECKING:  # pragma: no cover - assist typing only
+    from lander_learner.utils.target import TargetZone
 
 import numpy as np
 import pymunk
 
-from lander_learner.levels import BaseLevel, get_level
+from lander_learner.levels.base_level import BaseLevel
+from lander_learner.levels import get_level
 from lander_learner.utils.config import Config
 from lander_learner.utils.dataclasses import BodyGeometry, BodyPolygon, BodySegment
 
@@ -48,6 +52,7 @@ class PhysicsEngine:
         else:
             raise ValueError("Invalid level parameter; must be None, str, or BaseLevel instance.")
         self.level.generate_terrain(self.space)
+        self.level.create_target_zone()
 
         self._create_lander()
 
@@ -60,7 +65,7 @@ class PhysicsEngine:
         self.collision_state = False
         self.collision_impulse = 0.0
 
-    def reset(self, env=None):
+    def reset(self):
         """Resets simulation state for a new episode.
 
         Args:
@@ -70,9 +75,6 @@ class PhysicsEngine:
         self.space.remove(self.lander_body, self.lander_shape)
         self.level.reset(self.space)
         self._create_lander()
-
-        if env is not None:
-            self.level.configure_environment(env)
 
         self.collision_state = False
         self.collision_impulse = 0.0
@@ -261,3 +263,27 @@ class PhysicsEngine:
                     polys.append(BodyPolygon(vertices=vertex_list, body_type=body_category))
 
         return BodyGeometry(segments=segments, polys=polys)
+
+    def get_level(self) -> BaseLevel:
+        """Returns the active level instance.
+
+        Returns:
+            BaseLevel: The currently mounted level.
+        """
+        return self.level
+
+    def get_bounds(self) -> Tuple[float, float, float, float]:
+        """Returns axis-aligned bounds for the active level.
+
+        Returns:
+            Tuple[float, float, float, float]: (min_x, max_x, min_y, max_y) bounds.
+        """
+        return self.level.get_bounds()
+
+    def get_target(self) -> Optional["TargetZone"]:
+        """Returns the active target zone if one exists.
+
+        Returns:
+            Optional[TargetZone]: The level's target zone or ``None``.
+        """
+        return self.level.get_target_zone()
