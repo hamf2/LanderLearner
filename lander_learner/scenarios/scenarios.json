@@ -3,6 +3,7 @@
         "agent_type": "PPO",
         "reward_function": "rightward",
         "observation_function": "default",
+        "level_name": "half_plane",
         "target_zone": false,
         "learning_frames": 10000
     },
@@ -10,7 +11,24 @@
         "agent_type": "SAC",
         "reward_function": "soft_landing",
         "observation_function": "target",
+        "level_name": "half_plane",
         "target_zone": true,
         "learning_frames": 50000
+    },
+    "p2p": {
+        "agent_type": "PPO",
+        "reward_function": "point_to_point",
+        "observation_function": "default",
+        "level_name": "p2p001",
+        "target_zone": false,
+        "learning_frames": 20000
+    },
+    "lap": {
+        "agent_type": "PPO",
+        "reward_function": "lap_time",
+        "observation_function": "default",
+        "level_name": "lap001",
+        "target_zone": false,
+        "learning_frames": 30000
     }
   }
