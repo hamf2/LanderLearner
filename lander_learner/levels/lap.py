@@ -157,6 +157,25 @@ class LapLevel(BaseLevel):
         if hasattr(env, "laps_completed"):
             env.laps_completed = int(self._state.get("laps_completed", 0))
 
+    def get_finish_line(self) -> Optional[Tuple[np.ndarray, np.ndarray]]:
+        """Returns endpoints spanning the corridor width at the start line."""
+
+        if self._start_point is None or self._start_direction is None:
+            self._compute_geometry()
+        if self._start_point is None or self._start_direction is None:
+            return None
+
+        normal = np.array([-self._start_direction[1], self._start_direction[0]], dtype=float)
+        norm = np.linalg.norm(normal)
+        if norm < 1e-8:
+            normal = np.array([0.0, 1.0], dtype=float)
+        else:
+            normal /= norm
+
+        left = self._start_point + normal * self.corridor_half_width
+        right = self._start_point - normal * self.corridor_half_width
+        return left, right
+
     def reset(self, space: pymunk.Space) -> None:
         """Rebuilds level geometry for a fresh pymunk space.
 
@@ -179,9 +198,6 @@ class LapLevel(BaseLevel):
             dt (float): Simulation time step (unused).
             env: Optional environment context providing the lander position.
         """
-
-        if env is None or self._start_point is None or self._start_direction is None:
-            return
 
         lander_pos = getattr(env, "lander_position", None)
         if lander_pos is None:
@@ -237,6 +253,15 @@ class LapLevel(BaseLevel):
         left_wall = positions + normals * self.corridor_half_width
         right_wall = positions - normals * self.corridor_half_width
 
+        reference = self.control_points[0]
+        start_idx = int(np.argmin(np.linalg.norm(positions - reference, axis=1)))
+        if start_idx != 0:
+            positions = np.roll(positions, -start_idx, axis=0)
+            derivatives = np.roll(derivatives, -start_idx, axis=0)
+            normals = np.roll(normals, -start_idx, axis=0)
+            left_wall = np.roll(left_wall, -start_idx, axis=0)
+            right_wall = np.roll(right_wall, -start_idx, axis=0)
+
         min_xy = np.minimum(np.min(left_wall, axis=0), np.min(right_wall, axis=0))
         max_xy = np.maximum(np.max(left_wall, axis=0), np.max(right_wall, axis=0))
         self._bounds = (float(min_xy[0]), float(max_xy[0]), float(min_xy[1]), float(max_xy[1]))
@@ -246,13 +271,13 @@ class LapLevel(BaseLevel):
         self._left_wall = left_wall
         self._right_wall = right_wall
 
-        self._start_point = positions[0].copy()
         tangent = derivatives[0]
         norm = np.linalg.norm(tangent)
         if norm < 1e-6:
             tangent = np.array([1.0, 0.0])
         else:
             tangent = tangent / norm
+        self._start_point = positions[0].copy()
         self._start_direction = tangent
 
     def _create_static_geometry(self) -> None:
@@ -264,22 +289,22 @@ class LapLevel(BaseLevel):
 
         assert self._centreline is not None and self._left_wall is not None and self._right_wall is not None
 
-        boundary_points = self._generate_boundary_loop()
-        if len(boundary_points) < 3:
-            return
-
         loop_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         shapes: List[pymunk.Segment] = []
-        total_points = len(boundary_points)
-        for idx in range(total_points):
-            a = boundary_points[idx]
-            b = boundary_points[(idx + 1) % total_points]
-            if np.allclose(a, b):
-                continue
-            segment = pymunk.Segment(loop_body, tuple(a), tuple(b), self.wall_thickness)
-            segment.friction = 1.0
-            segment.elasticity = 0.0
-            shapes.append(segment)
+
+        for points in (self._left_wall, self._right_wall):
+            total = len(points)
+            if total < 2:
+                return
+            for idx in range(total):
+                a = points[idx]
+                b = points[(idx + 1) % total]
+                if np.allclose(a, b):
+                    continue
+                segment = pymunk.Segment(loop_body, tuple(a), tuple(b), self.wall_thickness)
+                segment.friction = 1.0
+                segment.elasticity = 0.0
+                shapes.append(segment)
 
         if not shapes:
             return
@@ -300,17 +325,6 @@ class LapLevel(BaseLevel):
             except Exception:
                 continue
         self._entries.clear()
-
-    def _generate_boundary_loop(self) -> List[np.ndarray]:
-        """Builds a closed loop polygon for wall segment creation."""
-
-        left_points = [np.array(pt, dtype=float) for pt in self._left_wall]
-        right_points = [np.array(pt, dtype=float) for pt in self._right_wall[::-1]]
-
-        boundary: List[np.ndarray] = []
-        boundary.extend(left_points)
-        boundary.extend(right_points)
-        return boundary
 
     def _sample_catmull_rom(self) -> Tuple[np.ndarray, np.ndarray]:
         """Samples the closed Catmull--Rom spline and its first derivative."""

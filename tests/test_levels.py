@@ -72,8 +72,8 @@ def test_point_to_point_initialisation_and_geometry(pymunk_space):
     assert kwargs["spawn_mode"] == "deterministic"
     assert np.isclose(kwargs["deterministic_x"], control_points[-1][0])
     assert np.isclose(kwargs["deterministic_y"], control_points[-1][1])
-    assert np.isclose(kwargs["zone_width"], 12.0)
-    assert np.isclose(kwargs["zone_height"], 6.0)
+    assert np.isclose(kwargs["zone_width"], level.corridor_half_width * 1.6)
+    assert np.isclose(kwargs["zone_height"], level.corridor_half_width * 0.8)
 
     level.reset(pymunk_space)
     left_points = level._left_wall
@@ -198,6 +198,13 @@ def test_lap_level_lap_tracking(pymunk_space):
     objectives = level.check_objectives(env)
     assert objectives["laps_completed"] == 2
     assert objectives["goal_reached"] is True
+
+    finish_line = level.get_finish_line()
+    assert finish_line is not None
+    left, right = finish_line
+    assert left.shape == (2,)
+    assert right.shape == (2,)
+    assert not np.allclose(left, right)
 
 
 def test_lap_preset_metadata_and_geometry(pymunk_space):

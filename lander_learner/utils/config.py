@@ -33,6 +33,7 @@ class Config:
     TARGET_ZONE_MOTION_INTERVAL = 5.0
     TARGET_ZONE_VELOCITY_RANGE_X = 5.0
     TARGET_ZONE_VELOCITY_RANGE_Y = 2.0
+    REQUIRED_LAPS = 3  # Number of laps required to complete episode in lap levels
 
     # Sensor specifications
     LASER_RANGE = 100.0

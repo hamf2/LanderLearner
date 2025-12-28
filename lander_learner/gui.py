@@ -15,6 +15,10 @@ import importlib.resources as pkg_resources
 from lander_learner.utils.config import Config
 from lander_learner import assets
 
+from typing import TYPE_CHECKING, Union
+if TYPE_CHECKING:  # pragma: no cover - assist typing only
+    from lander_learner.environment import LunarLanderEnv
+
 # Colour constants
 WHITE = (255, 255, 255)
 LIGHT_BLUE = (128, 200, 255)
@@ -43,11 +47,18 @@ class LunarLanderGUI:
         _key_callback (callable): Optional callback for key events.
     """
 
-    def __init__(self, env, multi_mode=False, styles=None, record=False):
+    def __init__(
+        self,
+        env: Union["LunarLanderEnv", list["LunarLanderEnv"]],
+        multi_mode: bool = False,
+        styles: Union[dict, list[dict]] = None,
+        record: bool = False
+    ):
         """Initializes the LunarLanderGUI.
 
         Args:
-            env: A single environment instance (if multi_mode is False) or a list of environment instances.
+            env (Union["LunarLanderEnv", list["LunarLanderEnv"]]): A single environment instance
+                (if multi_mode is False) or a list of environment instances.
             multi_mode (bool, optional): Flag indicating whether to render multiple environments.
                 Defaults to False.
             styles (dict or list of dict, optional): For single-mode a dictionary specifying the style.
@@ -114,12 +125,14 @@ class LunarLanderGUI:
         self._draw_terrain(view_ref_env)
         if view_ref_env.target_zone:
             self._draw_target_zone(view_ref_env)
+        if view_ref_env.finish_line:
+            self._draw_finish_line(view_ref_env)
         if self.multi_mode:
             for env, style in zip(self.envs, self.styles):
                 self._draw_lander(env, style)
         else:
             self._draw_lander(self.env, self.styles)
-        self._draw_debug_text()
+        self._draw_debug_text(view_ref_env)
         pygame.display.flip()
 
         if self.record:
@@ -129,11 +142,11 @@ class LunarLanderGUI:
 
         self.clock.tick(Config.FPS * Config.REPLAY_SPEED)
 
-    def _set_view_reference(self, env):
+    def _set_view_reference(self, env: "LunarLanderEnv"):
         """Sets the view reference coordinates based on the lander's position.
 
         Args:
-            env: The environment instance whose lander position is used for the view reference.
+            env (LunarLanderEnv): The environment instance whose lander position is used for the view reference.
         """
         self.view_ref_x = env.lander_position[0]
         if env.get_level_metadata().get("type", "") == "half_plane":
@@ -155,14 +168,14 @@ class LunarLanderGUI:
             image = pygame.image.load(img_file).convert_alpha()
         self.lander_surface = pygame.transform.smoothscale(image, (lander_width_px, lander_height_px))
 
-    def _draw_lander(self, env, style: dict = {}):
+    def _draw_lander(self, env: "LunarLanderEnv", style: dict = {}):
         """Draws the lander for a given environment.
 
         If a style dictionary is provided with "color" and "alpha", a tinted copy of the
         lander image is created.
 
         Args:
-            env: The environment instance whose lander state is to be drawn.
+            env (LunarLanderEnv): The environment instance whose lander state is to be drawn.
             style (dict, optional): Dictionary with style parameters ("color" and "alpha").
                 Defaults to an empty dict.
         """
@@ -188,13 +201,13 @@ class LunarLanderGUI:
         ))
         self.screen.blit(rotated_surface, lander_rect)
 
-    def _draw_target_zone(self, env, style: dict = {}):
+    def _draw_target_zone(self, env: "LunarLanderEnv", style: dict = {}):
         """Draws the target zone as a semi-transparent rectangular outline.
 
         The target zone is drawn using the specified style (default is blue with 50% transparency).
 
         Args:
-            env: The environment instance containing the target zone parameters.
+            env (LunarLanderEnv): The environment instance containing the target zone parameters.
             style (dict, optional): Dictionary with style parameters ("color" and "alpha").
                 Defaults to an empty dict.
         """
@@ -217,6 +230,17 @@ class LunarLanderGUI:
             2  # Outline thickness.
         )
         self.screen.blit(outline_surface, target_rect.topleft)
+
+    def _draw_finish_line(self, env: "LunarLanderEnv"):
+        """Draws the lap finish line as a bold segment across the corridor."""
+
+        segment = getattr(env, "finish_line", None)
+        if not segment:
+            return
+        start, end = segment
+        start_px = self.world_to_screen(*start)
+        end_px = self.world_to_screen(*end)
+        pygame.draw.line(self.screen, WHITE, start_px, end_px, 3)
 
     def _draw_background(self):
         """Draws a crosshatch pattern as a background grid.
@@ -243,8 +267,12 @@ class LunarLanderGUI:
         ground_y = self.world_to_screen_y(0)
         pygame.draw.line(self.screen, WHITE, (0, ground_y), (Config.SCREEN_WIDTH, ground_y), 2)
 
-    def _draw_terrain(self, env):
-        """Draws level geometry using static shapes from the physics engine."""
+    def _draw_terrain(self, env: "LunarLanderEnv"):
+        """Draws level geometry using static shapes from the physics engine.
+
+        Args:
+            env (LunarLanderEnv): The environment instance whose terrain is to be drawn.
+        """
 
         def colour_for(body_type: str):
             if body_type == "static":
@@ -277,13 +305,15 @@ class LunarLanderGUI:
             float: The width of the segment in pixels."""
         return radius * Config.RENDER_SCALE * 2
 
-    def _draw_debug_text(self):
+    def _draw_debug_text(self, env: "LunarLanderEnv"):
         """Renders debugging information on the screen.
 
         Uses the state of the last environment (in multi-mode) or the single environment.
         Displays position, angle, fuel, FPS, elapsed time, and the current reward.
+
+        Args:
+            env (LunarLanderEnv): The environment instance whose debug information is to be displayed.
         """
-        env = self.envs[-1] if self.multi_mode else self.env
         fps = self.clock.get_fps()
         debug_text = (
             f"Pos=({env.lander_position[0]:.2f}, {env.lander_position[1]:.2f}), "
@@ -291,10 +321,12 @@ class LunarLanderGUI:
             f"FPS={fps:.1f}, time={env.elapsed_time:.1f}, "
             f"reward={env._calculate_reward(False):.2f}"
         )
+        if env.physics_engine.get_level_metadata().get("type", "") == "lap":
+            debug_text += f", laps={getattr(env, 'lap_counter', 0)}"
         text_surface = self.font.render(debug_text, True, WHITE)
         self.screen.blit(text_surface, (10, 10))
 
-    def set_key_callback(self, callback):
+    def set_key_callback(self, callback: callable):
         """Sets the key event callback.
 
         Args:
@@ -302,7 +334,7 @@ class LunarLanderGUI:
         """
         self._key_callback = callback
 
-    def world_to_screen(self, x, y):
+    def world_to_screen(self, x: float, y: float) -> tuple[int, int]:
         """Converts world coordinates to screen coordinates.
 
         The view center is determined by the lander's x-position and a fixed offset in y.
@@ -316,7 +348,7 @@ class LunarLanderGUI:
         """
         return self.world_to_screen_x(x), self.world_to_screen_y(y)
 
-    def world_to_screen_x(self, x):
+    def world_to_screen_x(self, x: float) -> int:
         """Converts a world x-coordinate to a screen x-coordinate.
 
         The (last) lander's x-position is always centered on the screen.
@@ -329,7 +361,7 @@ class LunarLanderGUI:
         """
         return int(Config.SCREEN_WIDTH // 2 + (x - self.view_ref_x) * Config.RENDER_SCALE)
 
-    def world_to_screen_y(self, y):
+    def world_to_screen_y(self, y: float) -> int:
         """Converts a world y-coordinate to a screen y-coordinate.
 
         The conversion uses the render scale and a fixed vertical offset.

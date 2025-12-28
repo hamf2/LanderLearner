@@ -103,6 +103,11 @@ class BaseLevel(ABC):
         inf = float("inf")
         return (-inf, inf, -inf, inf)
 
+    def get_finish_line(self) -> Optional[Tuple[np.ndarray, np.ndarray]]:
+        """Returns optional endpoints describing a finish line segment."""
+
+        return None
+
     def configure_environment(self, env) -> None:
         """Hook for adjusting environment parameters before the episode starts.
 

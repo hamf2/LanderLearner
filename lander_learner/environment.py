@@ -61,6 +61,7 @@ class LunarLanderEnv(gym.Env):
         target_zone (bool): Flag to enable or disable target zone.
         target_moves (bool): Flag to enable or disable target zone motion.
         target_zone_obj (TargetZone or None): Instance of target zone management if enabled.
+        finish_line (Optional[Tuple[np.ndarray, np.ndarray]]): Optional finish line segment for lap levels.
         time_step (float): Time step for each frame.
         max_episode_duration (float): Maximum duration of an episode.
         impulse_threshold (float): Threshold for collision impulse to be considered a crash.
@@ -143,7 +144,9 @@ class LunarLanderEnv(gym.Env):
         self.fuel_remaining = np.array(self.initial_fuel, dtype=np.float32)
         self.elapsed_time = np.array(0.0, dtype=np.float32)
 
+        self.finish_line = None
         self._sync_target_zone(reset_config=reset_config)
+        self._sync_finish_line()
 
         # Collision and state flags.
         self.collision_state = False
@@ -151,6 +154,7 @@ class LunarLanderEnv(gym.Env):
         self.crash_state = False
         self.idle_state = False
         self.idle_timer = 0.0
+        self.lap_counter = 0
         self.time_limit_reached = False
 
     def reset(self, seed=None, reset_config=False):
@@ -291,6 +295,23 @@ class LunarLanderEnv(gym.Env):
         self.target_zone_height = np.array(target_zone.zone_height, dtype=np.float32)
         self.target_moves = bool(getattr(target_zone, "motion_enabled", False))
 
+    def _sync_finish_line(self) -> None:
+        """Caches finish line data for GUI rendering when provided by the level."""
+
+        level = getattr(self.physics_engine, "level", None)
+        if level is None:
+            self.finish_line = None
+            return
+        finish = level.get_finish_line()
+        if finish is None:
+            self.finish_line = None
+            return
+        start, end = finish
+        self.finish_line = (
+            np.array(start, dtype=np.float32),
+            np.array(end, dtype=np.float32),
+        )
+
     def _check_done(self):
         """Determines whether the episode should terminate.
 
@@ -361,6 +382,9 @@ class LunarLanderEnv(gym.Env):
                 return True
         else:
             self.idle_timer = 0.0
+
+        if self.lap_counter >= Config.REQUIRED_LAPS:
+            return True
 
         # If fuel is depleted, let it coast.
         if self.fuel_remaining <= 0.0:
