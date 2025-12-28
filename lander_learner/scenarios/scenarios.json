@@ -28,7 +28,7 @@
         "reward_function": "point_to_point",
         "observation_function": "default",
         "level_name": "p2p001",
-        "target_zone": false,
+        "target_zone": true,
         "learning_frames": 20000
     },
     "lap": {

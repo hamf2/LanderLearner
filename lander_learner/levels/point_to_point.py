@@ -21,7 +21,8 @@ class PointToPointLevel(BaseLevel):
 
     The level samples a Catmull-Rom spline to build a centreline, offsets wall
     geometry on each side, and adds semicircular end caps to produce a closed
-    collision loop suitable for pymunk.
+    collision loop suitable for pymunk. A deterministic target zone is aligned
+    with the final checkpoint so environments can enable precise landing goals.
     """
 
     def __init__(
@@ -36,6 +37,7 @@ class PointToPointLevel(BaseLevel):
         description: str = "Spline corridor between two checkpoints.",
         name: str = "Point To Point",
         metadata: Optional[Dict[str, Any]] = None,
+        target_zone_kwargs: Optional[Dict[str, Any]] = None,
     ) -> None:
         """Initialises the level with spline and corridor parameters.
 
@@ -50,6 +52,7 @@ class PointToPointLevel(BaseLevel):
             description: Human-readable level description.
             name: Level name reported through metadata.
             metadata: Optional metadata overrides.
+            target_zone_kwargs: Optional dictionary overriding target zone defaults.
         """
 
         control = np.asarray(control_points, dtype=float)
@@ -62,11 +65,28 @@ class PointToPointLevel(BaseLevel):
         if samples_per_segment < 4:
             raise ValueError("samples_per_segment must be at least four for smooth interpolation")
 
+        final_point = control[-1]
+
+        default_target_kwargs: Dict[str, Any] = {
+            "spawn_mode": "deterministic",
+            "deterministic_x": float(final_point[0]),
+            "deterministic_y": float(final_point[1]),
+            "zone_width": float(corridor_half_width * 1.6),
+            "zone_height": float(corridor_half_width * 0.8),
+        }
+        if target_zone_kwargs:
+            default_target_kwargs.update(target_zone_kwargs)
+
         payload = metadata.copy() if metadata else {}
         payload.setdefault("corridor_half_width", corridor_half_width)
         payload.setdefault("arrival_tolerance", arrival_tolerance)
         payload.setdefault("control_point_count", int(control.shape[0]))
-        super().__init__(name=name, description=description, metadata=payload)
+        super().__init__(
+            name=name,
+            description=description,
+            metadata=payload,
+            target_zone_kwargs=default_target_kwargs,
+        )
 
         self.control_points = control
         self.corridor_half_width = float(corridor_half_width)
@@ -148,9 +168,7 @@ class PointToPointLevel(BaseLevel):
         Args:
             env: Environment instance receiving level-specific configuration.
         """
-
-        if hasattr(env, "target_position"):
-            env.target_position = np.asarray(self.control_points[-1], dtype=np.float32)
+        super().configure_environment(env)
 
     def reset(self, space: pymunk.Space) -> None:
         """Rebuilds level geometry for a fresh pymunk space.

@@ -67,6 +67,14 @@ def test_point_to_point_initialisation_and_geometry(pymunk_space):
     centreline = level.get_waypoints()
     assert len(centreline) == len(control_points)
 
+    kwargs = level.get_target_zone_kwargs()
+    assert kwargs is not None
+    assert kwargs["spawn_mode"] == "deterministic"
+    assert np.isclose(kwargs["deterministic_x"], control_points[-1][0])
+    assert np.isclose(kwargs["deterministic_y"], control_points[-1][1])
+    assert np.isclose(kwargs["zone_width"], 12.0)
+    assert np.isclose(kwargs["zone_height"], 6.0)
+
     level.reset(pymunk_space)
     left_points = level._left_wall
     right_points = level._right_wall
@@ -88,6 +96,13 @@ def test_point_to_point_preset_initialisation(pymunk_space):
     metadata = level.get_metadata()
     assert metadata["preset"] == "p2p001"
     assert metadata["label"].startswith("PointToPoint")
+
+    kwargs = level.get_target_zone_kwargs()
+    assert kwargs is not None
+    assert kwargs["spawn_mode"] == "deterministic"
+    final_point = level.control_points[-1]
+    assert np.isclose(kwargs["deterministic_x"], final_point[0])
+    assert np.isclose(kwargs["deterministic_y"], final_point[1])
 
     level.reset(pymunk_space)
     assert level.control_points.shape[0] >= 4
