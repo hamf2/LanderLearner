@@ -43,6 +43,7 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
     default_agent_type = scenario_defaults.get("agent_type", "PPO")
     default_reward_function = scenario_defaults.get("reward_function", "default")
     default_observation_function = scenario_defaults.get("observation_function", "default")
+    default_level_name = scenario_defaults.get("level_name", "half_plane")
     default_target_zone = scenario_defaults.get("target_zone", None)
     default_learning_frames = scenario_defaults.get("learning_frames", 10000)
 
@@ -102,6 +103,12 @@ def parse_args(scenarios: dict) -> argparse.Namespace:
         type=str,
         default=default_observation_function,
         help="Observation function to use (overrides scenario default)"
+    )
+    parser.add_argument(
+        "--level_name",
+        type=str,
+        default=default_level_name,
+        help="Level preset name to use (overrides scenario default)"
     )
     parser.add_argument(
         "--target_zone",

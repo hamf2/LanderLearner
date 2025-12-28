@@ -92,6 +92,7 @@ def main():
                 gui_enabled=False,
                 reward_function=args.reward_function,
                 observation_function=args.observation_function,
+                level_name=args.level_name,
                 target_zone=args.target_zone,
             )
             for _ in range(args.num_envs)
@@ -113,6 +114,7 @@ def main():
             gui_enabled=args.gui,
             reward_function=args.reward_function,
             observation_function=args.observation_function,
+            level_name=args.level_name,
             target_zone=args.target_zone,
         )
         if args.mode == "human":
@@ -157,6 +159,7 @@ def main():
                 gui_enabled=True,
                 reward_function=args.reward_function,
                 observation_function=args.observation_function,
+                level_name=args.level_name,
                 target_zone=args.target_zone,
                 seed=env_seed
             )
@@ -170,6 +173,7 @@ def main():
             gui_enabled=True,
             reward_function=args.reward_function,
             observation_function=args.observation_function,
+            level_name=args.level_name,
             target_zone=args.target_zone,
             seed=env_seed
         )

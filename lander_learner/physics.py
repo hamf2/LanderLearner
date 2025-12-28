@@ -1,12 +1,18 @@
-"""Physics Engine module for the Lunar Lander."""
+"""Physics engine utilities for the 2D Lunar Lander simulation.
 
-from typing import Optional
+This module defines helper dataclasses for exposing world-space geometry and the
+``PhysicsEngine`` class that owns the pymunk space, maintains the lander body,
+and steps the simulation forward while collecting diagnostic information.
+"""
+
+from typing import List, Optional, Tuple
 
 import numpy as np
 import pymunk
 
 from lander_learner.levels import BaseLevel, get_level
 from lander_learner.utils.config import Config
+from lander_learner.utils.dataclasses import BodyGeometry, BodyPolygon, BodySegment
 
 
 class PhysicsEngine:
@@ -21,18 +27,28 @@ class PhysicsEngine:
         collision_impulse (float): Records the maximum impulse from collisions.
     """
 
-    def __init__(self, level: Optional[BaseLevel] = None):
-        """Initializes the physics engine.
+    def __init__(self, level: Optional[BaseLevel | str] = None):
+        """Initializes the physics engine and terrain.
 
-        Sets up the simulation space with gravity, creates the ground and the lander,
-        and installs collision callbacks.
+        Args:
+            level (BaseLevel | str | None): Level instance to mount, a factory
+                name understood by :func:`lander_learner.levels.get_level`, or
+                ``None`` for the default half-plane.
         """
         # Create the pymunk Space and set gravity.
         self.space = pymunk.Space()
         self.space.gravity = (0.0, -Config.GRAVITY)
 
-        self.level: BaseLevel = level or get_level()
+        if isinstance(level, str):
+            self.level = get_level(level)
+        elif isinstance(level, BaseLevel):
+            self.level = level
+        elif level is None:
+            self.level = get_level()
+        else:
+            raise ValueError("Invalid level parameter; must be None, str, or BaseLevel instance.")
         self.level.generate_terrain(self.space)
+
         self._create_lander()
 
         # Add collision handler callbacks.
@@ -45,10 +61,11 @@ class PhysicsEngine:
         self.collision_impulse = 0.0
 
     def reset(self, env=None):
-        """Resets the physics state for a new episode.
+        """Resets simulation state for a new episode.
 
-        Removes the existing lander body and shape, re-creates the lander,
-        refreshes the level terrain, and resets collision-related variables.
+        Args:
+            env: Optional environment instance receiving level configuration
+                callbacks.
         """
         self.space.remove(self.lander_body, self.lander_shape)
         self.level.reset(self.space)
@@ -61,16 +78,15 @@ class PhysicsEngine:
         self.collision_impulse = 0.0
 
     def update(self, left_thruster, right_thruster, env):
-        """Advances the physics simulation by one time step, applying thruster forces.
+        """Steps the simulation forward applying thruster forces.
 
         Args:
-            left_thruster (float): Thruster power for the left thruster (in [-1, 1]).
-            right_thruster (float): Thruster power for the right thruster (in [-1, 1]).
-            env: The environment instance, whose state will be updated based on the simulation.
-
-        This method applies forces based on thruster inputs, updates fuel consumption,
-        delegates level updates, steps the simulation for a fixed number of steps,
-        and updates the environment's state variables.
+            left_thruster (float): Normalised power for the left thruster
+                (range ``[-1, 1]``).
+            right_thruster (float): Normalised power for the right thruster
+                (range ``[-1, 1]``).
+            env: Environment instance whose state mirrors the pymunk bodies and
+                accumulates fuel consumption.
         """
         if env.fuel_remaining > 0.0:
             # Convert thruster power to force.
@@ -137,7 +153,7 @@ class PhysicsEngine:
             data (dict): Additional data provided by the collision handler.
 
         Returns:
-            bool: True to process the collision.
+            bool: ``True`` to continue normal collision processing.
         """
         self.collision_state = True
         return True
@@ -151,7 +167,7 @@ class PhysicsEngine:
             data (dict): Additional data provided by the collision handler.
 
         Returns:
-            bool: True to process the separation.
+            bool: ``True`` to continue normal separation handling.
         """
         self.collision_state = False
         return True
@@ -165,7 +181,83 @@ class PhysicsEngine:
             data (dict): Additional data provided by the collision handler.
 
         Returns:
-            bool: True to indicate successful processing.
+            bool: ``True`` to continue normal processing.
         """
         self.collision_impulse = max(self.collision_impulse, arbiter.total_impulse.length)
         return True
+
+    def get_level_metadata(self) -> dict:
+        """Retrieves metadata describing the active level.
+
+        Returns:
+            dict: Copy of the level metadata dictionary.
+        """
+        return self.level.get_metadata()
+
+    def get_body_vertices(
+        self,
+        *,
+        static: bool = False,
+        kinematic: bool = False,
+        dynamic: bool = False,
+        lander: bool = False,
+    ) -> BodyGeometry:
+        """Collects world-space vertices filtered by body category.
+
+        Args:
+            static (bool): Include static-body shapes when ``True``.
+            kinematic (bool): Include kinematic-body shapes when ``True``.
+            dynamic (bool): Include dynamic-body shapes when ``True``.
+            lander (bool): Include the lander body when ``True``.
+
+        Returns:
+            BodyGeometry: Segment and polygon primitives that match the
+            requested filters.
+        """
+        segments: List[BodySegment] = []
+        polys: List[BodyPolygon] = []
+
+        for shape in self.space.shapes:
+            body = shape.body
+            if body is self.lander_body:
+                body_category = "lander"
+            elif body.body_type == pymunk.Body.KINEMATIC:
+                body_category = "kinematic"
+            elif body.body_type == pymunk.Body.DYNAMIC:
+                body_category = "dynamic"
+            else:
+                body_category = "static"
+
+            include = False
+            if body_category == "lander" and lander:
+                include = True
+            elif body_category == "kinematic" and kinematic:
+                include = True
+            elif body_category == "dynamic" and dynamic:
+                include = True
+            elif body_category == "static" and static:
+                include = True
+
+            if not include:
+                continue
+
+            if isinstance(shape, pymunk.Segment):
+                start_world = body.local_to_world(shape.a)
+                end_world = body.local_to_world(shape.b)
+                segments.append(
+                    BodySegment(
+                        start=(float(start_world[0]), float(start_world[1])),
+                        end=(float(end_world[0]), float(end_world[1])),
+                        radius=float(getattr(shape, "radius", 0.0)),
+                        body_type=body_category,
+                    )
+                )
+            elif isinstance(shape, pymunk.Poly):
+                vertex_list: List[Tuple[float, float]] = []
+                for vertex in shape.get_vertices():
+                    world_vertex = body.local_to_world(vertex)
+                    vertex_list.append((float(world_vertex[0]), float(world_vertex[1])))
+                if vertex_list:
+                    polys.append(BodyPolygon(vertices=vertex_list, body_type=body_category))
+
+        return BodyGeometry(segments=segments, polys=polys)

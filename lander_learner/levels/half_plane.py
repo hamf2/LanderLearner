@@ -9,7 +9,11 @@ from .base_level import BaseLevel
 
 
 class HalfPlaneLevel(BaseLevel):
-    """Infinite half-plane that keeps the landing surface beneath the vehicle."""
+    """Infinite half-plane that keeps the landing surface beneath the vehicle.
+
+    The ground is modelled as a kinematic segment that re-centres underneath the
+    lander to provide a constant landing surface regardless of horizontal drift.
+    """
 
     def __init__(
         self,
@@ -19,6 +23,16 @@ class HalfPlaneLevel(BaseLevel):
         description: str = "Kinematic plane that recenters under the lander.",
         metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
+        """Initialises the half-plane level configuration.
+
+        Args:
+            plane_width (float): Width of the plane segment placed beneath the lander.
+            surface_friction (float): Friction coefficient applied to the landing surface.
+            surface_elasticity (float): Elasticity coefficient applied to the landing surface.
+            description (str): Human-readable description for UI or logging.
+            metadata (Optional[Dict[str, Any]]): Optional metadata overrides merged into the base metadata.
+        """
+
         payload = metadata.copy() if metadata else {}
         payload.setdefault("plane_width", plane_width)
         payload.setdefault("surface_friction", surface_friction)
@@ -35,6 +49,12 @@ class HalfPlaneLevel(BaseLevel):
         self._ground_in_space = False
 
     def generate_terrain(self, space: pymunk.Space) -> None:
+        """Creates the kinematic ground segment and inserts it into the space.
+
+        Args:
+            space (pymunk.Space): Pymunk space that receives the generated segment.
+        """
+
         self._space = space
         self._ground_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         self._ground_body.position = (0.0, 0.0)
@@ -53,21 +73,53 @@ class HalfPlaneLevel(BaseLevel):
         self._ground_in_space = True
 
     def get_spawn_point(self) -> np.ndarray:
+        """Returns the default spawn position for the lander.
+
+        Returns:
+            np.ndarray: Spawn coordinates above the plane.
+        """
+
         return np.array([0.0, 12.0], dtype=float)
 
     def check_objectives(self, env) -> Dict[str, bool]:
+        """Evaluates landing and horizontal positioning objectives.
+
+        Args:
+            env: Environment exposing lander position and collision state.
+
+        Returns:
+            Dict[str, bool]: Flags for landing success and in-bounds status.
+        """
+
         position = np.array(getattr(env, "lander_position", (0.0, 0.0)), dtype=float)
         landed = bool(getattr(env, "collision_state", False))
         within_bounds = bool(abs(position[0]) <= self.plane_width / 2.0)
         return {"landed": landed, "within_bounds": within_bounds}
 
     def get_bounds(self) -> Tuple[float, float, float, float]:
+        """Returns bounds that reflect the plane width and infinite ceiling.
+
+        Returns:
+            Tuple[float, float, float, float]: Axis-aligned bounds for the level.
+        """
+
         return (-self.plane_width / 2.0, self.plane_width / 2.0, 0.0, float("inf"))
 
     def configure_environment(self, env) -> None:
+        """Half-plane level does not require environment configuration.
+
+        Args:
+            env: Environment instance provided for configuration hooks.
+        """
         return None
 
     def reset(self, space: pymunk.Space) -> None:
+        """Restores the ground segment to its initial position in the space.
+
+        Args:
+            space (pymunk.Space): Pymunk space used for re-adding the ground segment.
+        """
+
         super().reset(space)
         self._space = space
         if self._ground_body is None or self._ground_shape is None:
@@ -82,6 +134,13 @@ class HalfPlaneLevel(BaseLevel):
         self._ground_in_space = True
 
     def update(self, dt: float, env=None) -> None:
+        """Recenters the kinematic ground segment below the lander.
+
+        Args:
+            dt (float): Simulation time step in seconds (unused).
+            env: Environment providing access to the lander position.
+        """
+
         if env is None or self._ground_body is None or self._ground_shape is None:
             return
 
@@ -104,6 +163,12 @@ class HalfPlaneLevel(BaseLevel):
             self._ground_in_space = True
 
     def get_metadata(self) -> Dict[str, Any]:
+        """Returns metadata describing the half-plane level.
+
+        Returns:
+            Dict[str, Any]: Metadata dictionary including type information.
+        """
+
         details = super().get_metadata()
         details.update({"type": "half_plane"})
         return details

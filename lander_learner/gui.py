@@ -17,10 +17,12 @@ from lander_learner import assets
 
 # Colour constants
 WHITE = (255, 255, 255)
+LIGHT_BLUE = (128, 200, 255)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 DARK_GREY = (50, 50, 50)
 BLACK = (0, 0, 0)
+ORANGE = (255, 165, 0)
 
 
 class LunarLanderGUI:
@@ -104,15 +106,14 @@ class LunarLanderGUI:
 
         self.screen.fill(BLACK)  # Clear to black
 
-        self._draw_ground()
-
         # Use the last environment in the list (or the single env) as reference for view.
         view_ref_env = self.envs[-1] if self.multi_mode else self.env
-        self.view_ref_x = view_ref_env.lander_position[0]
+        self._set_view_reference(view_ref_env)
 
+        self._draw_background()
+        self._draw_terrain(view_ref_env)
         if view_ref_env.target_zone:
             self._draw_target_zone(view_ref_env)
-        self._draw_background()
         if self.multi_mode:
             for env, style in zip(self.envs, self.styles):
                 self._draw_lander(env, style)
@@ -127,6 +128,19 @@ class LunarLanderGUI:
             self.frame_count += 1
 
         self.clock.tick(Config.FPS * Config.REPLAY_SPEED)
+
+    def _set_view_reference(self, env):
+        """Sets the view reference coordinates based on the lander's position.
+
+        Args:
+            env: The environment instance whose lander position is used for the view reference.
+        """
+        self.view_ref_x = env.lander_position[0]
+        if env.get_level_metadata().get("type", "") == "half_plane":
+            # Fixed vertical offset for better visibility.
+            self.view_ref_y = 25.0
+        else:
+            self.view_ref_y = env.lander_position[1]
 
     def _load_lander_image(self):
         """Loads and scales the lander image from the assets.
@@ -226,6 +240,40 @@ class LunarLanderGUI:
         """
         ground_y = self.world_to_screen_y(0)
         pygame.draw.line(self.screen, WHITE, (0, ground_y), (Config.SCREEN_WIDTH, ground_y), 2)
+
+    def _draw_terrain(self, env):
+        """Draws level geometry using static shapes from the physics engine."""
+
+        def colour_for(body_type: str):
+            if body_type == "static":
+                return WHITE
+            if body_type == "kinematic":
+                return LIGHT_BLUE
+            if body_type == "dynamic":
+                return ORANGE
+            return ORANGE
+
+        geometry = env.get_body_vertices(static=True, kinematic=True, dynamic=True, lander=False)
+        for segment in geometry.segments:
+            start = self.world_to_screen(*segment.start)
+            end = self.world_to_screen(*segment.end)
+            width_pixels = max(1, int(self._segment_width_pixels(segment.radius)))
+            pygame.draw.line(self.screen, colour_for(segment.body_type), start, end, width_pixels)
+
+        for polygon in geometry.polys:
+            if len(polygon.vertices) >= 2:
+                vertices = [self.world_to_screen(*vertex) for vertex in polygon.vertices]
+                pygame.draw.polygon(self.screen, colour_for(polygon.body_type), vertices, 0)
+
+    def _segment_width_pixels(self, radius: float) -> float:
+        """Converts a segment radius to pixel width for rendering.
+
+        Args:
+            radius (float): The radius of the segment in world units.
+
+        Returns:
+            float: The width of the segment in pixels."""
+        return radius * Config.RENDER_SCALE * 2
 
     def _draw_debug_text(self):
         """Renders debugging information on the screen.

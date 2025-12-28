@@ -32,32 +32,33 @@ logger = logging.getLogger(__name__)
 class LunarLanderEnv(gym.Env):
     """A 2D Lunar Lander Environment conforming to Gymnasium's interface.
 
-    This environment simulates a 2D lunar lander using a physics engine.
+    This environment simulates a 2D lunar lander using a :class:`PhysicsEngine` instance.
     It supports configurable reward and observation functions, as well as an optional
     target zone feature whose parameters can be updated via keyword arguments.
 
     Attributes:
-        lander_position (np.ndarray): Position of the lander.
-        lander_velocity (np.ndarray): Velocity of the lander.
-        lander_angle (np.ndarray): Angle of the lander.
-        lander_angular_velocity (np.ndarray): Angular velocity of the lander.
+        lander_position (np.ndarray): Position of the lander centroid.
+        lander_velocity (np.ndarray): Velocity of the lander centroid.
+        lander_angle (np.ndarray): Orientation in radians.
+        lander_angular_velocity (np.ndarray): Angular velocity in radians/s.
         fuel_remaining (np.ndarray): Remaining fuel.
-        elapsed_time (np.ndarray): Elapsed time in the episode.
-        target_position (np.ndarray): Position of the target zone.
+        elapsed_time (np.ndarray): Episode time in seconds.
+        target_position (np.ndarray): Position of the target zone centre, if enabled.
         target_zone_width (np.ndarray): Width of the target zone.
         target_zone_height (np.ndarray): Height of the target zone.
         collision_state (bool): Flag indicating if a collision occurred.
-        collision_impulse (float): Impulse of the collision.
+        collision_impulse (float): Impulse of the most recent collision.
         crash_state (bool): Flag indicating if a crash occurred.
         idle_state (bool): Flag indicating if the lander is idle.
         idle_timer (float): Timer for idle state.
         time_limit_reached (bool): Flag indicating if the time limit was reached.
-        gui_enabled (bool): Flag to enable or disable GUI.
+        gui_enabled (bool): Flag indicating if GUI rendering is active.
         physics_engine (PhysicsEngine): Instance of the physics engine.
         reward (Reward): Selected reward function.
         observation (Observation): Selected observation function.
         observation_space (gym.spaces.Box): Observation space definition.
         action_space (gym.spaces.Box): Action space definition.
+        level_name (str): Name of the level preset.
         target_zone (bool): Flag to enable or disable target zone.
         target_moves (bool): Flag to enable or disable target zone motion.
         target_zone_obj (TargetZone or None): Instance of target zone management if enabled.
@@ -73,6 +74,7 @@ class LunarLanderEnv(gym.Env):
         gui_enabled=False,
         reward_function="default",
         observation_function="default",
+        level_name="half_plane",
         target_zone=False,
         seed=None,
         **kwargs
@@ -80,20 +82,20 @@ class LunarLanderEnv(gym.Env):
         """Initializes the LunarLanderEnv instance.
 
         Args:
-            gui_enabled (bool, optional): Enables or disables the graphical user interface.
-            reward_function (str, optional): Specifies the reward function to be employed.
-            observation_function (str, optional): Specifies the observation function used to
-                construct the observation vector.
-            target_zone (bool, optional): Enables or disables the target zone feature.
-            seed (int, optional): Seed for random number generation.
-            **kwargs: Additional keyword arguments passed to the TargetZone constructor.
+            gui_enabled (bool, optional): Enables the GUI when ``True``. Defaults to ``False``.
+            reward_function (str, optional): Reward function identifier. Defaults to ``"default"``.
+            observation_function (str, optional): Observation function identifier. Defaults to ``"default"``.
+            level_name (str, optional): Level factory key or preset. Defaults to ``"half_plane"``.
+            target_zone (bool, optional): Enables the moving target zone feature. Defaults to ``False``.
+            seed (int, optional): Random seed forwarded to :meth:`gym.Env.reset`.
+            **kwargs: Additional keyword arguments forwarded to :class:`TargetZone`.
         """
         super().__init__()
 
         self.gui_enabled = gui_enabled
 
         # Create a physics engine instance.
-        self.physics_engine = PhysicsEngine()
+        self.physics_engine = PhysicsEngine(level=level_name)
 
         # Select the reward function based on the provided name.
         self.reward = get_reward_class(reward_function)
@@ -131,7 +133,7 @@ class LunarLanderEnv(gym.Env):
         """Resets state variables required for a new episode.
 
         Args:
-            reset_config (bool, optional): If True, reloads configuration parameters from Config.
+            reset_config (bool, optional): If ``True``, reloads configuration parameters from Config.
         """
         if reset_config:
             self.target_moves = self.target_zone and Config.TARGET_ZONE_MOTION
@@ -168,7 +170,7 @@ class LunarLanderEnv(gym.Env):
 
         Args:
             seed (int, optional): Seed for random number generation.
-            reset_config (bool, optional): If True, also reload configuration parameters from Config.
+            reset_config (bool, optional): If ``True``, also reload configuration parameters from Config.
 
         Returns:
             tuple: A tuple containing:
@@ -232,11 +234,46 @@ class LunarLanderEnv(gym.Env):
         """
         return self.reward.get_reward(self, done)
 
+    def get_level_metadata(self) -> dict:
+        """Exposes a copy of the active level metadata.
+
+        Returns:
+            dict: Level metadata including descriptive strings and author data.
+        """
+        metadata = self.physics_engine.get_level_metadata()
+        return metadata
+
+    def get_body_vertices(
+        self,
+        *,
+        kinematic: bool = True,
+        dynamic: bool = False,
+        static: bool = False,
+        lander: bool = False,
+    ):
+        """Retrieves world-space geometry filtered by body type.
+
+        Args:
+            kinematic (bool, optional): Include kinematic bodies when ``True``.
+            dynamic (bool, optional): Include dynamic bodies when ``True``.
+            static (bool, optional): Include static bodies when ``True``.
+            lander (bool, optional): Include the lander body when ``True``.
+
+        Returns:
+            BodyGeometry: Segment and polygon primitives matching the filters.
+        """
+        return self.physics_engine.get_body_vertices(
+            kinematic=kinematic,
+            dynamic=dynamic,
+            static=static,
+            lander=lander,
+        )
+
     def _check_done(self):
         """Determines whether the episode should terminate.
 
         Returns:
-            bool: True if termination conditions are met, otherwise False.
+            bool: ``True`` if the episode should terminate.
         """
         # Check for time limit.
         if self.elapsed_time >= self.max_episode_duration:
