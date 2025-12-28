@@ -1,0 +1,20 @@
+{
+  "name": "PointToPoint-001",
+  "type": "point_to_point",
+  "description": "Gentle S-curve corridor leading to a landing pad.",
+  "corridor_half_width": 12.0,
+  "samples_per_segment": 24,
+  "floor_thickness": 0.15,
+  "wall_thickness": 0.12,
+  "arrival_tolerance": 4.0,
+  "spawn_offset": [0.0, 8.0],
+  "control_points": [
+    [-60.0, 8.0],
+    [-40.0, 12.0],
+    [-20.0, 16.0],
+    [0.0, 14.0],
+    [20.0, 10.0],
+    [40.0, 6.0],
+    [60.0, 6.0]
+  ]
+}
