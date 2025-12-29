@@ -5,15 +5,19 @@ This module implements a 2D Lunar Lander environment based on Gymnasium's interf
 It simulates a lunar landing task with physics simulation, configurable rewards, custom observations,
 and an optional target zone feature. The environment supports both headless and GUI modes and includes methods
 for resetting the simulation, advancing one time step, and performing cleanup.
+
 Classes:
-    LunarLanderEnv: A Gymnasium-compatible environment for simulating lunar landing, managing physics, rewards,
+    `LunarLanderEnv`: A Gymnasium-compatible environment for simulating lunar landing, managing physics, rewards,
                     observations, and termination conditions.
+
 Usage Example:
-    >>> env = LunarLanderEnv(
-            gui_enabled=True, reward_function="default", observation_function="default", target_zone=True
-        )
-    >>> observation, info = env.reset(seed=42)
-    >>> next_observation, reward, done, truncated, info = env.step([0.5, -0.2])
+```
+>>> env = LunarLanderEnv(
+        gui_enabled=True, reward_function="default", observation_function="default", target_zone=True
+    )
+>>> observation, info = env.reset(seed=42)
+>>> next_observation, reward, done, truncated, info = env.step([0.5, -0.2])
+```
 """
 
 import numpy as np
@@ -282,8 +286,8 @@ class LunarLanderEnv(gym.Env):
             if target_zone is not None:
                 self.target_zone_moves_callback = target_zone.get_target_position
                 self.target_position = target_zone.get_target_position(0.0)
-                self.target_zone_width = np.array(target_zone.width, dtype=np.float32)
-                self.target_zone_height = np.array(target_zone.height, dtype=np.float32)
+                self.target_zone_width = np.array(target_zone.zone_width, dtype=np.float32)
+                self.target_zone_height = np.array(target_zone.zone_height, dtype=np.float32)
                 self.target_moves = target_zone.motion_enabled
                 return
 

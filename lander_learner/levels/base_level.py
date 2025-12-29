@@ -132,7 +132,8 @@ class BaseLevel(ABC):
             space (pymunk.Space): Pymunk space supplied for level reuse or regeneration.
         """
         self._state.clear()
-        self.create_target_zone()
+        if self._target_zone:
+            self._target_zone.reset()
 
     def update(self, dt: float, env: Optional["LunarLanderEnv"] = None) -> None:
         """Optional: Handle dynamic level elements (moving platforms).

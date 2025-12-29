@@ -3,5 +3,6 @@
 data/logs/*
 data/checkpoints/*
 data/recordings/*
+data/optimised_runs/*
 
 lander_learner.egg-info
