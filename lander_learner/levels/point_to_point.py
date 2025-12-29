@@ -38,6 +38,8 @@ class PointToPointLevel(BaseLevel):
         name: str = "Point To Point",
         metadata: Optional[Dict[str, Any]] = None,
         target_zone_kwargs: Optional[Dict[str, Any]] = None,
+        initial_fuel: Optional[float] = None,
+        episode_time_limit: Optional[float] = None,
     ) -> None:
         """Initialises the level with spline and corridor parameters.
 
@@ -53,6 +55,8 @@ class PointToPointLevel(BaseLevel):
             name: Level name reported through metadata.
             metadata: Optional metadata overrides.
             target_zone_kwargs: Optional dictionary overriding target zone defaults.
+            initial_fuel: Optional override for the lander's starting fuel.
+            episode_time_limit: Optional override for the episode time limit in seconds.
         """
 
         control = np.asarray(control_points, dtype=float)
@@ -86,6 +90,8 @@ class PointToPointLevel(BaseLevel):
             description=description,
             metadata=payload,
             target_zone_kwargs=default_target_kwargs,
+            initial_fuel=initial_fuel,
+            episode_time_limit=episode_time_limit,
         )
 
         self.control_points = control
@@ -411,6 +417,18 @@ class PointToPointPresetLevel(PointToPointLevel):
         metadata = merged.pop("metadata", {})
         if override_metadata:
             metadata = {**metadata, **override_metadata}
+
+        time_limit = merged.pop("time_limit_seconds", None)
+        if time_limit is None and "time_limit" in merged:
+            time_limit = merged.pop("time_limit")
+        episode_time_limit = merged.get("episode_time_limit", time_limit)
+        if episode_time_limit is not None:
+            merged["episode_time_limit"] = float(episode_time_limit)
+
+        if "starting_fuel" in merged and "initial_fuel" not in merged:
+            merged["initial_fuel"] = merged.pop("starting_fuel")
+        if "initial_fuel" in merged:
+            merged["initial_fuel"] = float(merged["initial_fuel"])
 
         super().__init__(
             control_points=control_points,

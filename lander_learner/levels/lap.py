@@ -37,6 +37,8 @@ class LapLevel(BaseLevel):
         description: str = "Closed spline corridor with lap tracking.",
         name: str = "Lap Course",
         metadata: Optional[Dict[str, Any]] = None,
+        initial_fuel: Optional[float] = None,
+        episode_time_limit: Optional[float] = None,
     ) -> None:
         """Initialises the lap level with spline parameters and lap goals.
 
@@ -52,6 +54,8 @@ class LapLevel(BaseLevel):
             description: Human-readable level description.
             name: Level name reported through metadata.
             metadata: Optional metadata overrides merged into level metadata.
+            initial_fuel: Optional override for the lander's starting fuel.
+            episode_time_limit: Optional override for the episode time limit in seconds.
         """
 
         control = np.asarray(control_points, dtype=float)
@@ -70,7 +74,13 @@ class LapLevel(BaseLevel):
         payload.setdefault("corridor_half_width", corridor_half_width)
         payload.setdefault("target_laps", target_laps)
         payload.setdefault("control_point_count", int(control.shape[0]))
-        super().__init__(name=name, description=description, metadata=payload)
+        super().__init__(
+            name=name,
+            description=description,
+            metadata=payload,
+            initial_fuel=initial_fuel,
+            episode_time_limit=episode_time_limit,
+        )
 
         self.control_points = control
         self.corridor_half_width = float(corridor_half_width)
@@ -238,6 +248,18 @@ class LapLevel(BaseLevel):
 
         details = super().get_metadata()
         details.update({"type": "lap", "target_laps": self.target_laps})
+
+        finish_line = self.get_finish_line()
+        if finish_line is not None:
+            left, right = finish_line
+            left_pt = np.asarray(left, dtype=float).reshape(-1)
+            right_pt = np.asarray(right, dtype=float).reshape(-1)
+            if left_pt.size == 2 and right_pt.size == 2:
+                details["finish_line_points"] = [
+                    [float(left_pt[0]), float(left_pt[1])],
+                    [float(right_pt[0]), float(right_pt[1])],
+                ]
+
         return details
 
     # --- Internal helpers -------------------------------------------------
@@ -411,6 +433,18 @@ class LapPresetLevel(LapLevel):
         metadata = merged.pop("metadata", {})
         if override_metadata:
             metadata = {**metadata, **override_metadata}
+
+        time_limit = merged.pop("time_limit_seconds", None)
+        if time_limit is None and "time_limit" in merged:
+            time_limit = merged.pop("time_limit")
+        episode_time_limit = merged.get("episode_time_limit", time_limit)
+        if episode_time_limit is not None:
+            merged["episode_time_limit"] = float(episode_time_limit)
+
+        if "starting_fuel" in merged and "initial_fuel" not in merged:
+            merged["initial_fuel"] = merged.pop("starting_fuel")
+        if "initial_fuel" in merged:
+            merged["initial_fuel"] = float(merged["initial_fuel"])
 
         super().__init__(
             control_points=control_points,

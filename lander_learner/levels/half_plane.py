@@ -24,6 +24,8 @@ class HalfPlaneLevel(BaseLevel):
         name="Half Plane",
         description: str = "Kinematic plane that recenters under the lander.",
         metadata: Optional[Dict[str, Any]] = None,
+        episode_time_limit: Optional[float] = None,
+        initial_fuel: Optional[float] = None,
     ) -> None:
         """Initialises the half-plane level configuration.
 
@@ -34,6 +36,8 @@ class HalfPlaneLevel(BaseLevel):
             target_zone_kwargs (Optional[Dict[str, Any]]): Optional kwargs forwarded to target zone creation.
             description (str): Human-readable description for UI or logging.
             metadata (Optional[Dict[str, Any]]): Optional metadata overrides merged into the base metadata.
+            episode_time_limit (Optional[float]): Optional override for the episode time limit in seconds.
+            initial_fuel (Optional[float]): Optional override for the lander's starting fuel.
         """
 
         payload = metadata.copy() if metadata else {}
@@ -45,6 +49,8 @@ class HalfPlaneLevel(BaseLevel):
             description=description,
             metadata=payload,
             target_zone_kwargs=target_zone_kwargs,
+            episode_time_limit=episode_time_limit,
+            initial_fuel=initial_fuel,
         )
 
         self.plane_width = plane_width

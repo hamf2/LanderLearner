@@ -6,6 +6,8 @@
   "samples_per_segment": 24,
   "wall_thickness": 0.12,
   "target_laps": 3,
+  "initial_fuel": 250.0,
+  "episode_time_limit": 180.0,
   "spawn_offset": [0.0, 8.0],
   "control_points": [
     [0.0, 0.0],

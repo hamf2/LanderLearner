@@ -12,6 +12,7 @@ from lander_learner.levels import (
 )
 from lander_learner.physics import PhysicsEngine
 from lander_learner.utils.dataclasses import BodySegment
+from lander_learner.levels.level_data import load_level_payload
 
 
 @pytest.fixture
@@ -103,6 +104,25 @@ def test_point_to_point_preset_initialisation(pymunk_space):
     final_point = level.control_points[-1]
     assert np.isclose(kwargs["deterministic_x"], final_point[0])
     assert np.isclose(kwargs["deterministic_y"], final_point[1])
+    payload = load_level_payload("p2p001")
+    expected_limit = (
+        payload.get("episode_time_limit")
+        or payload.get("time_limit_seconds")
+        or payload.get("time_limit")
+    )
+    if expected_limit is None:
+        assert level.get_metadata()["episode_time_limit"] is None
+    else:
+        assert level.get_metadata()["episode_time_limit"] == pytest.approx(float(expected_limit))
+
+    expected_fuel = (
+        payload.get("initial_fuel")
+        or payload.get("starting_fuel")
+    )
+    if expected_fuel is None:
+        assert level.get_metadata()["initial_fuel"] is None
+    else:
+        assert level.get_metadata()["initial_fuel"] == pytest.approx(float(expected_fuel))
 
     level.reset(pymunk_space)
     assert level.control_points.shape[0] >= 4
@@ -216,6 +236,17 @@ def test_lap_preset_metadata_and_geometry(pymunk_space):
     assert metadata["preset"] == "lap001"
     assert metadata["type"] == "lap"
     assert metadata["target_laps"] >= 1
+    finish_line = metadata.get("finish_line_points")
+    assert finish_line is not None
+    assert isinstance(finish_line, list)
+    assert len(finish_line) == 2
+    left, right = finish_line
+    left_meta = np.asarray(finish_line[0], dtype=float)
+    right_meta = np.asarray(finish_line[1], dtype=float)
+    assert left_meta.shape == (2,)
+    assert right_meta.shape == (2,)
+    assert np.allclose(left_meta, left)
+    assert np.allclose(right_meta, right)
 
     geometry = PhysicsEngine(level=level).get_body_vertices(kinematic=True)
     assert geometry.segments

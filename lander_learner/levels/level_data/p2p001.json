@@ -7,6 +7,8 @@
   "floor_thickness": 0.15,
   "wall_thickness": 0.12,
   "arrival_tolerance": 4.0,
+  "initial_fuel": 150.0,
+  "episode_time_limit": 60.0,
   "spawn_offset": [0.0, 8.0],
   "control_points": [
     [-60.0, 8.0],

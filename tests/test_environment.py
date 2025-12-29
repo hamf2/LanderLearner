@@ -3,12 +3,14 @@ import pytest
 from stable_baselines3.common.env_checker import check_env
 from lander_learner.environment import LunarLanderEnv
 from lander_learner.utils.config import Config
+from lander_learner.levels.level_data import load_level_payload
 
 
 # Use a dummy physics engine to avoid running a full pymunk simulation.
 class DummyPhysicsEngine:
     def __init__(self):
         self.updated = False
+        self.metadata = {"episode_time_limit": None, "initial_fuel": None}
 
     def update(self, left_thruster, right_thruster, env):
         self.updated = True
@@ -26,6 +28,9 @@ class DummyPhysicsEngine:
     def get_bounds(self):
         # Mirror the default half-plane bounds used by the production engine.
         return (float("-inf"), float("inf"), 0.0, float("inf"))
+
+    def get_level_metadata(self):
+        return self.metadata.copy()
 
 
 @pytest.fixture
@@ -50,6 +55,32 @@ def test_time_limit_reached(env_default):
     env_default.elapsed_time = Config.MAX_EPISODE_DURATION
     obs, reward, done, truncated, info = env_default.step([0.0, 0.0])
     assert done is True
+
+
+def test_preset_time_limit_override_applied():
+    env = LunarLanderEnv(level_name="p2p001", target_zone=False)
+    try:
+        payload = load_level_payload("p2p001")
+        expected_limit = (
+            payload.get("episode_time_limit")
+            or payload.get("time_limit_seconds")
+            or payload.get("time_limit")
+        )
+        if expected_limit is None:
+            expected_limit = Config.MAX_EPISODE_DURATION
+        assert env.max_episode_duration == pytest.approx(float(expected_limit))
+        expected_fuel = payload.get("initial_fuel") or payload.get("starting_fuel")
+        if expected_fuel is None:
+            expected_fuel = Config.INITIAL_FUEL
+        assert env.initial_fuel == pytest.approx(float(expected_fuel))
+        assert float(env.fuel_remaining) == pytest.approx(float(expected_fuel))
+        env.reset()
+        assert float(env.fuel_remaining) == pytest.approx(float(expected_fuel))
+        env.elapsed_time = env.max_episode_duration
+        obs, reward, done, truncated, info = env.step([0.0, 0.0])
+        assert done is True
+    finally:
+        env.close()
 
 
 def test_crash_due_to_impulse(env_default):
@@ -127,3 +158,29 @@ def test_reset(env_default):
     assert env_default.observation_space.shape == (8,)
     assert env_default.action_space.shape == (2,)
     assert env_default.metadata == {"render_modes": []}
+
+
+def test_lap_finish_line_metadata_drives_sync(monkeypatch):
+    env = LunarLanderEnv(level_name="lap001", target_zone=False)
+    try:
+        metadata = env.get_level_metadata()
+        finish_points = metadata.get("finish_line_points")
+        assert finish_points is not None
+
+        monkeypatch.setattr(
+            env.physics_engine,
+            "get_level_metadata",
+            lambda: {"finish_line_points": finish_points},
+        )
+        env.physics_engine.level = None
+        env.finish_line = None
+        env._sync_finish_line()
+
+        assert env.finish_line is not None
+        left, right = env.finish_line
+        expected_left = np.asarray(finish_points[0], dtype=np.float32)
+        expected_right = np.asarray(finish_points[1], dtype=np.float32)
+        assert np.allclose(left, expected_left)
+        assert np.allclose(right, expected_right)
+    finally:
+        env.close()

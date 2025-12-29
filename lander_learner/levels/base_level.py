@@ -5,6 +5,7 @@ import numpy as np
 import pymunk
 
 if TYPE_CHECKING:  # pragma: no cover - assist typing only
+    from lander_learner.environment import LunarLanderEnv
     from lander_learner.utils.target import TargetZone
 
 
@@ -21,6 +22,8 @@ class BaseLevel(ABC):
         description: str = "",
         metadata: Optional[Dict[str, Any]] = None,
         target_zone_kwargs: Optional[Dict[str, Any]] = None,
+        episode_time_limit: Optional[float] = None,
+        initial_fuel: Optional[float] = None,
     ) -> None:
         """Initialises shared level attributes.
 
@@ -29,6 +32,8 @@ class BaseLevel(ABC):
             description (str): Short description displayed in menus or logs.
             metadata (Optional[Dict[str, Any]]): Optional metadata dictionary merged into the level metadata.
             target_zone_kwargs (Optional[Dict[str, Any]]): Default kwargs used when instantiating a target zone.
+            episode_time_limit (Optional[float]): Optional override for the environment time limit in seconds.
+            initial_fuel (Optional[float]): Optional override for the lander's starting fuel.
         """
 
         self.name = name
@@ -39,9 +44,13 @@ class BaseLevel(ABC):
             target_zone_kwargs.copy() if target_zone_kwargs is not None else None
         )
         self._target_zone: Optional["TargetZone"] = None
+        self._time_limit_override: Optional[float] = (
+            float(episode_time_limit) if episode_time_limit is not None else None
+        )
+        self._fuel_override: Optional[float] = float(initial_fuel) if initial_fuel is not None else None
 
     @abstractmethod
-    def generate_terrain(self, space: pymunk.Space):
+    def generate_terrain(self, space: pymunk.Space) -> None:
         """Constructs static bodies (ground, obstacles) in the Pymunk space.
 
         Args:
@@ -75,7 +84,7 @@ class BaseLevel(ABC):
         return np.zeros(2, dtype=float)
 
     @abstractmethod
-    def check_objectives(self, env) -> dict:
+    def check_objectives(self, env: "LunarLanderEnv") -> Dict[str, Any]:
         """Evaluates level-specific completion criteria.
 
         Args:
@@ -108,7 +117,7 @@ class BaseLevel(ABC):
 
         return None
 
-    def configure_environment(self, env) -> None:
+    def configure_environment(self, env: "LunarLanderEnv") -> None:
         """Hook for adjusting environment parameters before the episode starts.
 
         Args:
@@ -125,7 +134,7 @@ class BaseLevel(ABC):
         self._state.clear()
         self.create_target_zone()
 
-    def update(self, dt: float, env=None) -> None:
+    def update(self, dt: float, env: Optional["LunarLanderEnv"] = None) -> None:
         """Optional: Handle dynamic level elements (moving platforms).
 
         Args:
@@ -140,7 +149,12 @@ class BaseLevel(ABC):
         Returns:
             Dict[str, Any]: Copy of metadata describing the level.
         """
-        details = {"name": self.name, "description": self.description}
+        details = {
+            "name": self.name,
+            "description": self.description,
+            "episode_time_limit": self._time_limit_override,
+            "initial_fuel": self._fuel_override,
+        }
         details.update(self._metadata)
         return details.copy()
 
@@ -177,3 +191,13 @@ class BaseLevel(ABC):
         """Returns the cached target zone instance if one has been created."""
 
         return self._target_zone
+
+    def get_time_limit_override(self) -> Optional[float]:
+        """Returns the per-level episode time limit override when provided."""
+
+        return self._time_limit_override
+
+    def get_initial_fuel_override(self) -> Optional[float]:
+        """Returns the per-level initial fuel override when provided."""
+
+        return self._fuel_override
