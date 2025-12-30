@@ -60,9 +60,32 @@ def optimise_trajectory(
 
     solver_options = {"print_time": False}
     ipopt_options = {"print_level": 0}
+    # Print concise problem summary before solving
+    print("--- Optimisation Problem Summary (temporal demo) ---")
+    try:
+        states_shape = (int(states.size1()), int(states.size2()))
+    except Exception:
+        states_shape = getattr(states, "shape", None)
+    try:
+        controls_shape = (int(controls.size1()), int(controls.size2()))
+    except Exception:
+        controls_shape = getattr(controls, "shape", None)
+    print(f"State variable `states` shape: {states_shape}")
+    print(f"Control variable `controls` shape: {controls_shape}")
+    print(f"Horizon steps: {horizon_steps}, dt: {dt}")
+    print("Objective: sum squared position error across all timesteps + 0.01 * control effort")
+    print("Constraints: control bounds [-1,1], fuel nonnegative on states[6,:]")
+    print("-------------------------------------")
+
     opti.solver("ipopt", solver_options, ipopt_options)
 
+    # Time the solver and print elapsed time
+    import time
+
+    t0 = time.perf_counter()
     solution = opti.solve()
+    t_elapsed = time.perf_counter() - t0
+    print(f"Solver elapsed time: {t_elapsed:.3f} s")
 
     solved_states = solution.value(states)
     solved_controls = solution.value(controls)

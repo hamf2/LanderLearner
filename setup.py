@@ -16,7 +16,9 @@ setup(
         "stable-baselines3[extra]==2.5.0",
         "pymunk==6.11.1",
         "pygame==2.6.1",
-        "numpy==2.2.2"
+        "numpy==2.2.2",
+        "matplotlib",
+        "casadi==3.7.2",
     ],
     entry_points={
         "console_scripts": [
