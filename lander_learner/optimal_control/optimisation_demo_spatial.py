@@ -147,9 +147,7 @@ def solve_min_time_speed_profile(
 
     # Initial state vector
     x0 = centreline[0] + normals[0] * 0.0
-    init_state = ca.DM(
-        [float(x0[0]), float(x0[1]), 0.0, 0.0, 0.0, 0.0, float(Config.INITIAL_FUEL)]
-    )
+    init_state = ca.DM([float(x0[0]), float(x0[1]), 0.0, 0.0, 0.0, 0.0, float(Config.INITIAL_FUEL)])
     opti.subject_to(states[:, 0] == init_state)
 
     # Enforce positional constraints and propagate dynamics
@@ -203,7 +201,7 @@ def solve_min_time_speed_profile(
         "controls": controls_opt,
         "dt": dt_opt,
         "d": d_opt,
-        "v": np.sqrt(states_opt[2, :]**2 + states_opt[3, :]**2),
+        "v": np.sqrt(states_opt[2, :] ** 2 + states_opt[3, :] ** 2),
         "step_times": step_times,
         "time_total": time_total,
         "centreline": centreline,
@@ -236,14 +234,16 @@ def example_run():
     )
 
     out_dir = Path(__file__).resolve().parents[2] / "data" / "optimised_runs"
-    saved = save_solution({
-        "time": result["time"],
-        "states": result["states"],
-        "controls": result["controls"],
-        "v": result["v"],
-        "d": result["d"],
-        "centreline": result["centreline"]},
-        out_dir
+    saved = save_solution(
+        {
+            "time": result["time"],
+            "states": result["states"],
+            "controls": result["controls"],
+            "v": result["v"],
+            "d": result["d"],
+            "centreline": result["centreline"],
+        },
+        out_dir,
     )
     print(f"Saved spatial optimisation result to {saved}")
 
