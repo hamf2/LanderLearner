@@ -48,12 +48,22 @@ def plot_trajectory(data: dict[str, np.ndarray]) -> None:
     speed = np.sqrt(vx**2 + vy**2)
 
     fig, axes = plt.subplots(2, 2, figsize=(8, 5))
-
-    axes[0, 0].plot(x, y)
+    axes[0, 0].plot(x, y, label="travelled path")
+    # If a centreline is present (spatial optimiser), plot it and optional checkpoints
+    centreline = data.get("centreline", None)
+    checkpoints = data.get("checkpoints", None)
+    if centreline is not None:
+        cx = centreline[:, 0]
+        cy = centreline[:, 1]
+        axes[0, 0].plot(cx, cy, "--", color="C2", label="centreline")
+    if checkpoints is not None:
+        cps = np.asarray(checkpoints)
+        axes[0, 0].plot(cps[:, 0], cps[:, 1], "o", color="C3", label="checkpoints")
     axes[0, 0].set_title("Position")
     axes[0, 0].set_xlabel("X (m)")
     axes[0, 0].set_ylabel("Y (m)")
     axes[0, 0].grid(True)
+    axes[0, 0].legend()
 
     axes[0, 1].plot(time[:-1], controls[0], label="Left", alpha=0.7)
     axes[0, 1].plot(time[:-1], controls[1], label="Right", alpha=0.7)
@@ -66,7 +76,23 @@ def plot_trajectory(data: dict[str, np.ndarray]) -> None:
     axes[0, 1].legend()
     axes[0, 1].grid(True)
 
-    axes[1, 0].plot(time, heading)
+    # Break the plot where heading wraps to avoid connecting across the ±π boundary.
+    # Insert an extra NaN sample between points that wrap so the line is broken
+    # cleanly between samples (rather than replacing an existing sample).
+    dh = np.abs(np.diff(heading))
+    wrap_idx = set(np.where(dh > np.pi)[0])
+    time_plot = []
+    heading_plot = []
+    for i in range(len(time)):
+        time_plot.append(time[i])
+        heading_plot.append(heading[i])
+        if i in wrap_idx:
+            # insert a NaN heading and a midpoint time so the break appears
+            next_t = time[i + 1] if i + 1 < len(time) else time[i]
+            time_plot.append(0.5 * (time[i] + next_t))
+            heading_plot.append(np.nan)
+
+    axes[1, 0].plot(np.asarray(time_plot), np.asarray(heading_plot))
     axes[1, 0].set_title("Heading")
     axes[1, 0].set_xlabel("Time (s)")
     axes[1, 0].set_ylabel("Angle (rad)")
