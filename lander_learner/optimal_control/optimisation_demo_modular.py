@@ -14,7 +14,8 @@ from pathlib import Path
 import numpy as np
 
 from lander_learner.optimal_control.transcription import TimeSteppingTranscription
-from lander_learner.optimal_control.integration_schemes import TrapezoidalScheme
+# from lander_learner.optimal_control.integration_schemes import TrapezoidalScheme
+from lander_learner.optimal_control.integration_schemes import HermiteSimpsonScheme
 from lander_learner.optimal_control.trajectory_optimizer import TrajectoryOptimizer
 from lander_learner.optimal_control.objectives_and_constraints import (
     MinimizeDistanceObjective,
@@ -29,13 +30,11 @@ from lander_learner.utils.config import Config
 
 
 def main() -> None:
-    horizon = 200
-    dt = 0.1
+    horizon = 40
+    dt = 0.5
 
     dynamics = CasadiLanderDynamics()
-    # Choose an integration scheme (Trapezoidal or Hermite-Simpson)
-    scheme = TrapezoidalScheme()
-    # scheme = HermiteSimpsonScheme()  # uncomment to try H-S collocation
+    scheme = HermiteSimpsonScheme()
     transcription = TimeSteppingTranscription(dt=dt, scheme=scheme)
     optimizer = TrajectoryOptimizer(transcription, dynamics)
 
@@ -58,21 +57,18 @@ def main() -> None:
     optimizer.opti.set_initial(optimizer.X, np.tile(initial_state.reshape(-1, 1), (1, horizon + 1)))
     optimizer.opti.set_initial(optimizer.U, 0.0)
 
-    # If the chosen integration scheme created extra variables (e.g. H-S midpoints),
-    # set sensible initial guesses for them too.
-    extras = getattr(transcription, "extras", None)
-    if extras:
-        # common pattern: extras may contain MX variables keyed by name
-        for name, var in extras.items():
-            try:
-                # set midpoints to the initial state repeated or zeros for controls
-                if name.startswith("X"):
-                    optimizer.opti.set_initial(var, np.tile(initial_state.reshape(-1, 1), (1, horizon)))
-                else:
-                    optimizer.opti.set_initial(var, 0.0)
-            except Exception:
-                # ignore if setting initial fails for any scheme-specific var
-                pass
+    # Set initial values for any created extra variables (e.g. H-S midpoints),
+    extras = getattr(transcription, "extras", {})
+    for name, var in extras.items():
+        try:
+            # set midpoints to the initial state repeated or zeros for controls
+            if name.startswith("X"):
+                optimizer.opti.set_initial(var, np.tile(initial_state.reshape(-1, 1), (1, horizon)))
+            else:
+                optimizer.opti.set_initial(var, 0.0)
+        except Exception:
+            # ignore if setting initial values fails
+            raise RuntimeWarning(f"Could not set initial values for extra variable '{name}'")
 
     # Print a concise problem summary before solving
     optimizer.print_problem_summary()
