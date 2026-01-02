@@ -6,7 +6,7 @@ class Config:
     GRAVITY = 1.0
     TIME_STEP = 1.0 / 60.0
     THRUST_POWER = 40.0  # Max force from each thruster
-    FUEL_COST = 0.003  # Fuel cost per Newton of thrust
+    FUEL_COST = 0.2  # Fuel cost per Newton of thrust
     INITIAL_FUEL = 100.0  # Starting fuel
     IMPULSE_THRESHOLD = 30.0  # Max impulse before crash (Newton-seconds)
     IDLE_TIMEOUT = 3.0  # Max time lander can be idle before episode termination (seconds)

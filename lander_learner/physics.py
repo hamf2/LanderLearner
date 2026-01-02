@@ -90,6 +90,9 @@ class PhysicsEngine:
             env: Environment instance whose state mirrors the pymunk bodies and
                 accumulates fuel consumption.
         """
+        frame_dt = float(getattr(env, "time_step", Config.TIME_STEP))
+        sub_dt = frame_dt / float(Config.PHYSICS_STEPS_PER_FRAME)
+
         if env.fuel_remaining > 0.0:
             # Convert thruster power to force.
             thruster_force_left = (left_thruster + 1.0) / 2.0 * Config.THRUST_POWER
@@ -103,16 +106,17 @@ class PhysicsEngine:
                 (0, thruster_force_right), (Config.LANDER_WIDTH / 2, 0)
             )
 
-            # Decrease fuel in env according to consumption rate.
-            fuel_used = (thruster_force_left + thruster_force_right) * Config.FUEL_COST
+            # Decrease fuel in env according to consumption rate scaled by frame duration.
+            fuel_used = (thruster_force_left + thruster_force_right) * Config.FUEL_COST * frame_dt
             env.fuel_remaining = max(0.0, env.fuel_remaining - fuel_used)
 
-        frame_dt = Config.TIME_STEP * Config.PHYSICS_STEPS_PER_FRAME
+        # Update any level logic for the full frame duration and step physics
+        # using subdivided timesteps so the physics behaves consistently when
+        # `env.time_step` is changed.
         self.level.update(frame_dt, env=env)
 
-        # Step the physics simulation.
         for _ in range(Config.PHYSICS_STEPS_PER_FRAME):
-            self.space.step(Config.TIME_STEP)
+            self.space.step(sub_dt)
 
         # Update the environment's state from the pymunk body.
         env.lander_position = np.array(self.lander_body.position, dtype=np.float32)
