@@ -13,6 +13,7 @@ from .base_level import BaseLevel
 from .half_plane import HalfPlaneLevel
 from .lap import LapLevel, LapPresetLevel
 from .point_to_point import PointToPointLevel, PointToPointPresetLevel
+from .blank import BlankLevel
 from .level_data import load_level_payload
 
 logger = logging.getLogger(__name__)
@@ -30,6 +31,9 @@ def get_level(name: str = "half_plane", **kwargs) -> BaseLevel:
     """
     mapping = {
         "half_plane": HalfPlaneLevel,
+        "blank": BlankLevel,
+        "inf": BlankLevel,
+        "infinite": BlankLevel,
         "point_to_point": PointToPointLevel,
         "point_to_point_preset": PointToPointPresetLevel,
         "lap": LapLevel,
@@ -62,6 +66,7 @@ def get_level(name: str = "half_plane", **kwargs) -> BaseLevel:
 __all__ = [
     "BaseLevel",
     "HalfPlaneLevel",
+    "BlankLevel",
     "PointToPointLevel",
     "PointToPointPresetLevel",
     "LapLevel",
