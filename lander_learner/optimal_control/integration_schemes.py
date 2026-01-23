@@ -28,9 +28,7 @@ class IntegrationScheme(ABC):
     """
 
     @abstractmethod
-    def create_variables(
-        self, opti: ca.Opti, horizon: int, state_size: int, control_size: int
-    ) -> Dict[str, ca.MX]:
+    def create_variables(self, opti: ca.Opti, horizon: int, state_size: int, control_size: int) -> Dict[str, ca.MX]:
         """Create auxiliary decision variables for the scheme.
 
         Args:

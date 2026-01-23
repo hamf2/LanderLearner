@@ -14,6 +14,7 @@ from pathlib import Path
 import numpy as np
 
 from lander_learner.optimal_control.transcription import TimeSteppingTranscription
+
 # from lander_learner.optimal_control.integration_schemes import TrapezoidalScheme
 from lander_learner.optimal_control.integration_schemes import HermiteSimpsonScheme
 from lander_learner.optimal_control.trajectory_optimizer import TrajectoryOptimizer

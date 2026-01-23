@@ -44,8 +44,8 @@ class CasadiLanderDynamics:
         self,
         params: LanderDynamicsParameters | None = None,
         *,
-        enforce_control_bounds: bool = False,
-        enforce_fuel_limits: bool = False,
+        enforce_control_bounds: bool = True,
+        enforce_fuel_limits: bool = True,
     ) -> None:
         self.params = params or LanderDynamicsParameters()
         self.enforce_control_bounds = enforce_control_bounds

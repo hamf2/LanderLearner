@@ -142,6 +142,67 @@ class FinalVelocityConstraint(TrajectoryConstraint):
         opti.subject_to(opti.bounded(-self.vxy_tol, vy_final, self.vxy_tol))
 
 
+class TerminalPositionConstraint(TrajectoryConstraint):
+    """Enforce a specified terminal position on the final state.
+
+    The constraint expects a fixed 2D centrepoint and a normal direction
+    plus a lateral-offset decision variable (``d_var``). It constrains the
+    final state position `X[0:2, -1]` to be `centre + normal * d_var[-1]`.
+    """
+
+    def __init__(self, end_pos: list | tuple | ca.MX):
+        self.end_pos = end_pos
+
+    def apply(self, opti: ca.Opti, X: ca.MX, U: ca.MX, stage_duration_fn: Callable[[ca.MX, ca.MX, int], ca.MX]) -> None:
+        end_pos_dm = ca.DM(self.end_pos)
+        opti.subject_to(X[0:2, -1] == end_pos_dm)
+
+
+class CorridorConstraint(TrajectoryConstraint):
+    """Enforce a lateral corridor for the lateral-offset decision variable.
+
+    This applies simple box constraints ``-half_width <= d_var <= half_width``
+    and optionally fixes the terminal and initial offsets to zero.
+    """
+
+    def __init__(self, d_var: ca.MX, half_width: float, enforce_ends: bool = True) -> None:
+        self.d_var = d_var
+        self.half_width = float(half_width)
+        self.enforce_ends = bool(enforce_ends)
+
+    def apply(self, opti: ca.Opti, X: ca.MX, U: ca.MX, stage_duration_fn) -> None:
+        opti.subject_to(self.d_var >= -self.half_width)
+        opti.subject_to(self.d_var <= self.half_width)
+        if self.enforce_ends:
+            opti.subject_to(self.d_var[0] == 0.0)
+            opti.subject_to(self.d_var[-1] == 0.0)
+
+
+class CentrelineConstraint(TrajectoryConstraint):
+    """Constrain state positions to a provided centreline with normals.
+
+    For each node k this enforces:
+        X[0:2, k] == centreline[k] + normals[k] * d_var[k]
+
+    The constraint keeps all problem wiring inside constraint classes
+    so demos do not directly call ``opti.subject_to`` for positional
+    constraints.
+    """
+
+    def __init__(self, centreline, normals, d_var: ca.MX) -> None:
+        self.centreline = list(centreline)
+        self.normals = list(normals)
+        self.d_var = d_var
+
+    def apply(self, opti: ca.Opti, X: ca.MX, U: ca.MX, stage_duration_fn) -> None:
+        N = X.shape[1]
+        # centreline may be numpy arrays; convert per-node to DM when applying
+        for k in range(int(N)):
+            centre_k = ca.DM(self.centreline[k])
+            normal_k = ca.DM(self.normals[k])
+            opti.subject_to(X[0:2, k] == centre_k + normal_k * self.d_var[k])
+
+
 class ControlBoundsConstraint(TrajectoryConstraint):
     """Simple box constraints on the control inputs across the horizon."""
 

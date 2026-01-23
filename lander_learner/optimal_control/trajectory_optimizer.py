@@ -71,7 +71,7 @@ class TrajectoryOptimizer:
                 specific options).
         """
         # 1. Ask the Strategy to build the skeleton
-        result = self.transcription.initialize_variables(self.opti, horizon_len, state_size, control_size)
+        result = self.transcription.initialize_variables(self.opti, horizon_len, state_size, control_size, **kwargs)
         if isinstance(result, tuple) and len(result) == 3:
             self.X, self.U, self.dt_var = result
         else:
@@ -79,7 +79,10 @@ class TrajectoryOptimizer:
             self.dt_var = None
 
         # 2. Ask the Strategy to enforce physics
-        self.transcription.apply_dynamics(self.opti, self.dynamics, self.X, self.U, dt_var=self.dt_var, **kwargs)
+        dynamics_kwargs = dict(kwargs)
+        if self.dt_var is not None:
+            dynamics_kwargs["dt_var"] = self.dt_var
+        self.transcription.apply_dynamics(self.opti, self.dynamics, self.X, self.U, **dynamics_kwargs)
 
         # 3. Apply modular Objectives/Constraints
         def stage_duration_fn(X: ca.MX, U: ca.MX, k: int) -> ca.MX:

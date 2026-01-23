@@ -93,29 +93,31 @@ class PhysicsEngine:
         frame_dt = float(getattr(env, "time_step", Config.TIME_STEP))
         sub_dt = frame_dt / float(Config.PHYSICS_STEPS_PER_FRAME)
 
-        if env.fuel_remaining > 0.0:
-            # Convert thruster power to force.
-            thruster_force_left = (left_thruster + 1.0) / 2.0 * Config.THRUST_POWER
-            thruster_force_right = (right_thruster + 1.0) / 2.0 * Config.THRUST_POWER
-
-            # Apply upward forces on opposite corners of the lander (in body coordinates).
-            self.lander_body.apply_force_at_local_point(
-                (0, thruster_force_left), (-Config.LANDER_WIDTH / 2, 0)
-            )
-            self.lander_body.apply_force_at_local_point(
-                (0, thruster_force_right), (Config.LANDER_WIDTH / 2, 0)
-            )
-
-            # Decrease fuel in env according to consumption rate scaled by frame duration.
-            fuel_used = (thruster_force_left + thruster_force_right) * Config.FUEL_COST * frame_dt
-            env.fuel_remaining = max(0.0, env.fuel_remaining - fuel_used)
-
-        # Update any level logic for the full frame duration and step physics
-        # using subdivided timesteps so the physics behaves consistently when
-        # `env.time_step` is changed.
+        # Update any level logic for the full frame duration.
         self.level.update(frame_dt, env=env)
 
+        # If fuel will be consumed across the frame, distribute force application
+        # and fuel consumption across the physics sub-steps. This ensures forces
+        # act during each physics sub-step (matching continuous-force behaviour)
+        # and allows fuel to deplete mid-frame.
+        thruster_force_left = (left_thruster + 1.0) / 2.0 * Config.THRUST_POWER
+        thruster_force_right = (right_thruster + 1.0) / 2.0 * Config.THRUST_POWER
+
+        per_substep_fuel = (thruster_force_left + thruster_force_right) * Config.FUEL_COST * sub_dt
+
         for _ in range(Config.PHYSICS_STEPS_PER_FRAME):
+            if env.fuel_remaining > 0.0:
+                # Apply upward forces on opposite corners of the lander (in body coordinates).
+                self.lander_body.apply_force_at_local_point(
+                    (0, thruster_force_left), (-Config.LANDER_WIDTH / 2, 0)
+                )
+                self.lander_body.apply_force_at_local_point(
+                    (0, thruster_force_right), (Config.LANDER_WIDTH / 2, 0)
+                )
+
+                # Decrease fuel per substep and clamp to zero.
+                env.fuel_remaining = max(0.0, env.fuel_remaining - per_substep_fuel)
+
             self.space.step(sub_dt)
 
         # Update the environment's state from the pymunk body.
