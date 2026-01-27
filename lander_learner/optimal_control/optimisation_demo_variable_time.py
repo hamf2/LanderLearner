@@ -134,7 +134,7 @@ def solve_min_time_speed_profile(
 
     # Bounds and simple constraints
     opti.subject_to(dt >= 1e-4)
-    opti.subject_to(dt <= 10.0)
+    opti.subject_to(dt <= 100.0)
 
     opti.subject_to(opti.bounded(-1.0, controls, 1.0))
     opti.subject_to(d >= -corridor_half_width)

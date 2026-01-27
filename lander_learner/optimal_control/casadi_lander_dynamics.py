@@ -35,7 +35,10 @@ class LanderDynamicsParameters:
 
 
 class CasadiLanderDynamics:
-    """Creates Casadi functions that reproduce the environment's free-flight dynamics."""
+    """Creates Casadi functions that reproduce the environment's free-flight dynamics.
+
+    State vector is defined as:
+        [x, y, x_dot, y_dot, theta, theta_dot, fuel_remaining]"""
 
     STATE_SIZE = 7
     CONTROL_SIZE = 2

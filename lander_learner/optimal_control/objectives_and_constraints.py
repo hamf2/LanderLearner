@@ -184,9 +184,7 @@ class CentrelineConstraint(TrajectoryConstraint):
     For each node k this enforces:
         X[0:2, k] == centreline[k] + normals[k] * d_var[k]
 
-    The constraint keeps all problem wiring inside constraint classes
-    so demos do not directly call ``opti.subject_to`` for positional
-    constraints.
+    where `d_var` is a lateral-offset decision variable.
     """
 
     def __init__(self, centreline, normals, d_var: ca.MX) -> None:
